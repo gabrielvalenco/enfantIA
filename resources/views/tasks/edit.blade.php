@@ -9,6 +9,7 @@
 <body>
     <div class="container mt-5">
         <h1>Edit Task</h1>
+        <a href="{{ route('dashboard') }}" class="btn btn-secondary mb-3">Voltar</a>
         <form action="{{ route('tasks.update', $task->id) }}" method="POST">
             @csrf
             @method('PUT')

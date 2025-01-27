@@ -27,4 +27,25 @@ class CategoryController extends Controller
         Category::create($validated);
         return redirect()->route('categories.index');
     }
+
+    public function edit(Category $category)
+    {
+        return view('categories.edit', compact('category'));
+    }
+
+    public function update(Request $request, Category $category)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+        ]);
+
+        $category->update($validated);
+        return redirect()->route('categories.index');
+    }
+
+    public function destroy(Category $category)
+    {
+        $category->delete();
+        return redirect()->route('categories.index');
+    }
 }

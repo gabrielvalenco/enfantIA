@@ -9,6 +9,7 @@
 <body>
     <div class="container mt-5">
         <h1>Task List</h1>
+        <a href="{{ route('dashboard') }}" class="btn btn-secondary mb-3">Voltar</a>
         <a href="{{ route('tasks.create') }}" class="btn btn-primary mb-3">Add New Task</a>
         <table class="table table-striped">
             <thead>

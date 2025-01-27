@@ -8,9 +8,16 @@ use App\Models\Category;
 
 class TaskController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $tasks = Task::all();
+        $query = Task::query();
+
+        if ($request->has('status')) {
+            $status = $request->get('status') === 'completed';
+            $query->where('status', $status);
+        }
+
+        $tasks = $query->get();
         return view('tasks.index', compact('tasks'));
     }
 
@@ -60,7 +67,7 @@ class TaskController extends Controller
 
     public function complete(Task $task)
     {
-        $task->update(['status' => true]);
+        $task->update(['status' => !$task->status]);
         return redirect()->route('tasks.index');
     }
 }
