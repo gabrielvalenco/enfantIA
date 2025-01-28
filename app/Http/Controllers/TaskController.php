@@ -29,15 +29,26 @@ class TaskController extends Controller
 
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'title' => 'required|string|max:255',
-            'description' => 'required|string',
-            'category_id' => 'required|exists:categories,id',
+        $request->validate([
+            'title' => 'required',
+            'description' => 'required',
+            'categories' => 'required|array|min:1|max:3',
+            'categories.*' => 'exists:categories,id',
             'due_date' => 'required|date',
+            'urgency' => 'required|in:none,low,medium,high'
         ]);
 
-        Task::create($validated);
-        return redirect()->route('tasks.index');
+        $task = Task::create([
+            'title' => $request->title,
+            'description' => $request->description,
+            'due_date' => $request->due_date,
+            'urgency' => $request->urgency,
+            'status' => false
+        ]);
+
+        $task->categories()->attach($request->categories);
+
+        return redirect()->route('tasks.index')->with('success', 'Task created successfully.');
     }
 
     public function edit(Task $task)
@@ -48,15 +59,25 @@ class TaskController extends Controller
 
     public function update(Request $request, Task $task)
     {
-        $validated = $request->validate([
-            'title' => 'required|string|max:255',
-            'description' => 'required|string',
-            'category_id' => 'required|exists:categories,id',
+        $request->validate([
+            'title' => 'required',
+            'description' => 'required',
+            'categories' => 'required|array|min:1|max:3',
+            'categories.*' => 'exists:categories,id',
             'due_date' => 'required|date',
+            'urgency' => 'required|in:none,low,medium,high'
         ]);
 
-        $task->update($validated);
-        return redirect()->route('tasks.index');
+        $task->update([
+            'title' => $request->title,
+            'description' => $request->description,
+            'due_date' => $request->due_date,
+            'urgency' => $request->urgency
+        ]);
+
+        $task->categories()->sync($request->categories);
+
+        return redirect()->route('tasks.index')->with('success', 'Task updated successfully.');
     }
 
     public function destroy(Task $task)
