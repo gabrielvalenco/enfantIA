@@ -16,6 +16,23 @@
             </div>
         @endif
 
+        @if($nearDeadlineTasks->isNotEmpty())
+            <div class="alert alert-warning">
+                <h5 class="alert-heading mb-2">
+                    <i class="fas fa-exclamation-triangle mr-2"></i>
+                    Atenção: Tarefas Próximas do Prazo
+                </h5>
+                <ul class="mb-0">
+                    @foreach($nearDeadlineTasks as $task)
+                        <li>
+                            "{{ $task->title }}" - 
+                            Vence em: {{ \Carbon\Carbon::parse($task->due_date)->diffForHumans() }}
+                        </li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+
         <div class="table-header">
             <h1 class="table-title">Task List</h1>
             <div class="table-actions">
@@ -39,46 +56,56 @@
                 </thead>
                 <tbody>
                     @foreach($tasks as $task)
-                    <tr>
-                        <td class="task-title">{{ $task->title }}</td>
-                        <td class="task-description">{{ $task->description }}</td>
-                        <td class="categories-column">
-                            @foreach($task->categories as $category)
-                                <span class="badge badge-info">{{ $category->name }}</span>
-                            @endforeach
-                        </td>
-                        <td>
-                            <span class="badge {{ $task->urgency == 'high' ? 'badge-danger' : ($task->urgency == 'medium' ? 'badge-warning' : 'badge-success') }}">
-                                {{ ucfirst($task->urgency) }}
-                            </span>
-                        </td>
-                        <td>
-                            <form action="{{ route('tasks.complete', $task) }}" method="POST" style="display: inline;">
-                                @csrf
-                                @method('PATCH')
-                                <button type="submit" class="btn btn-sm {{ $task->status ? 'btn-success' : 'btn-secondary' }}">
-                                    {{ $task->status ? 'Completed' : 'Pending' }}
-                                </button>
-                            </form>
-                        </td>
-                        <td class="due-date">{{ $task->due_date }}</td>
-                        <td class="actions-column">
-                            <div class="action-buttons">
-                                <a href="{{ route('tasks.edit', $task) }}" class="btn btn-sm btn-warning action-btn">
-                                    <span class="action-text">Edit</span>
-                                    <i class="fas fa-edit action-icon"></i>
-                                </a>
-                                <form action="{{ route('tasks.destroy', $task) }}" method="POST" style="display: inline;">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-sm btn-danger action-btn" onclick="return confirm('Are you sure?')">
-                                        <span class="action-text">Delete</span>
-                                        <i class="fas fa-trash action-icon"></i>
-                                    </button>
-                                </form>
-                            </div>
-                        </td>
-                    </tr>
+                        @if(!$task->status)
+                            <tr @if($nearDeadlineTasks->contains($task)) class="table-warning" @endif>
+                                <td class="task-title">{{ $task->title }}</td>
+                                <td class="task-description">{{ $task->description }}</td>
+                                <td class="categories-column">
+                                    @foreach($task->categories as $category)
+                                        <span class="badge badge-info">{{ $category->name }}</span>
+                                    @endforeach
+                                </td>
+                                <td>
+                                    <span class="badge {{ $task->urgency == 'high' ? 'badge-danger' : ($task->urgency == 'medium' ? 'badge-warning' : 'badge-success') }}">
+                                        {{ ucfirst($task->urgency) }}
+                                    </span>
+                                </td>
+                                <td>
+                                    <form action="{{ route('tasks.complete', $task) }}" method="POST" style="display: inline;">
+                                        @csrf
+                                        @method('PATCH')
+                                        <button type="submit" class="btn btn-sm {{ $task->status ? 'btn-success' : 'btn-secondary' }}">
+                                            {{ $task->status ? 'Completed' : 'Pending' }}
+                                        </button>
+                                    </form>
+                                </td>
+                                <td class="due-date">
+                                    {{ \Carbon\Carbon::parse($task->due_date)->format('d/m/Y H:i') }}
+                                    @if($nearDeadlineTasks->contains($task))
+                                        <span class="badge badge-warning">
+                                            <i class="fas fa-clock mr-1"></i>
+                                            Prazo próximo
+                                        </span>
+                                    @endif
+                                </td>
+                                <td class="actions-column">
+                                    <div class="action-buttons">
+                                        <a href="{{ route('tasks.edit', $task) }}" class="btn btn-sm btn-warning action-btn">
+                                            <span class="action-text">Edit</span>
+                                            <i class="fas fa-edit action-icon"></i>
+                                        </a>
+                                        <form action="{{ route('tasks.destroy', $task) }}" method="POST" style="display: inline;">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-sm btn-danger action-btn" onclick="return confirm('Are you sure?')">
+                                                <span class="action-text">Delete</span>
+                                                <i class="fas fa-trash action-icon"></i>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        @endif
                     @endforeach
                 </tbody>
             </table>

@@ -3,20 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Category List</title>
+    <title>Categorias</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="{{ asset('css/custom-styles.css') }}">
 </head>
 <body>
     <div class="container mt-5">
-        <h1>Category List</h1>
-        <a href="{{ route('dashboard') }}" class="btn btn-secondary mb-3">Voltar</a>
-        <a href="{{ route('categories.create') }}" class="btn btn-primary mb-3">Add New Category</a>
+        <h1>Categorias</h1>
+        <a href="{{ route('dashboard') }}" class="btn btn-secondary mb-3">Voltar ao Painel</a>
+        <a href="{{ route('categories.create') }}" class="btn btn-primary mb-3">Nova Categoria</a>
         <table class="table table-striped">
             <thead>
                 <tr>
-                    <th>Name</th>
-                    <th>Actions</th>
+                    <th>Nome</th>
+                    <th>Ações</th>
                 </tr>
             </thead>
             <tbody>
@@ -24,11 +24,11 @@
                 <tr>
                     <td>{{ $category->name }}</td>
                     <td>
-                        <a href="{{ route('categories.edit', $category->id) }}" class="btn btn-warning btn-sm">Edit</a>
+                        <a href="{{ route('categories.edit', $category->id) }}" class="btn btn-warning btn-sm">Editar</a>
                         <form action="{{ route('categories.destroy', $category->id) }}" method="POST" style="display:inline-block;">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                            <button type="submit" class="btn btn-danger btn-sm">Excluir</button>
                         </form>
                     </td>
                 </tr>

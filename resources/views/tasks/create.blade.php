@@ -1,24 +1,24 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create Task</title>
+    <title>Criar Tarefa</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="{{ asset('css/custom-styles.css') }}">
 </head>
 <body>
     <div class="container mt-5">
-        <h1>Create Task</h1>
+        <h1>Criar Tarefa</h1>
         <a href="{{ route('dashboard') }}" class="btn btn-secondary mb-3">Voltar</a>
         <form action="{{ route('tasks.store') }}" method="POST">
             @csrf
             <div class="form-group">
-                <label for="title">Title</label>
+                <label for="title">Título</label>
                 <input type="text" name="title" class="form-control" id="title" required>
             </div>
             <div class="form-group">
-                <label for="description">Description</label>
+                <label for="description">Descrição</label>
                 <textarea name="description" class="form-control" id="description" required></textarea>
             </div>
             <div class="form-group">
@@ -43,19 +43,19 @@
                 </small>
             </div>
             <div class="form-group">
-                <label for="due_date">Due Date</label>
+                <label for="due_date">Data de Vencimento</label>
                 <input type="date" name="due_date" class="form-control" id="due_date" required>
             </div>
             <div class="form-group">
-                <label for="urgency">Urgência</label>
+                <label for="urgency">Nível de Urgência</label>
                 <select name="urgency" id="urgency" class="form-control" required>
-                    <option value="none">Sem urgência</option>
-                    <option value="low">Pouca urgência</option>
-                    <option value="medium">Média urgência</option>
-                    <option value="high">Alta urgência</option>
+                    <option value="none">Nenhuma</option>
+                    <option value="low">Baixa</option>
+                    <option value="medium">Média</option>
+                    <option value="high">Alta</option>
                 </select>
             </div>
-            <button type="submit" class="btn btn-primary">Create Task</button>
+            <button type="submit" class="btn btn-primary">Criar Tarefa</button>
         </form>
     </div>
     <script>

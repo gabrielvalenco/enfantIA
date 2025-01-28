@@ -1,24 +1,46 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create Category</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="{{ asset('css/custom-styles.css') }}">
-</head>
-<body>
-    <div class="container mt-5">
-        <h1>Create Category</h1>
-        <a href="{{ route('dashboard') }}" class="btn btn-secondary mb-3">Voltar</a>
-        <form action="{{ route('categories.store') }}" method="POST">
-            @csrf
-            <div class="form-group">
-                <label for="name">Name</label>
-                <input type="text" name="name" class="form-control" id="name" required>
-            </div>
-            <button type="submit" class="btn btn-primary">Create Category</button>
-        </form>
+@extends('layouts.app')
+
+@section('content')
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>Nova Categoria</h1>
+        <a href="{{ route('categories.index') }}" class="btn btn-secondary">Voltar à Lista</a>
     </div>
-</body>
-</html>
+
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul class="mb-0">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
+    <form action="{{ route('categories.store') }}" method="POST">
+        @csrf
+        <div class="form-group">
+            <label for="name">Nome da Categoria</label>
+            <input type="text" name="name" id="name" class="form-control @error('name') is-invalid @enderror" 
+                   value="{{ old('name') }}" required>
+            @error('name')
+                <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
+        </div>
+
+        <div class="form-group">
+            <label for="description">Descrição</label>
+            <textarea name="description" id="description" class="form-control @error('description') is-invalid @enderror" 
+                      rows="3" required>{{ old('description') }}</textarea>
+            @error('description')
+                <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
+        </div>
+
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">Criar Categoria</button>
+            <a href="{{ route('categories.index') }}" class="btn btn-secondary">Cancelar</a>
+        </div>
+    </form>
+</div>
+@endsection
