@@ -18,11 +18,6 @@ class Task extends Model
         'status'
     ];
 
-    public function category()
-    {
-        return $this->belongsTo(Category::class);
-    }
-
     public function categories()
     {
         return $this->belongsToMany(Category::class);

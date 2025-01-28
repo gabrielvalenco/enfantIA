@@ -36,9 +36,7 @@ class TaskController extends Controller
         $messages = [
             'title.required' => 'O título é obrigatório.',
             'description.required' => 'A descrição é obrigatória.',
-            'categories.required' => 'Selecione pelo menos uma categoria.',
             'categories.array' => 'As categorias devem ser selecionadas corretamente.',
-            'categories.min' => 'Selecione pelo menos uma categoria.',
             'categories.max' => 'Você pode selecionar no máximo 3 categorias.',
             'categories.*.exists' => 'Uma das categorias selecionadas é inválida.',
             'due_date.required' => 'A data de vencimento é obrigatória.',
@@ -50,24 +48,31 @@ class TaskController extends Controller
         $request->validate([
             'title' => 'required',
             'description' => 'required',
-            'categories' => 'required|array|min:1|max:3',
+            'categories' => 'nullable|array|max:3',
             'categories.*' => 'exists:categories,id',
             'due_date' => 'required|date',
             'urgency' => 'required|in:none,low,medium,high'
         ], $messages);
 
-        $task = Task::create([
-            'title' => $request->title,
-            'description' => $request->description,
-            'due_date' => $request->due_date,
-            'urgency' => $request->urgency,
-            'status' => false
-        ]);
+        try {
+            $task = Task::create([
+                'title' => $request->title,
+                'description' => $request->description,
+                'due_date' => \Carbon\Carbon::parse($request->due_date)->format('Y-m-d H:i:s'),
+                'urgency' => $request->urgency,
+                'status' => false
+            ]);
 
-        $task->categories()->attach($request->categories);
+            if ($request->has('categories') && is_array($request->categories)) {
+                $task->categories()->attach($request->categories);
+            }
 
-        return redirect()->route('tasks.index')
-            ->with('success', 'Tarefa criada com sucesso!');
+            return redirect()->route('tasks.index')
+                ->with('success', 'Tarefa criada com sucesso!');
+        } catch (\Exception $e) {
+            return back()->withInput()
+                ->with('error', 'Erro ao criar a tarefa. Por favor, tente novamente.');
+        }
     }
 
     public function edit(Task $task)

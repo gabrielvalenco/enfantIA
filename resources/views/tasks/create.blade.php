@@ -22,7 +22,7 @@
                 <textarea name="description" class="form-control" id="description" required></textarea>
             </div>
             <div class="form-group">
-                <label>Categorias (selecione até 3)</label>
+                <label>Categorias (opcional - máximo 3)</label>
                 <div class="categories-container">
                     @foreach($categories as $category)
                         <div class="custom-control custom-checkbox">
@@ -43,8 +43,8 @@
                 </small>
             </div>
             <div class="form-group">
-                <label for="due_date">Data de Vencimento</label>
-                <input type="date" name="due_date" class="form-control" id="due_date" required>
+                <label for="due_date">Data e Hora de Vencimento</label>
+                <input type="datetime-local" name="due_date" class="form-control" id="due_date" required>
             </div>
             <div class="form-group">
                 <label for="urgency">Nível de Urgência</label>

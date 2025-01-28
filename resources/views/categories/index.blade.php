@@ -20,19 +20,30 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach($categories as $category)
-                <tr>
-                    <td>{{ $category->name }}</td>
-                    <td>
-                        <a href="{{ route('categories.edit', $category->id) }}" class="btn btn-warning btn-sm">Editar</a>
-                        <form action="{{ route('categories.destroy', $category->id) }}" method="POST" style="display:inline-block;">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-danger btn-sm">Excluir</button>
-                        </form>
-                    </td>
-                </tr>
-                @endforeach
+                @if($categories->isEmpty())
+                    <tr>
+                        <td colspan="2" class="text-center">
+                            <div class="alert alert-info mb-0">
+                                <i class="fas fa-info-circle mr-2"></i>
+                                Não há categorias cadastradas no momento.
+                            </div>
+                        </td>
+                    </tr>
+                @else
+                    @foreach($categories as $category)
+                    <tr>
+                        <td>{{ $category->name }}</td>
+                        <td>
+                            <a href="{{ route('categories.edit', $category->id) }}" class="btn btn-warning btn-sm">Editar</a>
+                            <form action="{{ route('categories.destroy', $category->id) }}" method="POST" style="display:inline-block;">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-danger btn-sm">Excluir</button>
+                            </form>
+                        </td>
+                    </tr>
+                    @endforeach
+                @endif
             </tbody>
         </table>
     </div>
