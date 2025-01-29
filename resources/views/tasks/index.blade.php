@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="{{ asset('css/custom-styles.css') }}">
 </head>
 <body class="bg-light">
-    <div class="container">
+    <div class="container mt-4">
         @if(session('success'))
             <div class="alert alert-success">
                 {{ session('success') }}
@@ -34,7 +34,7 @@
         @endif
 
         <div class="table-header">
-            <h1 class="table-title">Lista de Tarefas</h1>
+            <h1>Lista de Tarefas</h1>
             <div class="table-actions">
                 <a href="{{ route('dashboard') }}" class="btn btn-secondary">Voltar</a>
                 <a href="{{ route('tasks.create') }}" class="btn btn-primary">Nova Tarefa</a>

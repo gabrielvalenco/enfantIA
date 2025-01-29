@@ -8,10 +8,15 @@
     <link rel="stylesheet" href="{{ asset('css/custom-styles.css') }}">
 </head>
 <body>
-    <div class="container mt-5">
-        <h1>Categorias</h1>
-        <a href="{{ route('dashboard') }}" class="btn btn-secondary mb-3">Voltar ao Painel</a>
-        <a href="{{ route('categories.create') }}" class="btn btn-primary mb-3">Nova Categoria</a>
+    <div class="container mt-4">
+        <div class="table-header">
+            <h1>Categorias</h1>
+            <div class="table-actions">
+                <a href="{{ route('dashboard') }}" class="btn btn-secondary">Voltar</a>
+                <a href="{{ route('categories.create') }}" class="btn btn-primary">Nova Categoria</a>
+            </div>
+        </div>
+        
         <table class="table table-striped">
             <thead>
                 <tr>

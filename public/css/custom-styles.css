@@ -2,7 +2,7 @@
 
 body {
     font-family: 'Poppins', sans-serif;
-    background-color: #ECF0F1;
+    background-color: #e0e3e4;
     color: #2C3E50;
     padding-bottom: 60px;
 }
@@ -54,6 +54,7 @@ h1, h2, h3, h4, h5, h6 {
     font-weight: 600;
     padding: 16px;
     white-space: nowrap;
+    text-align: center;
 }
 
 .table th.due-date-header {
@@ -73,6 +74,7 @@ h1, h2, h3, h4, h5, h6 {
     padding: 1rem;
     vertical-align: middle;
     border-top: 1px solid #dee2e6;
+    text-align: center;
 }
 
 .badge {
@@ -633,6 +635,7 @@ h1, h2, h3, h4, h5, h6 {
     max-width: 800px;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 20px;
 }
 
 .menu-item {
@@ -661,6 +664,10 @@ h1, h2, h3, h4, h5, h6 {
 .menu-item.active {
     background-color: #E3F2FD;
     color: #1976D2;
+}
+
+a.menu-item i {
+    color: #2c3e50;
 }
 
 /* Ícones específicos */

@@ -4,7 +4,7 @@
 <div class="container mt-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h1>Tarefas Completadas</h1>
-        <a href="{{ route('dashboard') }}" class="btn btn-secondary">Voltar ao Dashboard</a>
+        <a href="{{ route('dashboard') }}" class="btn btn-secondary">Voltar</a>
     </div>
 
     @if(session('success'))
