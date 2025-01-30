@@ -103,6 +103,42 @@
             </a>
         </div>
     </div>
+
+    <div class="upcoming-tasks mt-4">
+        <div class="dashboard-section-title">
+            <i class="fas fa-clock"></i>
+            Prazos Próximos
+        </div>
+        
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Tarefa</th>
+                    <th>Prazo</th>
+                    <th>Urgência</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach ($upcomingTasks as $task)
+                <tr>
+                    <td>{{ $task->title }}</td>
+                    <td>{{ \Carbon\Carbon::parse($task->due_date)->format('d/m/Y') }}</td>
+                    <td>
+                        <span class="badge bg-{{ $task->urgency === 'high' ? 'danger' : ($task->urgency === 'medium' ? 'warning' : 'info') }}">
+                            {{ ucfirst($task->urgency) }}
+                        </span>
+                    </td>
+                    <td>
+                        <a href="{{ route('tasks.edit', $task->id) }}" class="btn btn-sm btn-primary">
+                            <i class="fas fa-edit"></i>
+                        </a>
+                    </td>
+                </tr>
+                @endforeach
+            </tbody>
+        </table>
+    </div>
 </div>
 
 <style>
@@ -230,7 +266,6 @@
 .menu-item-icon {
     width: 48px;
     height: 48px;
-    background: #f8f9fa;
     border-radius: 12px;
     display: flex;
     align-items: center;
@@ -241,8 +276,8 @@
 }
 
 .menu-item:hover .menu-item-icon {
-    background: var(--primary-color);
     color: white;
+    background: var(--primary-color);
 }
 
 .menu-item-content h3 {
@@ -255,6 +290,31 @@
     margin: 0.25rem 0 0;
     font-size: 0.875rem;
     color: #666;
+}
+
+.upcoming-tasks {
+    background: white;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.upcoming-tasks .table {
+    margin: 0;
+}
+
+.upcoming-tasks .table th {
+    border-top: none;
+    font-weight: 600;
+    color: #2c3e50;
+}
+
+.upcoming-tasks .table td {
+    vertical-align: middle;
+}
+
+.upcoming-tasks .table tr:last-child td {
+    border-bottom: none;
 }
 
 @media (max-width: 768px) {
@@ -271,6 +331,10 @@
     }
 
     .status-card {
+        padding: 1rem;
+    }
+
+    .upcoming-tasks {
         padding: 1rem;
     }
 }
