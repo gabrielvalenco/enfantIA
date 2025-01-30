@@ -49,8 +49,8 @@ h1, h2, h3, h4, h5, h6 {
 
 .table thead th {
     border-bottom: 2px solid #dee2e6;
-    background-color: #f8f9fa;
-    color: #495057;
+    background-color: #2E3D52;
+    color: #fff !important;
     font-weight: 600;
     padding: 16px;
     white-space: nowrap;
@@ -368,6 +368,7 @@ h1, h2, h3, h4, h5, h6 {
 
 .bg-light {
     background-color: #f8f9fa !important;
+    padding: 0px ;
 }
 
 .container {
@@ -598,7 +599,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .dashboard-header {
-    background-color: #fff;
+    background-color: #2E3D52 !important;
     padding: 1rem 2rem;
     display: flex;
     justify-content: space-between;
@@ -608,7 +609,7 @@ h1, h2, h3, h4, h5, h6 {
 
 .dashboard-title {
     font-size: 2rem;
-    color: #37474F;
+    color: #ffffff;
     font-weight: 600;
     margin: 0;
 }
@@ -712,14 +713,12 @@ a.menu-item i {
 }
 
 .footer {
-    background-color: #fff;
+    background-color: #2E3D52;
     padding: 0.75rem;
     text-align: center;
-    position: fixed;
-    bottom: 0;
     width: 100%;
     border-top: 1px solid #e0e0e0;
-    color: #757575;
+    color: #fff;
 }
 
 .footer-name {
@@ -736,7 +735,7 @@ a.menu-item i {
 }
 
 .social-icon {
-    color: #757575;
+    color: #fff;
     font-size: 1.5rem;
     transition: transform 0.2s ease, color 0.2s ease;
 }
@@ -747,7 +746,7 @@ a.menu-item i {
 }
 
 .social-icon.github:hover {
-    color: #333;
+    color: #000000;
 }
 
 .social-icon.linkedin:hover {

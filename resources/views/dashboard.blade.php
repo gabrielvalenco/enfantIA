@@ -337,6 +337,14 @@
     .upcoming-tasks {
         padding: 1rem;
     }
+
+    .upcoming-tasks .table {
+        padding: 0;
+    }
+
+    .upcoming-tasks .table th, .upcoming-tasks .table td {
+        padding: 0.5rem;
+    }
 }
 </style>
 @endsection
