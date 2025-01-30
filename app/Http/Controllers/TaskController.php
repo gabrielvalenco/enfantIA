@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Task;
 use App\Models\Category;
+use Illuminate\Http\Request;
+use Carbon\Carbon;
 
 class TaskController extends Controller
 {
@@ -16,7 +17,7 @@ class TaskController extends Controller
                      ->get();
 
         $nearDeadlineTasks = $tasks->filter(function ($task) {
-            $dueDate = \Carbon\Carbon::parse($task->due_date);
+            $dueDate = Carbon::parse($task->due_date);
             $now = now();
             $hoursUntilDue = $now->diffInHours($dueDate, false);
             return $hoursUntilDue <= 24 && $hoursUntilDue > 0;
@@ -55,30 +56,31 @@ class TaskController extends Controller
         ], $messages);
 
         try {
+            // Converter a data e hora para o formato correto do banco
+            $dueDate = Carbon::parse($request->due_date);
+            
             $task = Task::create([
                 'title' => $request->title,
                 'description' => $request->description,
-                'due_date' => \Carbon\Carbon::parse($request->due_date)->format('Y-m-d H:i:s'),
-                'urgency' => $request->urgency,
-                'status' => false
+                'due_date' => $dueDate,
+                'urgency' => $request->urgency
             ]);
 
-            if ($request->has('categories') && is_array($request->categories)) {
+            if ($request->has('categories')) {
                 $task->categories()->attach($request->categories);
             }
 
-            return redirect()->route('tasks.index')
-                ->with('success', 'Tarefa criada com sucesso!');
+            return redirect()->route('tasks.index')->with('success', 'Tarefa criada com sucesso!');
         } catch (\Exception $e) {
-            return back()->withInput()
-                ->with('error', 'Erro ao criar a tarefa. Por favor, tente novamente.');
+            return back()->with('error', 'Erro ao criar a tarefa. Por favor, tente novamente.');
         }
     }
 
     public function edit(Task $task)
     {
         $categories = Category::all();
-        return view('tasks.edit', compact('task', 'categories'));
+        $taskCategories = $task->categories->pluck('id')->toArray();
+        return view('tasks.edit', compact('task', 'categories', 'taskCategories'));
     }
 
     public function update(Request $request, Task $task)
@@ -86,9 +88,7 @@ class TaskController extends Controller
         $messages = [
             'title.required' => 'O título é obrigatório.',
             'description.required' => 'A descrição é obrigatória.',
-            'categories.required' => 'Selecione pelo menos uma categoria.',
             'categories.array' => 'As categorias devem ser selecionadas corretamente.',
-            'categories.min' => 'Selecione pelo menos uma categoria.',
             'categories.max' => 'Você pode selecionar no máximo 3 categorias.',
             'categories.*.exists' => 'Uma das categorias selecionadas é inválida.',
             'due_date.required' => 'A data de vencimento é obrigatória.',
@@ -100,37 +100,50 @@ class TaskController extends Controller
         $request->validate([
             'title' => 'required',
             'description' => 'required',
-            'categories' => 'required|array|min:1|max:3',
+            'categories' => 'nullable|array|max:3',
             'categories.*' => 'exists:categories,id',
             'due_date' => 'required|date',
             'urgency' => 'required|in:none,low,medium,high'
         ], $messages);
 
-        $task->update([
-            'title' => $request->title,
-            'description' => $request->description,
-            'due_date' => $request->due_date,
-            'urgency' => $request->urgency
-        ]);
+        try {
+            // Converter a data e hora para o formato correto do banco
+            $dueDate = Carbon::parse($request->due_date);
+            
+            $task->update([
+                'title' => $request->title,
+                'description' => $request->description,
+                'due_date' => $dueDate,
+                'urgency' => $request->urgency
+            ]);
 
-        $task->categories()->sync($request->categories);
+            // Sincronizar categorias mesmo se não houver nenhuma selecionada
+            $task->categories()->sync($request->input('categories', []));
 
-        return redirect()->route('tasks.index')
-            ->with('success', 'Tarefa atualizada com sucesso!');
+            return redirect()->route('tasks.index')->with('success', 'Tarefa atualizada com sucesso!');
+        } catch (\Exception $e) {
+            return back()->with('error', 'Erro ao atualizar a tarefa. Por favor, tente novamente.');
+        }
     }
 
     public function destroy(Task $task)
     {
-        $task->delete();
-        return redirect()->route('tasks.index')
-            ->with('success', 'Tarefa excluída com sucesso!');
+        try {
+            $task->delete();
+            return redirect()->route('tasks.index')->with('success', 'Tarefa excluída com sucesso!');
+        } catch (\Exception $e) {
+            return back()->with('error', 'Erro ao excluir a tarefa. Por favor, tente novamente.');
+        }
     }
 
     public function complete(Task $task)
     {
-        $task->update(['status' => !$task->status]);
-        return redirect()->route('tasks.index')
-            ->with('success', $task->status ? 'Tarefa marcada como concluída!' : 'Tarefa marcada como pendente!');
+        try {
+            $task->update(['status' => true]);
+            return redirect()->back()->with('success', 'Tarefa marcada como concluída!');
+        } catch (\Exception $e) {
+            return back()->with('error', 'Erro ao concluir a tarefa. Por favor, tente novamente.');
+        }
     }
 
     public function completed()
