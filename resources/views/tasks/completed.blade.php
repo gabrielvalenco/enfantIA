@@ -1,4 +1,6 @@
-@extends('layouts.app')
+@extends('layouts.app-no-footer')
+
+@section('header_title', 'Tarefas Concluídas')
 
 @section('content')
 <div class="container mt-4">
@@ -45,8 +47,9 @@
                             <td>{{ $task->updated_at->format('d/m/Y H:i') }}</td>
                             <td>
                                 <div class="action-buttons">
-                                    <form action="{{ route('tasks.complete', $task) }}" method="POST" class="d-inline">
+                                    <form action="{{ route('tasks.uncomplete', $task) }}" method="POST" class="d-inline">
                                         @csrf
+                                        @method('PATCH')
                                         <button type="submit" class="btn btn-warning action-btn">
                                             <span class="action-text">Desfazer</span>
                                             <i class="fas fa-undo action-icon"></i>

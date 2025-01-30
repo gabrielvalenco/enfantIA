@@ -269,15 +269,32 @@ h1, h2, h3, h4, h5, h6 {
 
 .alert {
     border-radius: 8px;
-    border: none;
-    margin-bottom: 2rem;
-    padding: 1rem 1.5rem;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 0.75rem 1rem;
+    margin-bottom: 1rem;
 }
 
-.alert-success {
-    background-color: #d4edda;
-    color: #155724;
+.alert-warning {
+    background-color: #fff3cd;
+    border-left: 4px solid #ffc107;
+    color: #856404;
+}
+
+.alert i {
+    font-size: 1.2rem;
+    margin-right: 0.5rem;
+    color: #ffc107;
+    padding-right: 1rem;
+}
+
+.alert strong {
+    font-weight: 600;
+}
+
+.alert small {
+    display: block;
+    margin-top: 0.25rem;
+    opacity: 0.8;
 }
 
 .btn {
@@ -599,34 +616,34 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .dashboard-header {
-    background-color: #2E3D52 !important;
+    background-color: #2C3E50 !important;
     padding: 1rem 2rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 1px solid #e0e0e0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 2rem;
+}
+
+.dashboard-header .d-flex {
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
 }
 
 .dashboard-title {
-    font-size: 2rem;
-    color: #ffffff;
-    font-weight: 600;
+    font-size: 1.5rem;
     margin: 0;
+    color: #ffffff;
 }
 
-.user-icon {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background-color: #e0e0e0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
+.dropdown .btn-link {
+    color: #666;
+    transition: color 0.2s;
 }
 
-.user-icon i {
-    color: #757575;
+.dropdown .btn-link:hover {
+    color: #333;
+}
+
+.dropdown .fa-user-circle {
     font-size: 1.5rem;
 }
 
@@ -768,4 +785,53 @@ a.menu-item i {
 
 .badge-warning i {
     font-size: 0.8rem;
+}
+
+/* Estilos para o dropdown do usuário */
+.dropdown-toggle::after {
+    margin-left: 0.5rem;
+}
+
+.dropdown-menu {
+    min-width: 200px;
+    padding: 0.5rem 0;
+    margin: 0;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+}
+
+.dropdown-item {
+    padding: 0.5rem 1rem;
+    display: flex;
+    align-items: center;
+}
+
+.dropdown-item:hover {
+    background-color: #f8f9fa;
+}
+
+.dropdown-item i {
+    width: 1.25rem;
+    text-align: center;
+}
+
+@keyframes blink {
+    0% { opacity: 1; }
+    50% { opacity: 0.5; }
+    100% { opacity: 1; }
+}
+
+.badge-urgent {
+    animation: blink 1s ease-in-out infinite;
+    background-color: #dc3545;
+    color: white;
+    padding: 0.4em 0.6em;
+    font-size: 0.85em;
+    border-radius: 4px;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.badge-urgent i {
+    font-size: 0.9em;
 }

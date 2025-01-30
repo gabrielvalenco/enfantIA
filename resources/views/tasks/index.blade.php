@@ -16,22 +16,26 @@
             </div>
         @endif
 
-        @if($nearDeadlineTasks->isNotEmpty())
-            <div class="alert alert-warning">
-                <h5 class="alert-heading mb-2">
-                    <i class="fas fa-exclamation-triangle mr-2"></i>
-                    Atenção: Tarefas Próximas do Prazo
-                </h5>
-                <ul class="mb-0">
-                    @foreach($nearDeadlineTasks as $task)
-                        <li>
-                            "{{ $task->title }}" - 
-                            Vence em: {{ \Carbon\Carbon::parse($task->due_date)->diffForHumans() }}
-                        </li>
-                    @endforeach
-                </ul>
-            </div>
-        @endif
+        @foreach($tasks as $task)
+            @php
+                $dueDate = \Carbon\Carbon::parse($task->due_date);
+                $now = \Carbon\Carbon::now();
+                $hoursUntilDue = $now->diffInHours($dueDate, false);
+            @endphp
+
+            @if($hoursUntilDue <= 24 && $hoursUntilDue > 0)
+                <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                    <div class="d-flex align-items-center">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        <div>
+                            <strong>Atenção!</strong> A tarefa "<span class="fw-bold">{{ $task->title }}</span>" vence em menos de 24 horas.
+                            <br>
+                            <small>Data de vencimento: {{ $dueDate->format('d/m/Y H:i') }}</small>
+                        </div>
+                    </div>
+                </div>
+            @endif
+        @endforeach
 
         <div class="table-header">
             <h1>Lista de Tarefas</h1>
@@ -67,7 +71,7 @@
                     @else
                         @foreach($tasks as $task)
                             @if(!$task->status)
-                                <tr @if($nearDeadlineTasks->contains($task)) class="table-warning" @endif>
+                                <tr>
                                     <td class="task-title">{{ $task->title }}</td>
                                     <td class="task-description">{{ $task->description }}</td>
                                     <td class="categories-column">
@@ -76,9 +80,28 @@
                                         @endforeach
                                     </td>
                                     <td>
-                                        <span class="badge {{ $task->urgency == 'high' ? 'badge-danger' : ($task->urgency == 'medium' ? 'badge-warning' : 'badge-success') }}">
-                                            {{ $task->urgency == 'high' ? 'Alta' : ($task->urgency == 'medium' ? 'Média' : ($task->urgency == 'low' ? 'Baixa' : 'Nenhuma')) }}
-                                        </span>
+                                        @switch($task->urgency)
+                                            @case('high')
+                                                @php
+                                                    $dueDate = \Carbon\Carbon::parse($task->due_date);
+                                                    $now = \Carbon\Carbon::now();
+                                                    $hoursUntilDue = $now->diffInHours($dueDate, false);
+                                                @endphp
+                                                @if($hoursUntilDue <= 24 && $hoursUntilDue > 0)
+                                                    <span class="badge-urgent">
+                                                        <i class="fas fa-exclamation-circle"></i>
+                                                        Alta Prioridade
+                                                    </span>
+                                                @else
+                                                    <span class="badge bg-danger">Alta</span>
+                                                @endif
+                                                @break
+                                            @case('medium')
+                                                <span class="badge bg-warning text-dark">Média</span>
+                                                @break
+                                            @default
+                                                <span class="badge bg-info">Baixa</span>
+                                        @endswitch
                                     </td>
                                     <td>
                                         <form action="{{ route('tasks.complete', $task) }}" method="POST" style="display: inline;">
@@ -91,12 +114,6 @@
                                     </td>
                                     <td class="due-date">
                                         {{ \Carbon\Carbon::parse($task->due_date)->format('d/m/Y H:i') }}
-                                        @if($nearDeadlineTasks->contains($task))
-                                            <span class="badge badge-warning">
-                                                <i class="fas fa-clock mr-1"></i>
-                                                Prazo próximo
-                                            </span>
-                                        @endif
                                     </td>
                                     <td class="actions-column">
                                         <div class="action-buttons">
@@ -126,5 +143,23 @@
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    @push('scripts')
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Cria o elemento de áudio
+        const audio = new Audio("{{ asset('notification.mp3') }}");
+        
+        // Verifica se há tarefas urgentes
+        const urgentTasks = document.querySelectorAll('.badge-urgent');
+        if (urgentTasks.length > 0) {
+            // Toca o som de notificação
+            audio.play().catch(function(error) {
+                console.log("Reprodução de áudio não permitida");
+            });
+        }
+    });
+    </script>
+    @endpush
 </body>
 </html>

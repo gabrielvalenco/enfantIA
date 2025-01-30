@@ -11,11 +11,7 @@ class TaskController extends Controller
 {
     public function index()
     {
-        $tasks = Task::where('status', false)
-                     ->with('categories')
-                     ->orderBy('due_date', 'asc')
-                     ->get();
-
+        $tasks = auth()->user()->tasks()->with('categories')->where('status', false)->get();
         $nearDeadlineTasks = $tasks->filter(function ($task) {
             $dueDate = Carbon::parse($task->due_date);
             $now = now();
@@ -59,11 +55,12 @@ class TaskController extends Controller
             // Converter a data e hora para o formato correto do banco
             $dueDate = Carbon::parse($request->due_date);
             
-            $task = Task::create([
+            $task = auth()->user()->tasks()->create([
                 'title' => $request->title,
                 'description' => $request->description,
                 'due_date' => $dueDate,
-                'urgency' => $request->urgency
+                'urgency' => $request->urgency,
+                'status' => false
             ]);
 
             if ($request->has('categories')) {
@@ -78,6 +75,7 @@ class TaskController extends Controller
 
     public function edit(Task $task)
     {
+        $this->authorize('update', $task);
         $categories = Category::all();
         $taskCategories = $task->categories->pluck('id')->toArray();
         return view('tasks.edit', compact('task', 'categories', 'taskCategories'));
@@ -85,6 +83,8 @@ class TaskController extends Controller
 
     public function update(Request $request, Task $task)
     {
+        $this->authorize('update', $task);
+        
         $messages = [
             'title.required' => 'O título é obrigatório.',
             'description.required' => 'A descrição é obrigatória.',
@@ -128,6 +128,7 @@ class TaskController extends Controller
 
     public function destroy(Task $task)
     {
+        $this->authorize('delete', $task);
         try {
             $task->delete();
             return redirect()->route('tasks.index')->with('success', 'Tarefa excluída com sucesso!');
@@ -138,9 +139,10 @@ class TaskController extends Controller
 
     public function complete(Task $task)
     {
+        $this->authorize('update', $task);
         try {
             $task->update(['status' => true]);
-            return redirect()->back()->with('success', 'Tarefa marcada como concluída!');
+            return redirect()->route('tasks.index')->with('success', 'Tarefa marcada como concluída!');
         } catch (\Exception $e) {
             return back()->with('error', 'Erro ao concluir a tarefa. Por favor, tente novamente.');
         }
@@ -148,11 +150,18 @@ class TaskController extends Controller
 
     public function completed()
     {
-        $tasks = Task::where('status', true)
-                     ->with('categories')
-                     ->orderBy('updated_at', 'desc')
-                     ->get();
-
+        $tasks = auth()->user()->tasks()->with('categories')->where('status', true)->get();
         return view('tasks.completed', compact('tasks'));
+    }
+
+    public function uncomplete(Task $task)
+    {
+        $this->authorize('update', $task);
+        try {
+            $task->update(['status' => false]);
+            return redirect()->route('tasks.completed')->with('success', 'Tarefa marcada como não concluída!');
+        } catch (\Exception $e) {
+            return back()->with('error', 'Erro ao desfazer conclusão da tarefa. Por favor, tente novamente.');
+        }
     }
 }
