@@ -16,7 +16,8 @@ class Task extends Model
         'description',
         'due_date',
         'urgency',
-        'status'
+        'status',
+        'user_id'
     ];
 
     public function categories()

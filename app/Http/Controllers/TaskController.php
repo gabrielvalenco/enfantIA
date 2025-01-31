@@ -24,7 +24,7 @@ class TaskController extends Controller
 
     public function create()
     {
-        $categories = Category::all();
+        $categories = Category::where('user_id', auth()->id())->get();
         return view('tasks.create', compact('categories'));
     }
 
@@ -55,12 +55,13 @@ class TaskController extends Controller
             // Converter a data e hora para o formato correto do banco
             $dueDate = Carbon::parse($request->due_date);
             
-            $task = auth()->user()->tasks()->create([
+            $task = Task::create([
                 'title' => $request->title,
                 'description' => $request->description,
                 'due_date' => $dueDate,
                 'urgency' => $request->urgency,
-                'status' => false
+                'status' => false,
+                'user_id' => auth()->id()
             ]);
 
             if ($request->has('categories')) {
@@ -76,7 +77,7 @@ class TaskController extends Controller
     public function edit(Task $task)
     {
         $this->authorize('update', $task);
-        $categories = Category::all();
+        $categories = Category::where('user_id', auth()->id())->get();
         $taskCategories = $task->categories->pluck('id')->toArray();
         return view('tasks.edit', compact('task', 'categories', 'taskCategories'));
     }

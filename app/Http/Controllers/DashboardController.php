@@ -25,7 +25,7 @@ class DashboardController extends Controller
             ->count();
 
         // Contagem de categorias
-        $categories = Category::count();
+        $categories = Category::where('user_id', auth()->id())->count();
 
         // Buscar as 3 tarefas mais próximas do prazo
         $upcomingTasks = auth()->user()->tasks()

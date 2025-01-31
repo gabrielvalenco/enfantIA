@@ -12,6 +12,10 @@ h1, h2, h3, h4, h5, h6 {
     font-weight: 700;
 }
 
+.card-header h4 {
+    color: #ffffff;
+}
+
 .btn-primary {
     background-color: #4A90E2;
     border-color: #4A90E2;
@@ -834,4 +838,47 @@ a.menu-item i {
 
 .badge-urgent i {
     font-size: 0.9em;
+}
+
+:root {
+    --primary: #2C3E50;
+    --primary-hover: #357ABD;
+    --secondary: #6c757d;
+    --success: #28a745;
+    --danger: #dc3545;
+    --warning: #ffc107;
+    --info: #17a2b8;
+    --info-hover: #1ccde9;
+}
+
+/* Sobrescrevendo classes do Bootstrap */
+.bg-primary {
+    background-color: var(--primary) !important;
+}
+
+.btn-primary {
+    background-color: var(--primary);
+    border-color: var(--primary);
+}
+
+.btn-primary:hover {
+    background-color: var(--primary-hover);
+    border-color: var(--primary-hover);
+}
+
+.text-primary {
+    color: var(--info) !important;
+}
+
+.text-primary:hover {
+    color: var(--info-hover) !important;
+}
+
+/* Você pode adicionar mais variações como: */
+.bg-primary-light {
+    background-color: #ECF3FB !important;
+}
+
+.bg-primary-dark {
+    background-color: #2C5282 !important;
 }

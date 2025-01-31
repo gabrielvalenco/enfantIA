@@ -3,7 +3,7 @@
 @section('content')
 <header class="dashboard-header">
     <div class="d-flex justify-content-between align-items-center">
-        <h1 class="dashboard-title">Painel de Controle</h1>
+        <h1 class="dashboard-title">TASKNEST</h1>
         
         <div class="dropdown">
             <button class="btn btn-link text-light p-0 border-0" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
