@@ -621,25 +621,6 @@ h1, h2, h3, h4, h5, h6 {
     }
 }
 
-.dashboard-header {
-    background-color: #2C3E50 !important;
-    padding: 1rem 2rem;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    margin-bottom: 2rem;
-}
-
-.dashboard-header .d-flex {
-    max-width: 1200px;
-    margin: 0 auto;
-    width: 100%;
-}
-
-.dashboard-title {
-    font-size: 1.5rem;
-    margin: 0;
-    color: #ffffff;
-}
-
 .dropdown .btn-link {
     color: #666;
     transition: color 0.2s;
@@ -651,15 +632,6 @@ h1, h2, h3, h4, h5, h6 {
 
 .dropdown .fa-user-circle {
     font-size: 1.5rem;
-}
-
-.dashboard-menu {
-    background-color: #fff;
-    margin: 2rem auto;
-    max-width: 800px;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    padding: 20px;
 }
 
 .menu-item {
@@ -714,25 +686,6 @@ a.menu-item i {
 .icon-tag::before {
     content: "⚑";
     font-size: 1.2rem;
-}
-
-@media (max-width: 768px) {
-    .dashboard-header {
-        padding: 1rem;
-    }
-
-    .dashboard-title {
-        font-size: 1.5rem;
-    }
-
-    .dashboard-menu {
-        margin: 1rem;
-        padding: 1rem;
-    }
-
-    .menu-item {
-        padding: 0.75rem;
-    }
 }
 
 .footer {
