@@ -9,7 +9,7 @@
             <button class="btn btn-link text-light p-0 border-0" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                 <i class="fas fa-user-circle fs-4"></i>
             </button>
-            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+            <ul class="dropdown-menu dropdown-menu-end user-dropdown" aria-labelledby="userDropdown">
                 <li>
                     <div class="dropdown-header">
                         <span class="fw-bold">{{ Auth::user()->name }}</span>
@@ -19,30 +19,18 @@
                 </li>
                 <li><hr class="dropdown-divider"></li>
                 <li>
-                    <a class="dropdown-item" href="#">
-                        <i class="fas fa-user-cog me-2"></i>
-                        Perfil
-                    </a>
-                </li>
-                <li>
-                    <a class="dropdown-item" href="#">
-                        <i class="fas fa-bell me-2"></i>
-                        Notificações
-                    </a>
-                </li>
-                <li>
-                    <a class="dropdown-item" href="#">
-                        <i class="fas fa-cog me-2"></i>
-                        Configurações
+                    <a href="#" class="dropdown-item">
+                        <i class="fas fa-user-edit me-2"></i>
+                        Editar Perfil
                     </a>
                 </li>
                 <li><hr class="dropdown-divider"></li>
                 <li>
-                    <form method="POST" action="{{ route('logout') }}">
+                    <form method="POST" action="{{ route('logout') }}" class="px-2 py-1">
                         @csrf
                         <button type="submit" class="dropdown-item text-danger">
                             <i class="fas fa-sign-out-alt me-2"></i>
-                            Logout
+                            Sair
                         </button>
                     </form>
                 </li>
@@ -386,6 +374,10 @@
     .upcoming-tasks .table th, .upcoming-tasks .table td {
         padding: 0.5rem;
     }
+}
+
+.user-dropdown {
+    min-width: 200px;
 }
 </style>
 @endsection

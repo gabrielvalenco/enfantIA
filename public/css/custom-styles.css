@@ -343,11 +343,13 @@ h1, h2, h3, h4, h5, h6 {
 .btn-danger {
     background-color: #dc3545;
     box-shadow: 0 2px 4px rgba(220, 53, 69, 0.2);
+    color: white;
 }
 
 .btn-danger:hover {
     background-color: #c82333;
     box-shadow: 0 4px 6px rgba(220, 53, 69, 0.3);
+    color: white;
 }
 
 .table-responsive {
@@ -818,6 +820,37 @@ a.menu-item i {
     text-align: center;
 }
 
+/* User Dropdown Styles */
+.user-dropdown {
+    min-width: 280px !important;
+    padding: 0.5rem;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+}
+
+.user-dropdown .dropdown-header {
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+}
+
+.user-dropdown .dropdown-item {
+    padding: 0.6rem 1rem;
+    border-radius: 0.25rem;
+}
+
+.user-dropdown .dropdown-item:hover {
+    background-color: var(--primary);
+    color: white;
+}
+
+.user-dropdown .dropdown-item.text-danger:hover {
+    background-color: var(--danger);
+    color: #ffffff !important;
+}
+
+.user-dropdown .dropdown-divider {
+    margin: 0.5rem 0;
+}
+
 @keyframes blink {
     0% { opacity: 1; }
     50% { opacity: 0.5; }
@@ -842,7 +875,7 @@ a.menu-item i {
 
 :root {
     --primary: #2C3E50;
-    --primary-hover: #357ABD;
+    --primary-hover: rgb(38, 91, 145);
     --secondary: #6c757d;
     --success: #28a745;
     --danger: #dc3545;
