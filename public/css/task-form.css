@@ -1,0 +1,52 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
+
+:root {
+    --primary: #2C3E50;
+    --primary-hover: rgb(38, 91, 145);
+    --secondary: #6c757d;
+    --success: #28a745;
+    --danger: #dc3545;
+    --warning: #ffc107;
+    --info: #17a2b8;
+    --info-hover: #1ccde9;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #e0e3e4;
+    color: #2C3E50;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    color: #2C3E50;
+    font-weight: 700;
+}
+
+/* CREATE-TAKS */
+.task-form-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.task-header {
+    margin-bottom: 2rem;    
+}
+
+.task-form-container button {
+    background-color: var(--primary);
+    border: none;
+}
+
+.task-form-container button:hover {
+    background-color: var(--primary-hover);
+    border: none;
+}
+
+.form-container {
+    background-color: white;
+    padding: 1rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+

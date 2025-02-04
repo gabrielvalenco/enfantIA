@@ -1,12 +1,14 @@
-@extends('layouts.app-no-footer')
+@extends('layouts.app')
 
-@section('header_title', 'Tarefas Concluídas')
+@php
+    $hideFooter = true;
+@endphp
 
 @section('content')
 <div class="container mt-4">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h1>Tarefas Completadas</h1>
-        <a href="{{ route('dashboard') }}" class="btn btn-secondary">Voltar</a>
+    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap">
+        <h1 class="mb-2 mb-md-0">Tarefas Concluídas</h1>
+        <a href="{{ route('dashboard') }}" class="btn btn-secondary back-button">Voltar</a>
     </div>
 
     @if(session('success'))

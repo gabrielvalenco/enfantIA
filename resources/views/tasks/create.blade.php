@@ -11,7 +11,7 @@
 <body class="bg-light">
     <div class="task-form-container">
         <div class="task-header d-flex justify-content-between align-items-center flex-wrap">
-            <h2 class="mb-0">Criar Nova Tarefa</h2>
+            <h1 class="mb-0">Criar Nova Tarefa</h1>
             <a href="{{ route('dashboard') }}" class="btn btn-secondary back-button">
                 <i class="fas fa-arrow-left me-2"></i>Voltar
             </a>

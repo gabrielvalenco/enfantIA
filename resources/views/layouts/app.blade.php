@@ -11,6 +11,7 @@
 <body class="bg-light">
     @yield('content')
 
+    @if(!isset($hideFooter) || !$hideFooter)
     <footer class="footer">
         <span class="footer-name">Desenvolvido por Gabriel de Souza Valenço - 2025</span>
         <div class="social-icons">
@@ -25,6 +26,7 @@
             </a>
         </div>
     </footer>
+    @endif
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
