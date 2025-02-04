@@ -3,6 +3,9 @@
 @section('content')
 
 <link rel="stylesheet" href="{{ asset('css/dashboard-style.css') }}">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css">
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/locales/pt-br.js"></script>
 
 <header class="dashboard-header">
     <div class="d-flex justify-content-between align-items-center">
@@ -171,5 +174,34 @@
             </tbody>
         </table>
     </div>
+
+    <div class="calendar mt-4">
+        <div class="dashboard-section-title">
+            <i class="fas fa-calendar-alt"></i>
+            Calendário de Tarefas
+        </div>
+        <div id="calendar"></div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var calendarEl = document.getElementById('calendar');
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridMonth',
+                locale: 'pt-br',
+                events: [
+                    @foreach ($upcomingTasks as $task)
+                    {
+                        title: '{{ $task->title }}',
+                        start: '{{ $task->due_date }}',
+                        url: '{{ route('tasks.edit', $task->id) }}',
+                        color: '{{ $task->urgency === 'high' ? '#dc3545' : ($task->urgency === 'medium' ? '#ffc107' : '#0d6efd') }}'
+                    },
+                    @endforeach
+                ]
+            });
+            calendar.render();
+        });
+    </script>
 </div>
 @endsection
