@@ -1,6 +1,8 @@
 @extends('layouts.app')
 
 @section('content')
+<link rel="stylesheet" href="{{ asset('css/category-style.css') }}">
+
 <div class="container mt-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h1>Nova Categoria</h1>
@@ -17,7 +19,7 @@
         </div>
     @endif
 
-    <form action="{{ route('categories.store') }}" method="POST">
+    <form action="{{ route('categories.store') }}" method="POST" class="category-form">
         @csrf
         <div class="form-group">
             <label for="name">Nome da Categoria</label>
@@ -36,10 +38,8 @@
                 <div class="invalid-feedback">{{ $message }}</div>
             @enderror
         </div>
-
         <div class="form-group">
             <button type="submit" class="btn btn-primary">Criar Categoria</button>
-            <a href="{{ route('categories.index') }}" class="btn btn-secondary">Cancelar</a>
         </div>
     </form>
 </div>
