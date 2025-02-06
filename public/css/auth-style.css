@@ -39,6 +39,8 @@ h1, h2, h3, h4, h5, h6 {
 
 .card {
     margin: 1rem;
+    border: var(--primary) solid 2px;
+    border-radius: 8px;
 }
 
 form {
@@ -97,16 +99,8 @@ form {
     }
 
     .container {
-       max-width: 100%;
-       width: 100%;
-       margin: 0 auto;
-       padding: 0 15px;
-    }
-
-    .card {
-        max-width: 900px;
-        width: 100%;
-        padding: 20px;
+        width: 450px;
         margin: 0 auto;
+        padding: 0 15px;
     }
 }
