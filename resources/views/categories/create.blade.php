@@ -31,13 +31,23 @@
         </div>
 
         <div class="form-group">
-            <label for="description">Descrição</label>
-            <textarea name="description" id="description" class="form-control @error('description') is-invalid @enderror" 
-                      rows="3" required>{{ old('description') }}</textarea>
+            <label for="description">Descrição <small class="text-muted">(opcional)</small></label>
+            <textarea name="description" class="form-control @error('description') is-invalid @enderror" id="description" rows="3">{{ old('description') }}</textarea>
             @error('description')
                 <div class="invalid-feedback">{{ $message }}</div>
             @enderror
         </div>
+
+        <div class="form-group mb-3">
+            <label>Cor da Categoria</label>
+            <div class="d-flex gap-3 mt-2">
+                <input type="color" name="color" id="color1" value="#DC3545" {{ old('color') == '#DC3545' ? 'checked' : '' }}>
+            </div>
+            @error('color')
+                <div class="invalid-feedback d-block">{{ $message }}</div>
+            @enderror
+        </div>
+
         <div class="form-group">
             <button type="submit" class="btn btn-primary">Criar Categoria</button>
         </div>

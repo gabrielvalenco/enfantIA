@@ -25,7 +25,7 @@
                 </li>
                 <li><hr class="dropdown-divider"></li>
                 <li>
-                    <a href="#" class="dropdown-item">
+                    <a href="{{ route('profile.edit') }}" class="dropdown-item">
                         <i class="fas fa-user-edit me-2"></i>
                         Editar Perfil
                     </a>

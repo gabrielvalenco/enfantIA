@@ -21,6 +21,12 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'avatar',
+        'phone',
+        'position',
+        'bio',
+        'timezone',
+        'preferences'
     ];
 
     /**
@@ -41,6 +47,7 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
+        'preferences' => 'array'
     ];
 
     public function tasks()

@@ -40,7 +40,12 @@
                 @else
                     @foreach($categories as $category)
                     <tr>
-                        <td>{{ $category->name }}</td>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <span class="color-preview" style="background-color: {{ $category->color }};"></span>
+                                {{ $category->name }}
+                            </div>
+                        </td>
                         <td>{{ $category->description }}</td>
                         <td>
                             <a href="{{ route('categories.edit', $category->id) }}" class="btn btn-warning btn-sm">Editar</a>

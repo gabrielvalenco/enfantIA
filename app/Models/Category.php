@@ -11,7 +11,12 @@ class Category extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'description', 'user_id'];
+    protected $fillable = [
+        'name',
+        'description',
+        'color',
+        'user_id'
+    ];
 
     public function tasks()
     {

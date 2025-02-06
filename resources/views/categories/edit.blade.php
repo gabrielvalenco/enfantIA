@@ -14,7 +14,7 @@
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h1>Editar Categoria</h1>
             <a href="{{ route('categories.index') }}" class="btn btn-secondary">
-                <i class="fas fa-arrow-left me-2"></i>Voltar
+                Voltar
             </a>
         </div>
         <form action="{{ route('categories.update', $category->id) }}" method="POST" class="category-form">
@@ -25,8 +25,12 @@
                 <input type="text" name="name" class="form-control" id="name" value="{{ $category->name }}" required>
             </div>
             <div class="form-group">
-                <label for="description">Descrição</label>
+                <label for="description">Descrição <small class="text-muted">(opcional)</small></label>
                 <textarea name="description" class="form-control" id="description" rows="3">{{ $category->description }}</textarea>
+            </div>
+            <div class="d-flex gap-3 mt-2 mb-3">
+                <label for="color">Cor da Categoria</label>
+                <input type="color" name="color" id="color1" value="{{ $category->color }}" {{ old('color') == '#DC3545' ? 'checked' : '' }}>
             </div>
             <div class="form-group">
                 <button type="submit" class="btn btn-primary">Atualizar Categoria</button>

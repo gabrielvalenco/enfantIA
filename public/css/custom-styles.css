@@ -96,12 +96,14 @@ h1, h2, h3, h4, h5, h6 {
     padding: 0.5em 0.8em;
     font-weight: 500;
     border-radius: 6px;
+    color: #fff;
 }
 
 .badge-info {
     background-color: #17a2b8;
     margin-bottom: 3px;
     margin-right: 0.5rem;
+    color: #fff;
 }
 
 .badge-danger {
@@ -110,7 +112,6 @@ h1, h2, h3, h4, h5, h6 {
 
 .badge-warning {
     background-color: #ffc107;
-    color: #000;
 }
 
 .badge-success {

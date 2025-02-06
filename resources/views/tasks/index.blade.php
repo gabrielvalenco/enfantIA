@@ -7,6 +7,8 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="stylesheet" href="{{ asset('css/custom-styles.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/task-form.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/category-style.css') }}">
 </head>
 <body class="bg-light">
     <div class="container mt-4">
@@ -75,9 +77,17 @@
                                     <td class="task-title">{{ $task->title }}</td>
                                     <td class="task-description">{{ $task->description }}</td>
                                     <td class="categories-column">
-                                        @foreach($task->categories as $category)
-                                            <span class="badge badge-info">{{ $category->name }}</span>
-                                        @endforeach
+                                        @if($task->categories->isNotEmpty())
+                                            <div class="d-flex flex-wrap gap-2">
+                                                @foreach($task->categories as $category)
+                                                    <div class="category-badge" style="background-color: {{ $category->color }};">
+                                                        {{ $category->name }}
+                                                    </div>
+                                                @endforeach
+                                            </div>
+                                        @else
+                                            <span class="text-muted">Sem categoria</span>
+                                        @endif
                                     </td>
                                     <td>
                                         @switch($task->urgency)
