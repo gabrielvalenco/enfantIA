@@ -32,6 +32,13 @@
                 </li>
                 <li><hr class="dropdown-divider"></li>
                 <li>
+                    <a href="{{ route('notes.index') }}" class="dropdown-item">
+                        <i class="fas fa-sticky-note me-2"></i>
+                        Bloco de notas
+                    </a>
+                </li>
+                <li><hr class="dropdown-divider"></li>
+                <li>
                     <form method="POST" action="{{ route('logout') }}" class="px-2 py-1">
                         @csrf
                         <button type="submit" class="dropdown-item text-danger">
@@ -134,6 +141,16 @@
                 <div class="menu-item-content">
                     <h3>Categorias</h3>
                     <p>Gerencie as categorias de tarefas</p>
+                </div>
+            </a>
+
+            <a href="{{ route('notes.index') }}" class="menu-item">
+                <div class="menu-item-icon">
+                    <i class="fas fa-sticky-note"></i>
+                </div>
+                <div class="menu-item-content">
+                    <h3>Bloco de Notas</h3>
+                    <p>Gerencie suas anotações pessoais</p>
                 </div>
             </a>
         </div>

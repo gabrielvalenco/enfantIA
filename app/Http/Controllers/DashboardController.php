@@ -11,36 +11,19 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        // Contagem de tarefas pendentes (não completadas)
-        $pendingTasks = auth()->user()->tasks()->where('status', false)->count();
-
-        // Contagem de tarefas completadas
-        $completedTasks = auth()->user()->tasks()->where('status', true)->count();
-
-        // Contagem de tarefas urgentes (não completadas e com urgência alta)
-        $urgentTasks = auth()->user()->tasks()
-            ->where('status', false)
-            ->where('urgency', 'high')
-            ->where('due_date', '>', Carbon::now())
-            ->count();
-
-        // Contagem de categorias
-        $categories = Category::where('user_id', auth()->id())->count();
-
-        // Buscar as 3 tarefas mais próximas do prazo
-        $upcomingTasks = auth()->user()->tasks()
-            ->where('status', false)
-            ->where('due_date', '>=', Carbon::now())
-            ->orderBy('due_date', 'asc')
-            ->take(3)
-            ->get();
-
-        return view('dashboard', compact(
-            'pendingTasks',
-            'completedTasks',
-            'urgentTasks',
-            'categories',
-            'upcomingTasks'
-        ));
+        $user = auth()->user();
+        
+        return view('dashboard', [
+            'pendingTasks' => $user->tasks()->where('status', 'pending')->count(),
+            'completedTasks' => $user->tasks()->where('status', 'completed')->count(),
+            'urgentTasks' => $user->tasks()->where('urgency', 'high')->where('status', 'pending')->count(),
+            'categories' => Category::where('user_id', auth()->id())->count(),
+            'upcomingTasks' => $user->tasks()
+                ->where('status', 'pending')
+                ->where('due_date', '>=', Carbon::now())
+                ->orderBy('due_date', 'asc')
+                ->take(5)
+                ->get()
+        ]);
     }
 }
