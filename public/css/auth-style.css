@@ -1,0 +1,112 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
+
+:root {
+    --background: #f8f9fa ;
+    --primary: #2C3E50;
+    --primary-hover: rgb(38, 91, 145);
+    --secondary: #6c757d;
+    --success: #28a745;
+    --danger: #dc3545;
+    --warning: #ffc107;
+    --info: #17a2b8;
+    --info-hover: #1ccde9;
+}
+
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-image: url('../images/task_nest_bg.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    color: var(--primary);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    color: var(--primary);
+    font-weight: 700;
+}
+
+.card {
+    margin: 1rem;
+}
+
+form {
+    display: block;
+
+    input {
+        margin-bottom: 2rem;
+    }
+    label {
+        margin-bottom: 2rem;
+    }
+    i {
+        padding-right: 8px;
+    }
+}
+
+.form-control {
+    border: var(--primary) solid 2px;
+    border-radius: 8px;
+}
+
+.form-control:focus {
+    border-color: var(--primary-hover);
+    box-shadow: 0 0 0 0.2rem rgba(38, 91, 145, 0.25);
+}
+
+.form-check-input {
+    border: var(--primary) solid 2px;
+    border-radius: 8px;
+}
+
+.form-check-input:focus {
+    border-color: var(--primary-hover);
+    box-shadow: 0 0 0 0.2rem rgba(38, 91, 145, 0.25);
+}
+
+.container {
+    width: 1200px;
+    margin: 0 auto;
+
+    h4 {
+        padding: 8px;
+        text-align: center;
+        background-color: var(--primary);
+        color: #ffffff;
+        border-radius: 8px;
+    }
+}
+
+@media (max-width: 768px) {
+    body {
+        background-image: url('../images/task_nest_mobile_bg.png');
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+    }
+
+    .container {
+       max-width: 100%;
+       width: 100%;
+       margin: 0 auto;
+       padding: 0 15px;
+    }
+
+    .card {
+        max-width: 900px;
+        width: 100%;
+        padding: 20px;
+        margin: 0 auto;
+    }
+}

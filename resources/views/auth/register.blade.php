@@ -1,6 +1,9 @@
 @extends('layouts.auth')
 
 @section('content')
+
+<link rel="stylesheet" href="{{ asset('css/auth-style.css') }}">
+
 <div class="container">
     <div class="row min-vh-100 align-items-center justify-content-center">
         <div class="col-12 col-sm-10 col-md-8 col-lg-6">
@@ -14,6 +17,7 @@
                         @csrf
 
                         <div class="mb-3">
+                            <i class="fas fa-user"></i>
                             <label for="name" class="form-label">Nome</label>
                             <input type="text" 
                                    class="form-control @error('name') is-invalid @enderror" 
@@ -29,6 +33,7 @@
                         </div>
 
                         <div class="mb-3">
+                            <i class="fas fa-envelope"></i>
                             <label for="email" class="form-label">Email</label>
                             <input type="email" 
                                    class="form-control @error('email') is-invalid @enderror" 
@@ -43,6 +48,7 @@
                         </div>
 
                         <div class="mb-3">
+                            <i class="fas fa-lock"></i>
                             <label for="password" class="form-label">Senha</label>
                             <input type="password" 
                                    class="form-control @error('password') is-invalid @enderror" 
@@ -56,13 +62,17 @@
                         </div>
 
                         <div class="mb-3">
+                            <i class="fas fa-lock"></i>
                             <label for="password_confirmation" class="form-label">Confirmar Senha</label>
                             <input type="password" 
-                                   class="form-control" 
+                                   class="form-control @error('password_confirmation') is-invalid @enderror" 
                                    id="password_confirmation" 
                                    name="password_confirmation" 
                                    required 
                                    autocomplete="new-password">
+                            @error('password_confirmation')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
                         </div>
 
                         <div class="d-grid gap-2">

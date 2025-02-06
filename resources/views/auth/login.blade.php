@@ -1,8 +1,11 @@
 @extends('layouts.auth')
 
 @section('content')
-<div class="container">
-    <div class="row min-vh-100 align-items-center justify-content-center">
+
+<link rel="stylesheet" href="{{ asset('css/auth-style.css') }}">
+
+<div class="container mb-4">
+    <div class="row justify-content-center">
         <div class="col-12 col-sm-10 col-md-8 col-lg-6">
             <div class="card border-0 shadow-sm">
                 <div class="card-header bg-primary text-white">
@@ -14,6 +17,7 @@
                         @csrf
 
                         <div class="mb-3">
+                            <i class="fas fa-envelope"></i>
                             <label for="email" class="form-label">Email</label>
                             <input type="email" 
                                    class="form-control @error('email') is-invalid @enderror" 
@@ -29,6 +33,7 @@
                         </div>
 
                         <div class="mb-3">
+                            <i class="fas fa-lock"></i>
                             <label for="password" class="form-label">Senha</label>
                             <input type="password" 
                                    class="form-control @error('password') is-invalid @enderror" 
