@@ -59,4 +59,16 @@ class User extends Authenticatable
     {
         return $this->hasMany(Note::class);
     }
+
+    public function groups()
+    {
+        return $this->belongsToMany(Group::class, 'group_members')
+                    ->withPivot('role')
+                    ->withTimestamps();
+    }
+
+    public function createdGroups()
+    {
+        return $this->hasMany(Group::class, 'created_by');
+    }
 }

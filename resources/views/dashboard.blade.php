@@ -31,6 +31,13 @@
                     </a>
                 </li>
                 <li><hr class="dropdown-divider"></li>
+                    <li>
+                        <a href="{{ route('groups.index') }}" class="dropdown-item">
+                        <i class="fas fa-users me-2"></i>
+                            Grupo
+                        </a>
+                    </li>
+                    <li><hr class="dropdown-divider"></li>
                 <li>
                     <a href="{{ route('notes.index') }}" class="dropdown-item">
                         <i class="fas fa-sticky-note me-2"></i>
