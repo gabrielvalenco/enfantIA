@@ -140,13 +140,16 @@ class TaskController extends Controller
 
     public function complete(Task $task)
     {
-        $this->authorize('update', $task);
-        try {
-            $task->update(['status' => true]);
-            return redirect()->route('tasks.index')->with('success', 'Tarefa marcada como concluída!');
-        } catch (\Exception $e) {
-            return back()->with('error', 'Erro ao concluir a tarefa. Por favor, tente novamente.');
+        $task->update([
+            'status' => true,
+            'completed_at' => now()
+        ]);
+
+        if (url()->previous() === route('dashboard')) {
+            return redirect()->route('tasks.completed')->with('success', 'Tarefa marcada como concluída!');
         }
+
+        return redirect()->back()->with('success', 'Tarefa marcada como concluída!');
     }
 
     public function completed()

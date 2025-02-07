@@ -13,17 +13,34 @@ class DashboardController extends Controller
     {
         $user = auth()->user();
         
-        return view('dashboard', [
-            'pendingTasks' => $user->tasks()->where('status', 'pending')->count(),
-            'completedTasks' => $user->tasks()->where('status', 'completed')->count(),
-            'urgentTasks' => $user->tasks()->where('urgency', 'high')->where('status', 'pending')->count(),
-            'categories' => Category::where('user_id', auth()->id())->count(),
-            'upcomingTasks' => $user->tasks()
-                ->where('status', 'pending')
-                ->where('due_date', '>=', Carbon::now())
-                ->orderBy('due_date', 'asc')
-                ->take(5)
-                ->get()
-        ]);
+        $pendingTasks = Task::where('user_id', $user->id)
+            ->where('status', false)
+            ->count();
+            
+        $completedTasks = Task::where('user_id', $user->id)
+            ->where('status', true)
+            ->count();
+            
+        $urgentTasks = Task::where('user_id', $user->id)
+            ->where('status', false)
+            ->where('urgency', 'high')
+            ->count();
+            
+        $categories = Category::where('user_id', $user->id)->count();
+
+        $upcomingTasks = Task::where('user_id', $user->id)
+            ->where('status', false)
+            ->whereDate('due_date', '>=', now())
+            ->orderBy('due_date', 'asc')
+            ->take(5)
+            ->get();
+
+        return view('dashboard', compact(
+            'pendingTasks',
+            'completedTasks',
+            'urgentTasks',
+            'categories',
+            'upcomingTasks'
+        ));
     }
 }

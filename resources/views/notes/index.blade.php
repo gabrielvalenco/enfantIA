@@ -25,7 +25,7 @@
                 @forelse ($notes as $note)
                     <div class="col-md-4 mb-3 note-card" data-note-id="{{ $note->id }}">
                         <div class="card h-100">
-                            <div class="card-header d-flex justify-content-between align-items-center">
+                            <div class="card-header d-flex flex-column justify-content-between align-items-center">
                                 <h5 class="card-title mb-0 note-title">{{ $note->title }}</h5>
                                 <div class="note-actions">
                                     <button class="btn btn-sm btn-link text-primary" onclick="editNote({{ $note->id }})">

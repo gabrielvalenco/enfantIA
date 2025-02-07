@@ -53,6 +53,13 @@
 </header>
 
 <div class="container mt-4">
+    @if(session('success'))
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            {{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
+
     <!-- Status Cards -->
     <div class="status-cards">
         <div class="status-card">
@@ -182,9 +189,13 @@
                         </span>
                     </td>
                     <td>
-                        <a href="{{ route('tasks.edit', $task->id) }}" class="btn btn-sm btn-primary">
-                            <i class="fas fa-edit"></i>
-                        </a>
+                        <button onclick="confirmComplete({{ $task->id }}, '{{ $task->title }}')" class="btn btn-sm btn-success" title="Concluir">
+                            <i class="fas fa-check"></i>
+                        </button>
+                        <form id="complete-form-{{ $task->id }}" action="{{ route('tasks.complete', $task->id) }}" method="POST" class="d-none">
+                            @csrf
+                            @method('PATCH')
+                        </form>
                     </td>
                 </tr>
                 @endforeach
@@ -219,6 +230,14 @@
             });
             calendar.render();
         });
+    </script>
+
+    <script>
+        function confirmComplete(taskId, taskTitle) {
+            if (confirm(`Deseja marcar a tarefa "${taskTitle}" como concluída?`)) {
+                document.getElementById(`complete-form-${taskId}`).submit();
+            }
+        }
     </script>
 </div>
 @endsection
