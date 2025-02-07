@@ -238,6 +238,7 @@ h1, h2, h3, h4, h5, h6 {
 .calendar a {
     text-decoration: none;
     color: inherit;
+    cursor: pointer;
 }
 
 @media (max-width: 768px) {

@@ -211,6 +211,38 @@
         <div id="calendar"></div>
     </div>
 
+    <!-- Modal da Tarefa -->
+    <div class="modal fade" id="taskModal" tabindex="-1" aria-labelledby="taskModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="taskModalLabel"></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="task-info mb-3">
+                        <p class="mb-1"><strong>Categoria:</strong> <span id="taskCategory"></span></p>
+                        <p class="mb-1"><strong>Data:</strong> <span id="taskDate"></span></p>
+                        <p class="mb-1"><strong>Urgência:</strong> <span id="taskUrgency"></span></p>
+                        <p class="mb-1"><strong>Descrição:</strong></p>
+                        <p id="taskDescription" class="text-muted mb-3"></p>
+                    </div>
+                    <div class="d-flex justify-content-center">
+                        <a href="#" id="editTaskBtn" class="btn btn-sm btn-warning">
+                            <i class="fas fa-edit"></i>
+                        </a>
+                        <button id="completeTaskBtn" class="btn btn-sm btn-success">
+                            <i class="fas fa-check"></i>
+                        </button>
+                        <button id="deleteTaskBtn" class="btn btn-sm btn-danger">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             var calendarEl = document.getElementById('calendar');
@@ -220,16 +252,114 @@
                 events: [
                     @foreach ($upcomingTasks as $task)
                     {
-                        title: '{{ $task->title }}',
+                        id: {{ $task->id }},
+                        title: '{{ $task->category ? $task->category->name . " • " : "" }}{{ $task->title }}',
                         start: '{{ $task->due_date }}',
-                        url: '{{ route('tasks.edit', $task->id) }}',
-                        color: '{{ $task->urgency === 'high' ? '#dc3545' : ($task->urgency === 'medium' ? '#ffc107' : '#0d6efd') }}'
+                        color: '{{ $task->urgency === 'high' ? '#dc3545' : ($task->urgency === 'medium' ? '#ffc107' : '#0d6efd') }}',
+                        display: 'block',
+                        textColor: 'var(--primary)',
+                        extendedProps: {
+                            category: '{{ $task->category ? $task->category->name : "Sem categoria" }}',
+                            description: '{{ $task->description ?? "Sem descrição" }}',
+                            urgency: '{{ $task->urgency }}',
+                            editUrl: '{{ route('tasks.edit', $task->id) }}',
+                            deleteUrl: '{{ route('tasks.destroy', $task->id) }}',
+                            completeUrl: '{{ route('tasks.complete', $task->id) }}'
+                        }
                     },
                     @endforeach
-                ]
+                ],
+                eventDidMount: function(info) {
+                    info.el.style.borderLeft = '8px solid ' + info.event.backgroundColor;
+                    info.el.style.backgroundColor = 'rgba(' + 
+                        hexToRgb(info.event.backgroundColor).r + ',' +
+                        hexToRgb(info.event.backgroundColor).g + ',' +
+                        hexToRgb(info.event.backgroundColor).b + ', 0.1)';
+                    
+                    // Adicionar título completo como tooltip
+                    info.el.title = info.event.title;
+                },
+                eventClick: function(info) {
+                    info.jsEvent.preventDefault();
+                    const event = info.event;
+                    const props = event.extendedProps;
+                    
+                    // Preencher o modal com as informações da tarefa
+                    document.getElementById('taskModalLabel').textContent = event.title;
+                    document.getElementById('taskCategory').textContent = props.category;
+                    document.getElementById('taskDate').textContent = new Date(event.start).toLocaleDateString('pt-BR');
+                    document.getElementById('taskDescription').textContent = props.description;
+                    document.getElementById('taskUrgency').textContent = props.urgency.charAt(0).toUpperCase() + props.urgency.slice(1);
+                    
+                    // Configurar URLs dos botões
+                    document.getElementById('editTaskBtn').href = props.editUrl;
+                    document.getElementById('deleteTaskBtn').onclick = () => deleteTask(event.id, props.deleteUrl);
+                    document.getElementById('completeTaskBtn').onclick = () => completeTask(event.id, props.completeUrl);
+                    
+                    // Abrir o modal
+                    new bootstrap.Modal(document.getElementById('taskModal')).show();
+                }
             });
             calendar.render();
         });
+
+        function deleteTask(taskId, deleteUrl) {
+            if (confirm('Tem certeza que deseja excluir esta tarefa?')) {
+                const form = document.createElement('form');
+                form.method = 'POST';
+                form.action = deleteUrl;
+                form.style.display = 'none';
+
+                const methodInput = document.createElement('input');
+                methodInput.type = 'hidden';
+                methodInput.name = '_method';
+                methodInput.value = 'DELETE';
+
+                const tokenInput = document.createElement('input');
+                tokenInput.type = 'hidden';
+                tokenInput.name = '_token';
+                tokenInput.value = document.querySelector('meta[name="csrf-token"]').content;
+
+                form.appendChild(methodInput);
+                form.appendChild(tokenInput);
+                document.body.appendChild(form);
+                form.submit();
+            }
+        }
+
+        function completeTask(taskId, completeUrl) {
+            if (confirm('Deseja marcar esta tarefa como concluída?')) {
+                const form = document.createElement('form');
+                form.method = 'POST';
+                form.action = completeUrl;
+                form.style.display = 'none';
+
+                const methodInput = document.createElement('input');
+                methodInput.type = 'hidden';
+                methodInput.name = '_method';
+                methodInput.value = 'PATCH';
+
+                const tokenInput = document.createElement('input');
+                tokenInput.type = 'hidden';
+                tokenInput.name = '_token';
+                tokenInput.value = document.querySelector('meta[name="csrf-token"]').content;
+
+                form.appendChild(methodInput);
+                form.appendChild(tokenInput);
+                document.body.appendChild(form);
+                form.submit();
+            }
+        }
+
+        // Função auxiliar para converter hex para RGB
+        function hexToRgb(hex) {
+            var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+            return result ? {
+                r: parseInt(result[1], 16),
+                g: parseInt(result[2], 16),
+                b: parseInt(result[3], 16)
+            } : null;
+        }
     </script>
 
     <script>
