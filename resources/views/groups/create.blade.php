@@ -14,7 +14,7 @@
         <div class="col-md-8">
             <div class="card">
                 <div class="card-body">
-                    <form action="{{ route('groups.store') }}" method="POST">
+                    <form class="d-block" action="{{ route('groups.store') }}" method="POST">
                         @csrf
 
                         <div class="mb-3">

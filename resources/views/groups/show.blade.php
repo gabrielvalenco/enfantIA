@@ -6,7 +6,7 @@
 
 <div class="container">
     <div class="dashboard-section-title mb-4">
-        <h1 class="d-inline-block mb-0">
+        <h1 class="d-inline-block mb-4">
             <i class="fas fa-users"></i>
             {{ $group->name }}
         </h1>
