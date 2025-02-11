@@ -12,7 +12,7 @@
         <h1 class="dashboard-title">TASKNEST</h1>
         
         <div class="dropdown">
-            <button class="btn btn-link text-light p-0 border-0" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+            <button class="btn btn-link text-light p-0 border-0  mb-0" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                 <i class="fas fa-user-circle fs-4"></i>
             </button>
             <ul class="dropdown-menu dropdown-menu-end user-dropdown" aria-labelledby="userDropdown">
@@ -172,43 +172,45 @@
 
     <div class="upcoming-tasks mt-4">
         <div class="dashboard-section-title">
-            <i class="fas fa-clock"></i>
-            Prazos Próximos
+            <i class="fas fa-clock"></i> Prazos Próximos
         </div>
-        
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Tarefa</th>
-                    <th>Prazo</th>
-                    <th>Urgência</th>
-                    <th>Ações</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($upcomingTasks as $task)
-                <tr>
-                    <td>{{ $task->title }}</td>
-                    <td>{{ \Carbon\Carbon::parse($task->due_date)->format('d/m/Y') }}</td>
-                    <td>
-                        <span class="badge bg-{{ $task->urgency === 'high' ? 'danger' : ($task->urgency === 'medium' ? 'warning' : 'info') }}">
-                            {{ ucfirst($task->urgency) }}
-                        </span>
-                    </td>
-                    <td>
-                        <button onclick="confirmComplete({{ $task->id }}, '{{ $task->title }}')" class="btn btn-sm btn-success" title="Concluir">
-                            <i class="fas fa-check"></i>
-                        </button>
-                        <form id="complete-form-{{ $task->id }}" action="{{ route('tasks.complete', $task->id) }}" method="POST" class="d-none">
-                            @csrf
-                            @method('PATCH')
-                        </form>
-                    </td>
-                </tr>
-                @endforeach
-            </tbody>
-        </table>
-    </div>
+
+            <div class="table-responsive">
+                <table class="table table-striped table-hover">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Tarefa</th>
+                            <th>Prazo</th>
+                            <th>Urgência</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($upcomingTasks as $task)
+                        <tr>
+                            <td>{{ $task->title }}</td>
+                            <td>{{ \Carbon\Carbon::parse($task->due_date)->format('d/m/Y') }}</td>
+                            <td>
+                                <span class="badge bg-{{ $task->urgency === 'high' ? 'danger' : ($task->urgency === 'medium' ? 'warning' : 'info') }}">
+                                    {{ ucfirst($task->urgency) }}
+                                </span>
+                            </td>
+                            <td class="text-center">
+                                <button onclick="confirmComplete({{ $task->id }}, '{{ $task->title }}')" class="btn btn-sm btn-success" title="Concluir">
+                                    <i class="fas fa-check"></i>
+                                </button>
+                                <form id="complete-form-{{ $task->id }}" action="{{ route('tasks.complete', $task->id) }}" method="POST" class="d-none">
+                                    @csrf
+                                    @method('PATCH')
+                                </form>
+                            </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
 
     <div class="calendar mt-4">
         <div class="dashboard-section-title">
@@ -336,23 +338,27 @@
 
         function completeTask(taskId, completeUrl) {
             if (confirm('Deseja marcar esta tarefa como concluída?')) {
+                // Create a hidden form
                 const form = document.createElement('form');
+                form.style.display = 'none';
                 form.method = 'POST';
                 form.action = completeUrl;
-                form.style.display = 'none';
 
-                const methodInput = document.createElement('input');
-                methodInput.type = 'hidden';
-                methodInput.name = '_method';
-                methodInput.value = 'PATCH';
+                // Add CSRF token
+                const csrfToken = document.createElement('input');
+                csrfToken.type = 'hidden';
+                csrfToken.name = '_token';
+                csrfToken.value = document.querySelector('meta[name="csrf-token"]').content;
+                form.appendChild(csrfToken);
 
-                const tokenInput = document.createElement('input');
-                tokenInput.type = 'hidden';
-                tokenInput.name = '_token';
-                tokenInput.value = document.querySelector('meta[name="csrf-token"]').content;
+                // Add method spoofing
+                const methodField = document.createElement('input');
+                methodField.type = 'hidden';
+                methodField.name = '_method';
+                methodField.value = 'PATCH';
+                form.appendChild(methodField);
 
-                form.appendChild(methodInput);
-                form.appendChild(tokenInput);
+                // Add form to body and submit
                 document.body.appendChild(form);
                 form.submit();
             }

@@ -12,6 +12,12 @@
     --info-hover: #1ccde9;
 }
 
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
 body {
     font-family: 'Poppins', sans-serif;
     background-color: var(--background);
@@ -259,16 +265,30 @@ h1, h2, h3, h4, h5, h6 {
     }
 
     .upcoming-tasks {
-        padding: 1rem;
+        padding: 0.8rem;
     }
 
     .upcoming-tasks .table {
-        padding: 0;
+        font-size: 0.8rem;
     }
 
-    .upcoming-tasks .table th, .upcoming-tasks .table td {
-        padding: 0.5rem;
+    .upcoming-tasks th, .upcoming-tasks td {
+        padding: 0.2rem;
     }
+
+    .upcoming-tasks .btn {
+        padding: 0.3rem 0.5rem;
+        font-size: 0.8rem;
+    }
+
+    .fc-header-toolbar {
+        display: block !important;
+    }
+
+    .fc-header-toolbar button {
+        margin-top: 10px !important;
+    }
+
 }
 
 .user-dropdown {

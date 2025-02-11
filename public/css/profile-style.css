@@ -12,15 +12,16 @@
     --info-hover: #1ccde9;
 }
 
-html, body {
-    height: 100%;
-    margin: 0;
-    padding: 0;
+html {
+    height: auto;
 }
 
 body {
     font-family: 'Poppins', sans-serif;
-    background-color: var(--background);
+    background-image: url('../images/task_nest_bg.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
     color: var(--primary);
 }
 
@@ -29,38 +30,23 @@ h1, h2, h3, h4, h5, h6 {
     font-weight: 700;
 }
 
-.card-body {
-    display: block !important;
-    padding: 2rem;
+label {
+    font-weight: 600;
 }
 
-.card {
-    display: block;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+footer {
+    display: none;
 }
-
-.card-footer {
-    display: flex;
-    justify-content: flex-end; /* Move os itens para a direita */
-}
-
 
 @media (max-width: 768px) {
     .container {
-        max-width: 900px;
-        width: 100%;
+        margin: 0;
+        padding: 0;
     }
-    .dashboard-section-title .btn {
-        margin-bottom: 2rem;
-    }
-    .float-end {
-        width: 100%;
-    }
-    .card-footer .btn {
+    .container .btn {
         margin: 0;
     }
-    .modal form{
+    form {
         display: block;
     }
 }

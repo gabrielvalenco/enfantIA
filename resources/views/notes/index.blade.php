@@ -2,6 +2,8 @@
 
 @section('content')
 
+<link rel="stylesheet" href="{{ asset('css/notes-style.css') }}">
+
 <div class="container">
     <div class="notes-section">
         <div class="dashboard-section-title mb-4 d-flex justify-content-between align-items-center">

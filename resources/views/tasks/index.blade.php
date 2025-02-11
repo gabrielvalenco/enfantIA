@@ -47,8 +47,7 @@
             </div>
         </div>
 
-        <div class="table-responsive">
-            <table class="table">
+            <table class="table table-striped">
                 <thead>
                     <tr>
                         <th>Título</th>
@@ -78,9 +77,9 @@
                                     <td class="task-description">{{ $task->description }}</td>
                                     <td class="categories-column">
                                         @if($task->categories->isNotEmpty())
-                                            <div class="d-flex flex-wrap gap-2">
+                                            <div class="d-block gap-2">
                                                 @foreach($task->categories as $category)
-                                                    <div class="category-badge" style="background-color: {{ $category->color }};">
+                                                    <div class="category-badge p-2 m-1" style="background-color: {{ $category->color }};">
                                                         {{ $category->name }}
                                                     </div>
                                                 @endforeach
@@ -117,8 +116,8 @@
                                         <form action="{{ route('tasks.complete', $task) }}" method="POST" style="display: inline;">
                                             @csrf
                                             @method('PATCH')
-                                            <button type="submit" class="btn btn-sm {{ $task->status ? 'btn-success' : 'btn-secondary' }}">
-                                                {{ $task->status ? 'Concluída' : 'Pendente' }}
+                                            <button type="submit" class="btn btn-sm pb-1 {{ $task->status ? 'btn-success' : 'btn-success' }}">
+                                                <i class="fas fa-check"></i> {{ $task->status ? 'Concluída' : ''}}
                                             </button>
                                         </form>
                                     </td>

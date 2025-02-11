@@ -1,20 +1,20 @@
 @extends('layouts.app')
 
 @section('content')
-<link rel="stylesheet" href="{{ asset('css/custom-styles.css') }}">
+<link rel="stylesheet" href="{{ asset('css/profile-style.css') }}">
 
-<div class="container mt-4">
+<div class="container mb-4">
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card shadow-sm">
-                <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-                    <h5 class="mb-0">Meu Perfil</h5>
+                <div class="card-header rounded-0 bg-primary text-white d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0 text-white">Meu Perfil</h5>
                     <a href="{{ route('dashboard') }}" class="btn btn-light btn-sm">
                         Voltar ao Dashboard
                     </a>
                 </div>
 
-                <div class="card-body">
+                <div class="card-body mt-4">
                     @if(session('success'))
                         <div class="alert alert-success">
                             {{ session('success') }}
@@ -98,33 +98,6 @@
                             @error('timezone')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
-                        </div>
-
-                        <hr>
-
-                        <h5 class="mb-3">Preferências de Notificação</h5>
-                        <div class="form-group mb-3">
-                            <div class="custom-control custom-switch">
-                                <input type="checkbox" class="custom-control-input" id="task_notifications" name="task_notifications"
-                                       {{ old('task_notifications', $user->preferences['task_notifications'] ?? false) ? 'checked' : '' }}>
-                                <label class="custom-control-label" for="task_notifications">Notificações de Tarefas</label>
-                            </div>
-                        </div>
-
-                        <div class="form-group mb-3">
-                            <div class="custom-control custom-switch">
-                                <input type="checkbox" class="custom-control-input" id="deadline_reminders" name="deadline_reminders"
-                                       {{ old('deadline_reminders', $user->preferences['deadline_reminders'] ?? false) ? 'checked' : '' }}>
-                                <label class="custom-control-label" for="deadline_reminders">Lembretes de Prazo</label>
-                            </div>
-                        </div>
-
-                        <div class="form-group mb-3">
-                            <div class="custom-control custom-switch">
-                                <input type="checkbox" class="custom-control-input" id="weekly_summary" name="weekly_summary"
-                                       {{ old('weekly_summary', $user->preferences['weekly_summary'] ?? false) ? 'checked' : '' }}>
-                                <label class="custom-control-label" for="weekly_summary">Resumo Semanal</label>
-                            </div>
                         </div>
 
                         <div class="text-end mt-4">

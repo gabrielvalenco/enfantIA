@@ -12,9 +12,18 @@
     --info-hover: #1ccde9;
 }
 
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
 body {
     font-family: 'Poppins', sans-serif;
-    background-color: var(--background);
+    background-image: url('../images/task_nest_bg.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
     color: var(--primary);
 }
 
@@ -48,7 +57,7 @@ h1, h2, h3, h4, h5, h6 {
     background-color: white;
     padding: 1rem;
     border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.185);
 }
 
 .color-preview {
@@ -78,4 +87,19 @@ h1, h2, h3, h4, h5, h6 {
 
 .gap-2 {
     gap: 0.75rem !important;
+}
+
+@media (max-width: 768px) {
+    body {
+        background-image: url('../images/task_nest_mobile_bg.png');
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+    }
+
+    .container {
+        width: 450px;
+        margin: 0 auto;
+        padding: 0 15px;
+    }
 }

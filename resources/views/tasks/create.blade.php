@@ -18,7 +18,7 @@
         </div>
 
         <div class="form-container">
-            <form action="{{ route('tasks.store') }}" method="POST" class="needs-validation" novalidate>
+            <form action="{{ route('tasks.store') }}" method="POST" class="needs-validation p-3" novalidate>
                 @csrf
                 
                 <!-- Título -->
