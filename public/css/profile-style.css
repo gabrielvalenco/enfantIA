@@ -34,6 +34,70 @@ label {
     font-weight: 600;
 }
 
+.avatar-wrapper {
+    position: relative;
+    display: inline-block;
+}
+
+.custom-control-input {
+    position: absolute;
+    left: 0;
+    z-index: -1;
+    width: 1rem;
+    height: 1.25rem;
+    opacity: 0;
+}
+
+.custom-control-label {
+    position: relative;
+    margin-bottom: 0;
+    vertical-align: top;
+    padding-left: 2.5rem;
+    cursor: pointer;
+}
+
+.custom-control-label::before {
+    position: absolute;
+    top: 0.25rem;
+    left: 0;
+    display: block;
+    width: 2rem;
+    height: 1.25rem;
+    content: "";
+    background-color: #fff;
+    border: 1px solid #adb5bd;
+    border-radius: 0.625rem;
+    transition: background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.custom-control-label::after {
+    position: absolute;
+    top: 0.35rem;
+    left: 0.1rem;
+    display: block;
+    width: 1rem;
+    height: 1rem;
+    content: "";
+    background-color: #adb5bd;
+    border-radius: 0.625rem;
+    transition: transform 0.15s ease-in-out, background-color 0.15s ease-in-out;
+}
+
+.custom-control-input:checked ~ .custom-control-label::before {
+    color: #fff;
+    border-color: #0d6efd;
+    background-color: #0d6efd;
+}
+
+.custom-control-input:checked ~ .custom-control-label::after {
+    background-color: #fff;
+    transform: translateX(0.9rem);
+}
+
+.custom-control-input:focus ~ .custom-control-label::before {
+    box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+}
+
 footer {
     display: none;
 }

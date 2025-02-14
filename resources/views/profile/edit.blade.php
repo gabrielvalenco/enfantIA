@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
+
 <link rel="stylesheet" href="{{ asset('css/profile-style.css') }}">
 
 <div class="container mb-4">
@@ -23,7 +24,7 @@
 
                     <form action="{{ route('profile.update') }}" method="POST" enctype="multipart/form-data">
                         @csrf
-                        @method('PUT')
+                        @method('PATCH')
 
                         <div class="row">
                             <div class="col-md-4 text-center mb-4">
@@ -34,7 +35,7 @@
                                         <label for="avatar" class="btn btn-outline-primary btn-sm">
                                             <i class="fas fa-camera me-2"></i>Alterar Foto
                                         </label>
-                                        <input type="file" name="avatar" id="avatar" class="d-none">
+                                        <input type="file" name="avatar" id="avatar" class="d-none" accept="image/*">
                                     </div>
                                 </div>
                             </div>
@@ -112,80 +113,23 @@
     </div>
 </div>
 
-<style>
-.avatar-wrapper {
-    position: relative;
-    display: inline-block;
-}
-
-.custom-control-input {
-    position: absolute;
-    left: 0;
-    z-index: -1;
-    width: 1rem;
-    height: 1.25rem;
-    opacity: 0;
-}
-
-.custom-control-label {
-    position: relative;
-    margin-bottom: 0;
-    vertical-align: top;
-    padding-left: 2.5rem;
-    cursor: pointer;
-}
-
-.custom-control-label::before {
-    position: absolute;
-    top: 0.25rem;
-    left: 0;
-    display: block;
-    width: 2rem;
-    height: 1.25rem;
-    content: "";
-    background-color: #fff;
-    border: 1px solid #adb5bd;
-    border-radius: 0.625rem;
-    transition: background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-}
-
-.custom-control-label::after {
-    position: absolute;
-    top: 0.35rem;
-    left: 0.1rem;
-    display: block;
-    width: 1rem;
-    height: 1rem;
-    content: "";
-    background-color: #adb5bd;
-    border-radius: 0.625rem;
-    transition: transform 0.15s ease-in-out, background-color 0.15s ease-in-out;
-}
-
-.custom-control-input:checked ~ .custom-control-label::before {
-    color: #fff;
-    border-color: #0d6efd;
-    background-color: #0d6efd;
-}
-
-.custom-control-input:checked ~ .custom-control-label::after {
-    background-color: #fff;
-    transform: translateX(0.9rem);
-}
-
-.custom-control-input:focus ~ .custom-control-label::before {
-    box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
-}
-</style>
-
 <script>
 document.getElementById('avatar').addEventListener('change', function(e) {
     if (e.target.files && e.target.files[0]) {
+        const file = e.target.files[0];
+        
+        // Verificar tamanho do arquivo (máximo 2MB)
+        if (file.size > 2 * 1024 * 1024) {
+            alert('A imagem deve ter no máximo 2MB');
+            this.value = '';
+            return;
+        }
+
         const reader = new FileReader();
         reader.onload = function(e) {
             document.querySelector('.avatar-wrapper img').src = e.target.result;
         };
-        reader.readAsDataURL(e.target.files[0]);
+        reader.readAsDataURL(file);
     }
 });
 </script>
