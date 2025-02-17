@@ -68,5 +68,7 @@ Route::middleware('auth')->group(function () {
         Route::resource('groups', GroupController::class);
         Route::post('/groups/{group}/members', [GroupController::class, 'addMember'])->name('groups.add-member');
         Route::delete('/groups/{group}/members', [GroupController::class, 'removeMember'])->name('groups.remove-member');
+        Route::delete('/groups/{group}/delete', [GroupController::class, 'delete'])->name('groups.delete');
+        Route::get('/groups/{group}/leave', [GroupController::class, 'leave'])->name('groups.leave');
     });
 });

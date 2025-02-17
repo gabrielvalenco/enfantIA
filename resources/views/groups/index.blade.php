@@ -46,6 +46,15 @@
                         </div>
                     </div>
                     <div class="card-footer bg-transparent">
+                            @if($group->isAdmin(Auth::user()))
+                                <a href="{{ route('groups.delete', $group) }}" class="btn btn-danger btn-sm me-2">
+                                    <i class="fas fa-trash"></i> Excluir
+                                </a>
+                            @else
+                                <a href="{{ route('groups.leave', $group) }}" class="btn btn-danger btn-sm me-2">
+                                    <i class="fas fa-sign-out-alt"></i> Sair
+                                </a>
+                            @endif
                         <a href="{{ route('groups.show', $group) }}" class="btn btn-primary btn-sm">
                             <i class="fas fa-eye"></i> Ver Grupo
                         </a>

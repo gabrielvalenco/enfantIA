@@ -101,4 +101,24 @@ class GroupController extends Controller
         $group->members()->detach($validated['user_id']);
         return back()->with('success', 'Membro removido com sucesso!');
     }
+
+    public function delete(Group $group)
+    {
+        $group->delete();
+        return redirect()->route('groups.index')->with('success', 'Grupo deletado com sucesso!');
+    }
+
+    public function destroy(Group $group)
+    {
+        $group->delete();
+        return redirect()->route('groups.index')
+            ->with('success', 'Grupo removido com sucesso!');
+    }
+
+    public function leave(Group $group)
+    {
+        $group->members()->detach(Auth::id());
+        return redirect()->route('groups.index')
+            ->with('success', 'Saída realizada com sucesso!');
+    }
 }
