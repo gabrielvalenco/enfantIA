@@ -24,6 +24,7 @@ return new class extends Migration
             $table->text('description');
             $table->date('due_date');
             $table->boolean('status')->default(false);
+            $table->timestamp('completed_at')->nullable();
             $table->enum('urgency', ['none', 'low', 'medium', 'high'])->default('none');
             $table->timestamps();
         });

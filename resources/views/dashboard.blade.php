@@ -240,7 +240,7 @@
                         <a href="#" id="editTaskBtn" class="btn btn-sm btn-warning">
                             <i class="fas fa-edit"></i>
                         </a>
-                        <button id="completeTaskBtn" class="btn btn-sm btn-success">
+                        <button id="completeTaskBtn" class="btn btn-sm btn-success" data-task-id="">
                             <i class="fas fa-check"></i>
                         </button>
                         <button id="deleteTaskBtn" class="btn btn-sm btn-danger">
@@ -253,6 +253,19 @@
     </div>
 
     <script>
+        function confirmComplete(taskId, taskTitle) {
+            if (confirm(`Deseja marcar a tarefa "${taskTitle}" como concluída?`)) {
+                document.getElementById(`complete-form-${taskId}`).submit();
+            }
+        }
+
+        // Update the completeTask function to use the form submission
+        function completeTask(taskId) {
+            if (confirm('Deseja marcar esta tarefa como concluída?')) {
+                document.getElementById(`complete-form-${taskId}`).submit();
+            }
+        }
+
         document.addEventListener('DOMContentLoaded', function() {
             var calendarEl = document.getElementById('calendar');
             var calendar = new FullCalendar.Calendar(calendarEl, {
@@ -303,13 +316,21 @@
                     // Configurar URLs dos botões
                     document.getElementById('editTaskBtn').href = props.editUrl;
                     document.getElementById('deleteTaskBtn').onclick = () => deleteTask(event.id, props.deleteUrl);
-                    document.getElementById('completeTaskBtn').onclick = () => completeTask(event.id, props.completeUrl);
+                    document.getElementById('completeTaskBtn').setAttribute('data-task-id', event.id);
                     
                     // Abrir o modal
                     new bootstrap.Modal(document.getElementById('taskModal')).show();
                 }
             });
             calendar.render();
+
+            // Add event listener for modal complete button
+            document.getElementById('completeTaskBtn').addEventListener('click', function() {
+                const taskId = this.getAttribute('data-task-id');
+                if (taskId) {
+                    completeTask(taskId);
+                }
+            });
         });
 
         function deleteTask(taskId, deleteUrl) {
@@ -336,34 +357,6 @@
             }
         }
 
-        function completeTask(taskId, completeUrl) {
-            if (confirm('Deseja marcar esta tarefa como concluída?')) {
-                // Create a hidden form
-                const form = document.createElement('form');
-                form.style.display = 'none';
-                form.method = 'POST';
-                form.action = completeUrl;
-
-                // Add CSRF token
-                const csrfToken = document.createElement('input');
-                csrfToken.type = 'hidden';
-                csrfToken.name = '_token';
-                csrfToken.value = document.querySelector('meta[name="csrf-token"]').content;
-                form.appendChild(csrfToken);
-
-                // Add method spoofing
-                const methodField = document.createElement('input');
-                methodField.type = 'hidden';
-                methodField.name = '_method';
-                methodField.value = 'PATCH';
-                form.appendChild(methodField);
-
-                // Add form to body and submit
-                document.body.appendChild(form);
-                form.submit();
-            }
-        }
-
         // Função auxiliar para converter hex para RGB
         function hexToRgb(hex) {
             var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
@@ -378,6 +371,13 @@
     <script>
         function confirmComplete(taskId, taskTitle) {
             if (confirm(`Deseja marcar a tarefa "${taskTitle}" como concluída?`)) {
+                document.getElementById(`complete-form-${taskId}`).submit();
+            }
+        }
+
+        // Update the completeTask function to use the form submission
+        function completeTask(taskId) {
+            if (confirm('Deseja marcar esta tarefa como concluída?')) {
                 document.getElementById(`complete-form-${taskId}`).submit();
             }
         }
