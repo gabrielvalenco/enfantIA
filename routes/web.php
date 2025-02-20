@@ -45,6 +45,8 @@ Route::middleware('auth')->group(function () {
     Route::delete('/tasks/{task}', [TaskController::class, 'destroy'])->name('tasks.destroy');
     Route::patch('/tasks/{task}/complete', [TaskController::class, 'complete'])->name('tasks.complete');
     Route::patch('/tasks/{task}/uncomplete', [TaskController::class, 'uncomplete'])->name('tasks.uncomplete');
+    Route::delete('/tasks/{task}/clear', [TaskController::class, 'clear'])->name('tasks.clear');
+    Route::delete('/tasks/cleared', [TaskController::class, 'cleared'])->name('tasks.cleared');
 
     Route::get('/categories', [CategoryController::class, 'index'])->name('categories.index');
     Route::get('/categories/create', [CategoryController::class, 'create'])->name('categories.create');

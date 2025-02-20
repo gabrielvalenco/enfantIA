@@ -17,18 +17,10 @@ html, body {
     margin: 0;
     padding: 0;
 }
-
 body {
     font-family: 'Poppins', sans-serif;
     background-color: var(--background);
     color: var(--primary);
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-}
-
-.content {
-    flex: 1 0 auto;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -709,22 +701,30 @@ a.menu-item i {
 }
 
 footer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     flex-shrink: 0;
     width: 100%;
     background-color: var(--primary);
     color: white;
     padding: 1rem 0;
     margin-top: auto;
+    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.2);
 }
 
 .footer-name {
     display: block;
     margin-bottom: 0.5rem;
     font-size: 0.9rem;
+    text-align: center;
 }
 
 footer span {
     text-align: center;
+    font-size: 0.8rem;
+    opacity: 0.8;
 }
 
 .social-icons {

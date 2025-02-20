@@ -97,27 +97,27 @@
                                                     $hoursUntilDue = $now->diffInHours($dueDate, false);
                                                 @endphp
                                                 @if($hoursUntilDue <= 24 && $hoursUntilDue > 0)
-                                                    <span class="badge-urgent">
+                                                    <span class="badge-urgent p-2">
                                                         <i class="fas fa-exclamation-circle"></i>
                                                         Alta Prioridade
                                                     </span>
                                                 @else
-                                                    <span class="badge bg-danger">Alta</span>
+                                                    <span class="badge bg-danger p-2">Alta</span>
                                                 @endif
                                                 @break
                                             @case('medium')
-                                                <span class="badge bg-warning text-dark">Média</span>
+                                                <span class="badge bg-warning text-dark p-2">Média</span>
                                                 @break
                                             @default
-                                                <span class="badge bg-info">Baixa</span>
+                                                <span class="badge bg-info p-2">Baixa</span>
                                         @endswitch
                                     </td>
                                     <td>
                                         <form action="{{ route('tasks.complete', $task) }}" method="POST" style="display: inline;">
                                             @csrf
                                             @method('PATCH')
-                                            <button type="submit" class="btn btn-sm pb-1 {{ $task->status ? 'btn-success' : 'btn-success' }}">
-                                                <i class="fas fa-check"></i> {{ $task->status ? 'Concluída' : ''}}
+                                            <button type="submit" class="btn btn-sm pb-1 {{ $task->status ? 'btn-secondary' : 'btn-secondary' }}">
+                                                <i class="fas fa-clock"></i> {{ $task->status ? 'Concluída' : ''}}
                                             </button>
                                         </form>
                                     </td>

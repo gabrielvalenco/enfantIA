@@ -1,69 +1,94 @@
 @extends('layouts.auth')
 
 @section('content')
-
 <link rel="stylesheet" href="{{ asset('css/auth-style.css') }}">
 
-<div class="container mb-4">
-    <div class="row justify-content-center">
-        <div class="col-12 col-sm-10 col-md-8 col-lg-6">
-            <div class="card border-0 shadow-sm">
-                <div class="card-header bg-primary text-white">
-                    <h4 class="mb-0">Login</h4>
-                </div>
+<div class="auth-wrapper">
+    <div class="auth-container">
+        <div class="auth-card">
+            <div class="auth-header">
+                <h4>Login</h4>
+            </div>
 
-                <div class="card-body p-4">
-                    <form method="POST" action="{{ route('login') }}">
-                        @csrf
+            <div class="auth-body">
+                <form method="POST" action="{{ route('login') }}">
+                    @csrf
 
-                        <div class="mb-3">
-                            <i class="fas fa-envelope"></i>
-                            <label for="email" class="form-label">Email</label>
-                            <input type="email" 
-                                   class="form-control @error('email') is-invalid @enderror" 
-                                   id="email" 
-                                   name="email" 
-                                   value="{{ old('email') }}" 
-                                   required 
-                                   autocomplete="email" 
-                                   autofocus>
-                            @error('email')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
+                    <div class="form-group">
+                        <label for="email">
+                            <i class="fas fa-envelope"></i>Email
+                        </label>
+                        <input type="email" 
+                            class="form-control @error('email') is-invalid @enderror" 
+                            id="email" 
+                            name="email" 
+                            value="{{ old('email') }}" 
+                            required 
+                            autocomplete="email" 
+                            autofocus>
+                        @error('email')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
 
-                        <div class="mb-3">
-                            <i class="fas fa-lock"></i>
-                            <label for="password" class="form-label">Senha</label>
+                    <div class="form-group">
+                        <label for="password">
+                            <i class="fas fa-lock"></i>Senha
+                        </label>
+                        <div class="password-container">
                             <input type="password" 
-                                   class="form-control @error('password') is-invalid @enderror" 
-                                   id="password" 
-                                   name="password" 
-                                   required 
-                                   autocomplete="current-password">
-                            @error('password')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
+                                class="form-control @error('password') is-invalid @enderror" 
+                                id="password" 
+                                name="password" 
+                                required 
+                                autocomplete="current-password">
+                            <span class="password-toggle" onclick="togglePasswordVisibility()">
+                                <i class="fas fa-eye" id="togglePassword"></i>
+                            </span>
                         </div>
+                        @error('password')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
 
-                        <div class="mb-3">
-                            <div class="form-check">
-                                <input type="checkbox" class="form-check-input" id="remember" name="remember">
-                                <label class="form-check-label" for="remember">Lembrar-me</label>
-                            </div>
-                        </div>
+                    <div class="form-check">
+                        <input type="checkbox" class="form-check-input" id="remember" name="remember">
+                        <label class="form-check-label" for="remember">Lembrar-me</label>
+                    </div>
 
-                        <div class="d-grid gap-2">
-                            <button type="submit" class="btn btn-primary">Entrar</button>
-                        </div>
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary btn-block">Entrar</button>
                         
-                        <div class="mt-3 text-center">
-                            <p class="mb-0">Não tem uma conta? <a href="{{ route('register') }}" class="text-primary text-decoration-none">Registre-se</a></p>
+                        @if (Route::has('password.request'))
+                        <div class="forgot-password">
+                            <a href="{{ route('password.request') }}">
+                                Esqueceu sua senha?
+                            </a>
                         </div>
-                    </form>
-                </div>
+                        @endif
+                    </div>
+
+                    <div class="auth-footer">
+                        <p>Não tem uma conta? <a href="{{ route('register') }}">Registre-se</a></p>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
 </div>
+
+<script>
+function togglePasswordVisibility() {
+    const passwordInput = document.getElementById('password');
+    const toggleIcon = document.getElementById('togglePassword');
+    
+    if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        toggleIcon.classList.replace('fa-eye', 'fa-eye-slash');
+    } else {
+        passwordInput.type = 'password';
+        toggleIcon.classList.replace('fa-eye-slash', 'fa-eye');
+    }
+}
+</script>
 @endsection

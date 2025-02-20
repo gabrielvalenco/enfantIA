@@ -4,7 +4,6 @@
 
 <link rel="stylesheet" href="{{ asset('css/profile-style.css') }}">
 
-<div class="container mb-4">
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card shadow-sm">
@@ -111,7 +110,6 @@
             </div>
         </div>
     </div>
-</div>
 
 <script>
 document.getElementById('avatar').addEventListener('change', function(e) {
