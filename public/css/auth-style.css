@@ -28,6 +28,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
+    scroll-behavior: smooth;
 }
 
 .auth-wrapper {
@@ -70,6 +71,10 @@ body {
 .auth-body {
     padding: 40px;
     padding-bottom: 10px;
+}
+
+form {
+    display: block;
 }
 
 .form-group {
@@ -136,11 +141,12 @@ body {
 }
 
 .form-check {
-    padding-left: 0;
     margin-bottom: 25px;
+    position: relative;
 }
 
 .form-check-input {
+    border: 2px solid #2C3E50;
     margin-right: 10px;
     width: 18px;
     height: 18px;
@@ -218,14 +224,59 @@ body {
     text-decoration: underline;
 }
 
+.portfolio-anchor {
+    font-weight: 700;
+    font-size: 21px;
+    position: relative;
+    background-color: var(--info);
+    color: rgb(255, 255, 255);
+    padding: 15px;
+    border-radius: 5px;
+    text-align: center;
+    margin-top: 25px;
+    display: block;
+    text-decoration: none;
+    cursor: pointer;
+    overflow: hidden;
+}
+
+.portfolio-anchor::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+    transition: all 0.4s ease-in-out;
+}
+
+.portfolio-anchor:hover::before {
+    left: 100%;
+    transition: all 0.5s ease-in-out;
+}
+
+.portfolio-anchor:hover {
+    transform: translateY(-2px);
+}
+
+
 /* Media Queries */
 @media (max-width: 768px) {
     body {
         background-image: url('../images/task_nest_mobile_bg.png');
     }
+
+    .auth-wrapper {
+        max-width: 350px;
+        width: 100%;
+        margin: 0 auto;
+        padding: 0;
+    }
     
     .auth-container {
-        width: 100% !important;
+        max-width: 600px !important;
+        width: 100%;
     }
     
     .auth-body {
