@@ -74,3 +74,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/groups/{group}/leave', [GroupController::class, 'leave'])->name('groups.leave');
     });
 });
+
+Route::get('/portfolio', function () {
+    return view('portfolio');
+})->name('portfolio');

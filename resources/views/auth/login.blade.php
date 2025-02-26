@@ -74,6 +74,7 @@
                 </form>
             </div>
         </div>
+        <a href="{{ route('portfolio') }}" class="portfolio-anchor mt-5 text-center">Conheça mais do projeto</a>
     </div>
 </div>
 
