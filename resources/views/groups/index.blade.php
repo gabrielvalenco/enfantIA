@@ -1,6 +1,8 @@
 @extends('layouts.app')
 
 @section('content')
+
+<link rel="icon" href="{{ asset('favicon.svg') }}" type="image/svg+xml">
 <link rel="stylesheet" href="{{ asset('css/group-style.css') }}">
 
 <div class="container">
