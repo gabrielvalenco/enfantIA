@@ -36,23 +36,48 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .card {
-    display: block;
+    height: auto;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-.card-footer {
-    display: flex;
-    justify-content: flex-end; /* Move os itens para a direita */
+.task-item {
+    border: 1px solid #e9ecef;
+    transition: all 0.3s ease;
 }
 
+.task-item:nth-child(odd) {
+    background-color: #f8f9fa;
+}
+
+.task-item:nth-child(even) {
+    background-color: #ffffff;
+}
+
+.task-item:hover {
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+}
+
+.task-actions .btn {
+    margin-left: 5px;
+}
+
+.card-footer {
+    margin: 0 auto;
+    padding: 1rem;
+}
+
+label {
+    font-weight: 600;
+}
 
 @media (max-width: 768px) {
     .container {
         max-width: 900px;
         width: 100%;
     }
-    .dashboard-section-title .btn {
+    .dashboard-section-titledashboard-section-title .btn {
         margin-bottom: 2rem;
     }
     .float-end {

@@ -142,6 +142,16 @@ h1, h2, h3, h4, h5, h6 {
     gap: 0.5rem;
 }
 
+.dashboard-section-group-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: var(--primary);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
 .dashboard-menu .dashboard-section-title i {
     color: #ffffff;
 }
@@ -249,6 +259,54 @@ h1, h2, h3, h4, h5, h6 {
     cursor: pointer;
 }
 
+/* Notification Box Styles */
+.notification-box {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.notification-box .card {
+    border: none;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.notification-box .list-group-item {
+    transition: all 0.2s ease;
+    border-radius: 8px !important;
+}
+
+.notification-box .list-group-item:hover {
+    background-color: #f8f9fa;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.notification-box .badge {
+    padding: 0.35em 0.65em;
+    font-size: 0.75em;
+    vertical-align: middle;
+}
+
+.notification-box .btn {
+    transition: all 0.2s ease;
+}
+
+.notification-box .btn:hover {
+    transform: translateY(-2px);
+}
+
+.notification-box .btn-success {
+    background-color: var(--success);
+    border-color: var(--success);
+}
+
+.notification-box .btn-danger {
+    background-color: var(--danger);
+    border-color: var(--danger);
+}
+
 @media (max-width: 768px) {
     .status-cards {
         grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -291,8 +349,4 @@ h1, h2, h3, h4, h5, h6 {
         margin-top: 10px !important;
     }
 
-}
-
-.user-dropdown {
-    min-width: 200px;
 }

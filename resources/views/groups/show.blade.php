@@ -47,19 +47,20 @@
                 <div class="card-body">
                     @forelse($tasks as $task)
                         <div class="task-item p-3 mb-3 rounded @if($task->completed) bg-light text-muted @endif">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div>
-                                    <h5 class="mb-1">{{ $task->title }}</h5>
-                                    <p class="mb-1 text-muted">
-                                        <small>
-                                            <i class="fas fa-user"></i> {{ $task->creator->name }} |
-                                            <i class="fas fa-calendar"></i> {{ $task->due_date->format('d/m/Y') }} |
-                                            <i class="fas fa-tag"></i> {{ $task->category->name ?? 'Sem categoria' }}
-                                        </small>
-                                    </p>
-                                    <p class="mb-0">{{ $task->description }}</p>
-                                </div>
-                                <div class="task-actions">
+                            <div>
+                                <h5 class="mb-1">{{ $task->title }}</h5>
+                                <p class="mb-2 text-muted">
+                                    <small>
+                                        <i class="fas fa-user"></i> {{ $task->creator->name }} |
+                                        <i class="fas fa-calendar"></i> {{ $task->due_date->format('d/m/Y') }}
+                                        @if($task->assignedUser)
+                                         | <i class="fas fa-user-check"></i> Responsável: {{ $task->assignedUser->name }}
+                                        @endif
+                                    </small>
+                                </p>
+                                <p class="mb-3">{{ $task->description }}</p>
+                                <hr class="my-2">
+                                <div class="task-actions text-end mt-2">
                                     @if(!$task->completed)
                                         <form action="{{ route('tasks.complete', $task) }}" method="POST" class="d-inline">
                                             @csrf
@@ -145,17 +146,18 @@
                 <h5 class="modal-title" id="addMemberModalLabel">Adicionar Novo Membro</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form action="{{ route('groups.add-member', $group) }}" method="POST">
+            <form action="{{ route('groups.add-member', $group) }}" method="POST" id="addMemberForm">
                 @csrf
                 <div class="modal-body">
                     <div class="mb-3">
                         <label for="email" class="form-label">Email do novo membro</label>
                         <input type="email" class="form-control" id="email" name="email" required>
+                        <div id="emailFeedback" class="mt-2"></div>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="submit" class="btn btn-primary">Adicionar</button>
+                    <button type="submit" class="btn btn-primary" id="addMemberBtn">Adicionar</button>
                 </div>
             </form>
         </div>
@@ -185,5 +187,88 @@
         </div>
     </div>
 </div>
+
+@push('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const emailInput = document.getElementById('email');
+        const emailFeedback = document.getElementById('emailFeedback');
+        const addMemberBtn = document.getElementById('addMemberBtn');
+        const addMemberForm = document.getElementById('addMemberForm');
+        const currentUserEmail = "{{ Auth::user()->email }}";
+        const groupId = "{{ $group->id }}";
+        
+        if (emailInput) {
+            emailInput.addEventListener('blur', validateEmail);
+            emailInput.addEventListener('input', function() {
+                // Clear validation when user starts typing again
+                emailInput.classList.remove('is-invalid', 'is-valid');
+                emailFeedback.innerHTML = '';
+                addMemberBtn.disabled = false;
+            });
+            
+            addMemberForm.addEventListener('submit', function(e) {
+                if (emailInput.classList.contains('is-invalid')) {
+                    e.preventDefault();
+                }
+            });
+        }
+        
+        function validateEmail() {
+            const email = emailInput.value.trim();
+            
+            // Reset validation
+            emailInput.classList.remove('is-invalid', 'is-valid');
+            emailFeedback.innerHTML = '';
+            addMemberBtn.disabled = false;
+            
+            if (email === '') {
+                return;
+            }
+            
+            // Check if user is trying to invite themselves
+            if (email.toLowerCase() === currentUserEmail.toLowerCase()) {
+                showError('Você não pode convidar a si mesmo para o grupo.');
+                return;
+            }
+            
+            // Simple email validation
+            const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailPattern.test(email)) {
+                showError('Por favor, insira um email válido.');
+                return;
+            }
+            
+            // Check if user exists via AJAX
+            fetch(`/api/check-user?email=${encodeURIComponent(email)}&group_id=${groupId}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (!data.exists) {
+                        showError('Este usuário não existe no sistema.');
+                    } else if (data.inGroup) {
+                        showError('Este usuário já é membro do grupo.');
+                    } else {
+                        showSuccess('Usuário encontrado! Um convite será enviado.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error checking user:', error);
+                });
+        }
+        
+        function showError(message) {
+            emailInput.classList.add('is-invalid');
+            emailFeedback.innerHTML = `<div class="alert alert-danger">${message}</div>`;
+            addMemberBtn.disabled = true;
+        }
+        
+        function showSuccess(message) {
+            emailInput.classList.add('is-valid');
+            emailFeedback.innerHTML = `<div class="alert alert-success">${message}</div>`;
+            addMemberBtn.disabled = false;
+        }
+    });
+</script>
+@endpush
 
 @endsection

@@ -39,7 +39,8 @@ class TaskController extends Controller
             'due_date.required' => 'A data de vencimento é obrigatória.',
             'due_date.date' => 'A data de vencimento deve ser uma data válida.',
             'urgency.required' => 'O nível de urgência é obrigatório.',
-            'urgency.in' => 'O nível de urgência selecionado é inválido.'
+            'urgency.in' => 'O nível de urgência selecionado é inválido.',
+            'assigned_to.exists' => 'O responsável selecionado é inválido.'
         ];
 
         $request->validate([
@@ -48,7 +49,9 @@ class TaskController extends Controller
             'categories' => 'nullable|array|max:3',
             'categories.*' => 'exists:categories,id',
             'due_date' => 'required|date',
-            'urgency' => 'required|in:none,low,medium,high'
+            'urgency' => 'required|in:none,low,medium,high',
+            'group_id' => 'nullable|exists:groups,id',
+            'assigned_to' => 'nullable|exists:users,id'
         ], $messages);
 
         try {
@@ -61,11 +64,18 @@ class TaskController extends Controller
                 'due_date' => $dueDate,
                 'urgency' => $request->urgency,
                 'status' => false,
-                'user_id' => auth()->id()
+                'user_id' => auth()->id(),
+                'group_id' => $request->group_id,
+                'assigned_to' => $request->assigned_to
             ]);
 
             if ($request->has('categories')) {
                 $task->categories()->attach($request->categories);
+            }
+
+            if ($request->has('group_id')) {
+                return redirect()->route('groups.show', $request->group_id)
+                    ->with('success', 'Tarefa criada com sucesso no grupo!');
             }
 
             return redirect()->route('tasks.index')->with('success', 'Tarefa criada com sucesso!');

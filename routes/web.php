@@ -9,6 +9,7 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\NoteController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\GroupController;
+use App\Http\Controllers\GroupInvitationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -72,6 +73,11 @@ Route::middleware('auth')->group(function () {
         Route::delete('/groups/{group}/members', [GroupController::class, 'removeMember'])->name('groups.remove-member');
         Route::delete('/groups/{group}/delete', [GroupController::class, 'delete'])->name('groups.delete');
         Route::get('/groups/{group}/leave', [GroupController::class, 'leave'])->name('groups.leave');
+        
+        // Group Invitations
+        Route::get('/invitations', [GroupInvitationController::class, 'index'])->name('invitations.index');
+        Route::post('/invitations/{invitation}/accept', [GroupInvitationController::class, 'accept'])->name('invitations.accept');
+        Route::post('/invitations/{invitation}/reject', [GroupInvitationController::class, 'reject'])->name('invitations.reject');
     });
 });
 

@@ -111,6 +111,61 @@
         </div>
     </div>
 
+    @if(isset($pendingInvitations) && $pendingInvitations->count() > 0)
+    <!-- Notifications for Group Invitations -->
+    <div class="notification-box mt-4 mb-4">
+        <div class="dashboard-section-group-title">
+            <i class="fas fa-bell"></i>
+            Notificações <span class="badge bg-danger">{{ $pendingInvitations->count() }}</span>
+        </div>
+        <div class="card">
+            <div class="card-body">
+                <div class="list-group">
+                    @foreach($pendingInvitations as $invitation)
+                        <div class="list-group-item list-group-item-action mb-2 border rounded">
+                            <div class="d-flex w-100 justify-content-between align-items-center">
+                                <div>
+                                    <h5 class="mb-1">Convite para o grupo: {{ $invitation->group->name }}</h5>
+                                    <p class="mb-1">
+                                        <small class="text-muted">
+                                            <i class="fas fa-user"></i> Enviado por: {{ $invitation->group->creator->name }}
+                                        </small>
+                                    </p>
+                                    <p class="mb-1">{{ $invitation->group->description }}</p>
+                                    <p class="mb-0">
+                                        <small class="text-muted">
+                                            <i class="fas fa-clock"></i> Recebido em: {{ $invitation->created_at->format('d/m/Y H:i') }}
+                                        </small>
+                                    </p>
+                                </div>
+                                <div class="d-flex">
+                                    <form action="{{ route('invitations.accept', $invitation) }}" method="POST" class="me-2">
+                                        @csrf
+                                        <button type="submit" class="btn btn-success">
+                                            <i class="fas fa-check"></i> Aceitar
+                                        </button>
+                                    </form>
+                                    <form action="{{ route('invitations.reject', $invitation) }}" method="POST">
+                                        @csrf
+                                        <button type="submit" class="btn btn-danger">
+                                            <i class="fas fa-times"></i> Rejeitar
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+                <div class="text-end mt-2">
+                    <a href="{{ route('invitations.index') }}" class="btn btn-outline-primary btn-sm">
+                        <i class="fas fa-envelope"></i> Ver todos os convites
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    @endif
+
     <!-- Quick Actions -->
     <div class="dashboard-menu">
         <div class="dashboard-section-title">

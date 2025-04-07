@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Task;
 use App\Models\Category;
+use App\Models\GroupInvitation;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 
@@ -34,13 +35,17 @@ class DashboardController extends Controller
             ->orderBy('due_date', 'asc')
             ->take(5)
             ->get();
+            
+        // Get pending group invitations
+        $pendingInvitations = $user->pendingGroupInvitations()->with('group.creator')->get();
 
         return view('dashboard', compact(
             'pendingTasks',
             'completedTasks',
             'urgentTasks',
             'categories',
-            'upcomingTasks'
+            'upcomingTasks',
+            'pendingInvitations'
         ));
     }
 }

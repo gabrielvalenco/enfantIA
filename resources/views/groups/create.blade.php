@@ -37,11 +37,11 @@
                         </div>
 
                         <div class="mb-3">
-                            <label class="form-label">Adicionar Membros (até 3)</label>
+                            <label class="form-label">Adicionar Membros (opcional - até 3)</label>
                             <div id="memberFields">
                                 <div class="input-group mb-2">
                                     <input type="email" name="members[]" class="form-control" 
-                                        placeholder="email@exemplo.com">
+                                        placeholder="email@exemplo.com" onblur="validateEmail(this)">
                                     <button type="button" class="btn btn-success add-member" 
                                         onclick="addMemberField()" id="addMemberBtn">
                                         <i class="fas fa-plus"></i>
@@ -49,11 +49,12 @@
                                 </div>
                             </div>
                             <small class="text-muted">
-                                Digite o email dos membros que você deseja adicionar ao grupo
+                                Digite o email dos membros que você deseja convidar para o grupo. 
+                                Eles receberão um convite e precisarão aceitá-lo para entrar no grupo.
                             </small>
                         </div>
 
-                        <div class="d-grid gap-2">
+                        <div class="d-grid gap-3">
                             <button type="submit" class="btn btn-primary">
                                 <i class="fas fa-save"></i> Criar Grupo
                             </button>
@@ -72,6 +73,7 @@
 <script>
     let memberCount = 1;
     const maxMembers = 3;
+    const currentUserEmail = "{{ Auth::user()->email }}";
 
     function addMemberField() {
         if (memberCount < maxMembers) {
@@ -79,7 +81,7 @@
             const field = document.createElement('div');
             field.className = 'input-group mb-2';
             field.innerHTML = `
-                <input type="email" name="members[]" class="form-control" placeholder="email@exemplo.com">
+                <input type="email" name="members[]" class="form-control" placeholder="email@exemplo.com" onblur="validateEmail(this)">
                 <button type="button" class="btn btn-danger" onclick="removeMemberField(this)">
                     <i class="fas fa-minus"></i>
                 </button>
@@ -97,6 +99,116 @@
         memberCount--;
         document.getElementById('addMemberBtn').style.display = 'block';
     }
+
+    // Add onblur event to the initial email field
+    document.addEventListener('DOMContentLoaded', function() {
+        const initialEmailField = document.querySelector('input[name="members[]"]');
+        initialEmailField.addEventListener('blur', function() {
+            validateEmail(this);
+        });
+    });
+
+    // Validate email and check if user exists
+    function validateEmail(input) {
+        // Remove previous validation styling
+        input.classList.remove('is-invalid', 'is-valid');
+        const errorContainer = input.parentNode.querySelector('.invalid-feedback');
+        if (errorContainer) {
+            errorContainer.remove();
+        }
+        const successContainer = input.parentNode.querySelector('.valid-feedback');
+        if (successContainer) {
+            successContainer.remove();
+        }
+        
+        // Skip empty inputs (they're optional)
+        if (input.value.trim() === '') {
+            return;
+        }
+        
+        // Check if user is trying to invite themselves
+        if (input.value.trim().toLowerCase() === currentUserEmail.toLowerCase()) {
+            showError(input, 'Você não pode convidar a si mesmo para o grupo.');
+            return;
+        }
+        
+        // Simple email validation
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailPattern.test(input.value)) {
+            showError(input, 'Por favor, insira um email válido.');
+            return;
+        }
+
+        // Check if user exists via AJAX
+        fetch(`/api/check-user?email=${encodeURIComponent(input.value.trim())}`)
+            .then(response => response.json())
+            .then(data => {
+                if (!data.exists) {
+                    showError(input, 'Este usuário não existe no sistema.');
+                } else if (data.inGroup) {
+                    showError(input, 'Este usuário já é membro do grupo.');
+                } else {
+                    showSuccess(input, 'Usuário encontrado! Um convite será enviado.');
+                }
+            })
+            .catch(error => {
+                console.error('Error checking user:', error);
+            });
+    }
+
+    function showError(input, message) {
+        input.classList.add('is-invalid');
+        const errorMsg = document.createElement('div');
+        errorMsg.className = 'invalid-feedback';
+        errorMsg.textContent = message;
+        input.parentNode.insertBefore(errorMsg, input.nextSibling);
+    }
+
+    function showSuccess(input, message) {
+        input.classList.add('is-valid');
+        const successMsg = document.createElement('div');
+        successMsg.className = 'valid-feedback';
+        successMsg.textContent = message;
+        input.parentNode.insertBefore(successMsg, input.nextSibling);
+    }
+
+    // Add form validation
+    document.querySelector('form').addEventListener('submit', function(e) {
+        const emailInputs = document.querySelectorAll('input[name="members[]"]');
+        let hasInvalidEmail = false;
+        
+        emailInputs.forEach(input => {
+            // Remove previous validation styling
+            input.classList.remove('is-invalid');
+            const errorContainer = input.parentNode.querySelector('.invalid-feedback');
+            if (errorContainer) {
+                errorContainer.remove();
+            }
+            
+            // Skip empty inputs (they're optional)
+            if (input.value.trim() === '') {
+                return;
+            }
+            
+            // Check if user is trying to invite themselves
+            if (input.value.trim().toLowerCase() === currentUserEmail.toLowerCase()) {
+                showError(input, 'Você não pode convidar a si mesmo para o grupo.');
+                hasInvalidEmail = true;
+                return;
+            }
+            
+            // Simple email validation
+            const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailPattern.test(input.value)) {
+                showError(input, 'Por favor, insira um email válido.');
+                hasInvalidEmail = true;
+            }
+        });
+        
+        if (hasInvalidEmail) {
+            e.preventDefault();
+        }
+    });
 </script>
 @endpush
 @endsection

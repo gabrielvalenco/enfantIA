@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Group;
+use App\Models\GroupInvitation;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -25,7 +26,7 @@ class GroupController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'members' => 'array|min:1|max:3',
+            'members' => 'nullable|array|max:3',
             'members.*' => 'email|exists:users,email'
         ]);
 
@@ -38,14 +39,33 @@ class GroupController extends Controller
         // Add creator as admin
         $group->members()->attach(Auth::id(), ['role' => 'admin']);
 
-        // Add other members
+        // Send invitations to other members
+        $invitedMembers = [];
         if (!empty($validated['members'])) {
-            $members = User::whereIn('email', $validated['members'])->pluck('id');
-            $group->members()->attach($members, ['role' => 'member']);
+            foreach ($validated['members'] as $email) {
+                if (!empty($email)) {
+                    $user = User::where('email', $email)->first();
+                    // Skip if the user is trying to invite themselves
+                    if ($user && $user->id !== Auth::id()) {
+                        // Create invitation
+                        GroupInvitation::create([
+                            'group_id' => $group->id,
+                            'user_id' => $user->id,
+                            'status' => 'pending'
+                        ]);
+                        $invitedMembers[] = $email;
+                    }
+                }
+            }
+        }
+
+        $message = 'Grupo criado com sucesso!';
+        if (count($invitedMembers) > 0) {
+            $message .= ' Convites enviados para: ' . implode(', ', $invitedMembers);
         }
 
         return redirect()->route('groups.show', $group)
-            ->with('success', 'Grupo criado com sucesso!');
+            ->with('success', $message);
     }
 
     public function show(Group $group)
@@ -54,7 +74,7 @@ class GroupController extends Controller
             abort(403);
         }
 
-        $tasks = $group->tasks()->with(['category', 'creator'])->get();
+        $tasks = $group->tasks()->with(['creator', 'assignedUser'])->get();
         $members = $group->members()->get();
 
         return view('groups.show', compact('group', 'tasks', 'members'));
@@ -72,16 +92,37 @@ class GroupController extends Controller
 
         $user = User::where('email', $validated['email'])->first();
 
+        // Prevent inviting yourself
+        if ($user->id === Auth::id()) {
+            return back()->with('error', 'Você não pode convidar a si mesmo para o grupo.');
+        }
+
         if ($group->members()->count() >= 4) {
             return back()->with('error', 'O grupo já atingiu o limite máximo de 4 membros.');
         }
 
-        if (!$group->isMember($user)) {
-            $group->members()->attach($user->id, ['role' => 'member']);
-            return back()->with('success', 'Membro adicionado com sucesso!');
+        if ($group->isMember($user)) {
+            return back()->with('error', 'Este usuário já é membro do grupo.');
         }
 
-        return back()->with('error', 'Este usuário já é membro do grupo.');
+        // Check if there's already a pending invitation
+        $existingInvitation = GroupInvitation::where('group_id', $group->id)
+            ->where('user_id', $user->id)
+            ->where('status', 'pending')
+            ->first();
+
+        if ($existingInvitation) {
+            return back()->with('info', 'Este usuário já possui um convite pendente para este grupo.');
+        }
+
+        // Create a new invitation
+        GroupInvitation::create([
+            'group_id' => $group->id,
+            'user_id' => $user->id,
+            'status' => 'pending'
+        ]);
+
+        return back()->with('success', 'Convite enviado com sucesso!');
     }
 
     public function removeMember(Request $request, Group $group)

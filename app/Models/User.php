@@ -71,4 +71,14 @@ class User extends Authenticatable
     {
         return $this->hasMany(Group::class, 'created_by');
     }
+
+    public function groupInvitations()
+    {
+        return $this->hasMany(GroupInvitation::class);
+    }
+
+    public function pendingGroupInvitations()
+    {
+        return $this->hasMany(GroupInvitation::class)->where('status', 'pending');
+    }
 }

@@ -23,6 +23,10 @@
             <form action="{{ route('tasks.store') }}" method="POST" class="needs-validation p-3" novalidate>
                 @csrf
                 
+                @if(request()->has('group_id'))
+                    <input type="hidden" name="group_id" value="{{ request('group_id') }}">
+                @endif
+                
                 <!-- Título -->
                 <div class="form-floating mb-3">
                     <input type="text" 
@@ -89,6 +93,25 @@
                         </div>
                     </div>
                 </div>
+
+                @if(request()->has('group_id'))
+                <!-- Responsável pela Tarefa -->
+                <div class="mb-4">
+                    <label for="assigned_to" class="form-label fw-bold mb-2">
+                        <i class="fas fa-user-check me-2"></i>Responsável pela Tarefa
+                    </label>
+                    <select class="form-select" id="assigned_to" name="assigned_to">
+                        <option value="">Selecione um responsável (opcional)</option>
+                        @php
+                            $group = \App\Models\Group::find(request('group_id'));
+                            $members = $group ? $group->members : collect([]);
+                        @endphp
+                        @foreach($members as $member)
+                            <option value="{{ $member->id }}">{{ $member->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                @endif
 
                 <!-- Categorias -->
                 <div class="mb-4">

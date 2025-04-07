@@ -20,7 +20,13 @@ class Task extends Model
         'urgency',
         'user_id',
         'category_id',
-        'group_id'
+        'group_id',
+        'assigned_to'
+    ];
+
+    protected $casts = [
+        'due_date' => 'datetime',
+        'status' => 'boolean',
     ];
 
     public function categories()
@@ -31,6 +37,16 @@ class Task extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function creator()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function assignedUser()
+    {
+        return $this->belongsTo(User::class, 'assigned_to');
     }
 
     public function group()
