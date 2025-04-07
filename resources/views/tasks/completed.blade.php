@@ -5,11 +5,19 @@
 @endphp
 
 @section('content')
+
+<link rel="icon" href="{{ asset('favicon.svg') }}" type="image/svg+xml">
+<link rel="stylesheet" href="{{ asset('css/task-form.css') }}">
+
 <div class="container mt-4">
     <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap">
         <h1 class="mb-2 mb-md-0">Tarefas Concluídas</h1>
-        <a href="{{ route('dashboard') }}" class="btn btn-secondary back-button">Voltar</a>
+        <div class="d-flex gap-2">
+            <a href="{{ route('dashboard') }}" class="btn btn-secondary back-button">Voltar</a>
+            <a href="{{ route('tasks.cleared') }}" class="btn btn-danger">Limpar</a>
+        </div>
     </div>
+
 
     @if(session('success'))
         <div class="alert alert-success">
@@ -17,7 +25,7 @@
         </div>
     @endif
 
-    <div class="table-responsive">
+    <div class="table-responsive m-0">
         <table class="table table-striped">
             <thead>
                 <tr>

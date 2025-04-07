@@ -1,6 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
 
 :root {
+    --background: #f8f9fa ;
     --primary: #2C3E50;
     --primary-hover: rgb(38, 91, 145);
     --secondary: #6c757d;
@@ -11,14 +12,24 @@
     --info-hover: #1ccde9;
 }
 
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    scroll-behavior: smooth;
+}
+
 body {
     font-family: 'Poppins', sans-serif;
-    background-color: #e0e3e4;
-    color: #2C3E50;
+    background-image: url('../images/task_nest_bg.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    color: var(--primary);
 }
 
 h1, h2, h3, h4, h5, h6 {
-    color: #2C3E50;
+    color: var(--primary);
     font-weight: 700;
 }
 
@@ -47,6 +58,49 @@ h1, h2, h3, h4, h5, h6 {
     background-color: white;
     padding: 1rem;
     border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.185);
 }
 
+.color-preview {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    margin-right: 8px;
+    vertical-align: middle;
+    border: 2px solid #fff;
+    box-shadow: 0 0 0 1px #ccc;
+}
+
+.category-badge {
+    display: inline-block;
+    padding: 10px 15px;
+    border-radius: 20px;
+    font-size: 0.875rem;
+    color: #fff;
+    font-weight: 500;
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+}
+
+.categories-column {
+    min-width: 150px;
+}
+
+.gap-2 {
+    gap: 0.75rem !important;
+}
+
+@media (max-width: 768px) {
+    body {
+        background-image: url('../images/task_nest_mobile_bg.png');
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+    }
+
+    .container {
+        width: 450px;
+        margin: 0 auto;
+        padding: 0 15px;
+    }
+}

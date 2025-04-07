@@ -4,9 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lista de Tarefas</title>
+
+    <link rel="icon" href="{{ asset('favicon.svg') }}" type="image/svg+xml">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="stylesheet" href="{{ asset('css/custom-styles.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/task-form.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/category-style.css') }}">
 </head>
 <body class="bg-light">
     <div class="container mt-4">
@@ -45,8 +49,7 @@
             </div>
         </div>
 
-        <div class="table-responsive">
-            <table class="table">
+            <table class="table table-striped">
                 <thead>
                     <tr>
                         <th>Título</th>
@@ -75,9 +78,17 @@
                                     <td class="task-title">{{ $task->title }}</td>
                                     <td class="task-description">{{ $task->description }}</td>
                                     <td class="categories-column">
-                                        @foreach($task->categories as $category)
-                                            <span class="badge badge-info">{{ $category->name }}</span>
-                                        @endforeach
+                                        @if($task->categories->isNotEmpty())
+                                            <div class="d-block gap-2">
+                                                @foreach($task->categories as $category)
+                                                    <div class="category-badge p-2 m-1" style="background-color: {{ $category->color }};">
+                                                        {{ $category->name }}
+                                                    </div>
+                                                @endforeach
+                                            </div>
+                                        @else
+                                            <span class="text-muted">Sem categoria</span>
+                                        @endif
                                     </td>
                                     <td>
                                         @switch($task->urgency)
@@ -88,27 +99,27 @@
                                                     $hoursUntilDue = $now->diffInHours($dueDate, false);
                                                 @endphp
                                                 @if($hoursUntilDue <= 24 && $hoursUntilDue > 0)
-                                                    <span class="badge-urgent">
+                                                    <span class="badge-urgent p-2">
                                                         <i class="fas fa-exclamation-circle"></i>
                                                         Alta Prioridade
                                                     </span>
                                                 @else
-                                                    <span class="badge bg-danger">Alta</span>
+                                                    <span class="badge bg-danger p-2">Alta</span>
                                                 @endif
                                                 @break
                                             @case('medium')
-                                                <span class="badge bg-warning text-dark">Média</span>
+                                                <span class="badge bg-warning text-dark p-2">Média</span>
                                                 @break
                                             @default
-                                                <span class="badge bg-info">Baixa</span>
+                                                <span class="badge bg-info p-2">Baixa</span>
                                         @endswitch
                                     </td>
                                     <td>
                                         <form action="{{ route('tasks.complete', $task) }}" method="POST" style="display: inline;">
                                             @csrf
                                             @method('PATCH')
-                                            <button type="submit" class="btn btn-sm {{ $task->status ? 'btn-success' : 'btn-secondary' }}">
-                                                {{ $task->status ? 'Concluída' : 'Pendente' }}
+                                            <button type="submit" class="btn btn-sm pb-1 {{ $task->status ? 'btn-secondary' : 'btn-secondary' }}">
+                                                <i class="fas fa-clock"></i> {{ $task->status ? 'Concluída' : ''}}
                                             </button>
                                         </form>
                                     </td>

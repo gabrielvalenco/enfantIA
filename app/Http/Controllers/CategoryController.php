@@ -20,22 +20,20 @@ class CategoryController extends Controller
 
     public function store(Request $request)
     {
-        $messages = [
-            'name.required' => 'O nome da categoria é obrigatório.',
-            'name.unique' => 'Já existe uma categoria com este nome.',
-            'description.required' => 'A descrição da categoria é obrigatória.'
-        ];
-
         $request->validate([
-            'name' => 'required|unique:categories,name,NULL,id,user_id,' . auth()->id(),
-            'description' => 'required'
-        ], $messages);
+            'name' => 'required|string|max:255|unique:categories,name,NULL,id,user_id,' . auth()->id(),
+            'description' => 'nullable|string',
+            'color' => 'required|string|max:7'
+        ]);
 
-        Category::create([
+        $category = new Category([
             'name' => $request->name,
             'description' => $request->description,
+            'color' => $request->color,
             'user_id' => auth()->id()
         ]);
+
+        $category->save();
 
         return redirect()->route('categories.index')
             ->with('success', 'Categoria criada com sucesso!');
@@ -54,15 +52,20 @@ class CategoryController extends Controller
         $messages = [
             'name.required' => 'O nome da categoria é obrigatório.',
             'name.unique' => 'Já existe uma categoria com este nome.',
-            'description.required' => 'A descrição da categoria é obrigatória.'
         ];
 
         $request->validate([
-            'name' => 'required|unique:categories,name,' . $category->id . ',id,user_id,' . auth()->id(),
-            'description' => 'required'
+            'name' => 'required|string|max:255|unique:categories,name,' . $category->id . ',id,user_id,' . auth()->id(),
+            'description' => 'nullable|string',
+            'color' => 'required|string|max:7'
         ], $messages);
 
-        $category->update($request->all());
+        $category->update([
+            'name' => $request->name,
+            'description' => $request->description,
+            'color' => $request->color
+        ]);
+
         return redirect()->route('categories.index')
             ->with('success', 'Categoria atualizada com sucesso!');
     }

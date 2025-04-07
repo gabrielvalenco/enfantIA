@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Category;
 use App\Models\User;
+use App\Models\Group;
 
 class Task extends Model
 {
@@ -15,9 +16,11 @@ class Task extends Model
         'title',
         'description',
         'due_date',
-        'urgency',
         'status',
-        'user_id'
+        'urgency',
+        'user_id',
+        'category_id',
+        'group_id'
     ];
 
     public function categories()
@@ -28,5 +31,10 @@ class Task extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function group()
+    {
+        return $this->belongsTo(Group::class);
     }
 }

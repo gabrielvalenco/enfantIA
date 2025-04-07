@@ -1,13 +1,31 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
 
+:root {
+    --background: #f8f9fa ;
+    --primary: #2C3E50;
+    --primary-hover: rgb(38, 91, 145);
+    --secondary: #6c757d;
+    --success: #28a745;
+    --danger: #dc3545;
+    --warning: #ffc107;
+    --info: #17a2b8;
+    --info-hover: #1ccde9;
+}
+
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    scroll-behavior: smooth;
+}
 body {
     font-family: 'Poppins', sans-serif;
-    background-color: #e0e3e4;
-    color: #2C3E50;
+    background-color: var(--background);
+    color: var(--primary);
 }
 
 h1, h2, h3, h4, h5, h6 {
-    color: #2C3E50;
+    color: var(--primary);
     font-weight: 700;
 }
 
@@ -84,12 +102,14 @@ h1, h2, h3, h4, h5, h6 {
     padding: 0.5em 0.8em;
     font-weight: 500;
     border-radius: 6px;
+    color: #fff;
 }
 
 .badge-info {
     background-color: #17a2b8;
     margin-bottom: 3px;
     margin-right: 0.5rem;
+    color: #fff;
 }
 
 .badge-danger {
@@ -98,7 +118,6 @@ h1, h2, h3, h4, h5, h6 {
 
 .badge-warning {
     background-color: #ffc107;
-    color: #000;
 }
 
 .badge-success {
@@ -349,11 +368,6 @@ h1, h2, h3, h4, h5, h6 {
     background-color: #c82333;
     box-shadow: 0 4px 6px rgba(220, 53, 69, 0.3);
     color: white;
-}
-
-.table-responsive {
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .table thead th:first-child {
@@ -687,19 +701,31 @@ a.menu-item i {
     font-size: 1.2rem;
 }
 
-.footer {
-    background-color: #2E3D52;
-    padding: 0.75rem;
-    text-align: center;
+footer {
+    display: flex; 
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
     width: 100%;
-    border-top: 1px solid #e0e0e0;
-    color: #fff;
+    background-color: var(--primary);
+    color: white;
+    padding: 1rem 0;
+    margin-top: auto;
+    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.2);
 }
 
 .footer-name {
     display: block;
     margin-bottom: 0.5rem;
     font-size: 0.9rem;
+    text-align: center;
+}
+
+footer span {
+    text-align: center;
+    font-size: 0.8rem;
+    opacity: 0.8;
 }
 
 .social-icons {

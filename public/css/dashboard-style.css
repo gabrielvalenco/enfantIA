@@ -1,5 +1,35 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
 
+:root {
+    --background: #f8f9fa ;
+    --primary: #2C3E50;
+    --primary-hover: rgb(38, 91, 145);
+    --secondary: #6c757d;
+    --success: #28a745;
+    --danger: #dc3545;
+    --warning: #ffc107;
+    --info: #17a2b8;
+    --info-hover: #1ccde9;
+}
+
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: var(--background);
+    color: var(--primary);
+}
+
+h1, h2, h3, h4, h5, h6 {
+    color: var(--primary);
+    font-weight: 700;
+}
+
 .dashboard-header {
     background-color: #2C3E50;
     padding: 1rem 2rem;
@@ -47,6 +77,7 @@
     grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
     gap: 1.5rem;
     margin-bottom: 4rem;
+    cursor: pointer;
 }
 
 .status-card {
@@ -215,8 +246,8 @@
 .calendar a {
     text-decoration: none;
     color: inherit;
+    cursor: pointer;
 }
-
 
 @media (max-width: 768px) {
     .status-cards {
@@ -236,16 +267,30 @@
     }
 
     .upcoming-tasks {
-        padding: 1rem;
+        padding: 0.8rem;
     }
 
     .upcoming-tasks .table {
-        padding: 0;
+        font-size: 0.8rem;
     }
 
-    .upcoming-tasks .table th, .upcoming-tasks .table td {
-        padding: 0.5rem;
+    .upcoming-tasks th, .upcoming-tasks td {
+        padding: 0.2rem;
     }
+
+    .upcoming-tasks .btn {
+        padding: 0.3rem 0.5rem;
+        font-size: 0.8rem;
+    }
+
+    .fc-header-toolbar {
+        display: block !important;
+    }
+
+    .fc-header-toolbar button {
+        margin-top: 10px !important;
+    }
+
 }
 
 .user-dropdown {
