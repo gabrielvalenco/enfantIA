@@ -252,7 +252,7 @@
                                 </span>
                             </td>
                             <td class="text-center">
-                                <button onclick="confirmComplete({{ $task->id }}, '{{ $task->title }}')" class="btn btn-sm btn-success" title="Concluir">
+                                <button onclick="confirmComplete({{ $task->id }}, '{{ $task->title }}')" class="btn next-btn-success btn-sm btn-success" title="Concluir">
                                     <i class="fas fa-check"></i>
                                 </button>
                                 <form id="complete-form-{{ $task->id }}" action="{{ route('tasks.complete', $task->id) }}" method="POST" class="d-none">

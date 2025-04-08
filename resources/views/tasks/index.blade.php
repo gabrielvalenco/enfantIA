@@ -108,7 +108,7 @@
                                                 @endif
                                                 @break
                                             @case('medium')
-                                                <span class="badge bg-warning text-dark p-2">Média</span>
+                                                <span class="badge bg-warning p-2">Média</span>
                                                 @break
                                             @default
                                                 <span class="badge bg-info p-2">Baixa</span>
@@ -118,7 +118,7 @@
                                         <form action="{{ route('tasks.complete', $task) }}" method="POST" style="display: inline;">
                                             @csrf
                                             @method('PATCH')
-                                            <button type="submit" class="btn btn-sm pb-1 {{ $task->status ? 'btn-secondary' : 'btn-secondary' }}">
+                                            <button type="submit" class="btn index-status btn-sm pb-1 {{ $task->status ? 'btn-secondary' : 'btn-secondary' }}">
                                                 <i class="fas fa-clock"></i> {{ $task->status ? 'Concluída' : ''}}
                                             </button>
                                         </form>

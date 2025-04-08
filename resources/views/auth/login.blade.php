@@ -3,13 +3,13 @@
 @section('content')
 
 <link rel="icon" href="{{ asset('favicon.svg') }}" type="image/svg+xml">
-<link rel="stylesheet" href="{{ asset('css/auth-style.css') }}">
+<link rel="stylesheet" href="{{ asset('css/auth/login.css') }}">
 
 <div class="auth-wrapper">
     <div class="auth-container">
         <div class="auth-card">
             <div class="auth-header">
-                <h4>Login</h4>
+                <h4>{{ env('APP_NAME') }}</h4>
             </div>
 
             <div class="auth-body">
@@ -59,7 +59,7 @@
                     </div>
 
                     <div class="form-actions">
-                        <button type="submit" class="btn btn-primary btn-block">Entrar</button>
+                        <button type="submit" class="btn-login">Entrar</button>
                         
                         @if (Route::has('password.request'))
                         <div class="forgot-password">
@@ -76,7 +76,9 @@
                 </form>
             </div>
         </div>
-        <a href="{{ route('portfolio') }}" class="portfolio-anchor mt-5 text-center">Conheça mais do projeto</a>
+        <div class="portfolio">
+            <a href="{{ route('portfolio') }}" class="portfolio-anchor mt-5 text-center">Conheça mais do projeto</a>
+        </div>
     </div>
 </div>
 
