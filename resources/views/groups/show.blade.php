@@ -46,7 +46,7 @@
                 </div>
                 <div class="card-body">
                     @forelse($tasks as $task)
-                        <div class="task-item p-3 mb-3 rounded @if($task->completed) bg-light text-muted @endif">
+                        <div class="task-item p-3 mb-3 rounded @if($task->completed) text-muted @endif">
                             <div>
                                 <h5 class="mb-1">{{ $task->title }}</h5>
                                 <p class="mb-2 text-muted">

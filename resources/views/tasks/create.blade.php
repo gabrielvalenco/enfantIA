@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="stylesheet" href="{{ asset('css/task-form.css') }}">
 </head>
-<body class="bg-light">
+<body>
     <div class="task-form-container">
         <div class="task-header d-flex justify-content-between align-items-center flex-wrap">
             <h1 class="mb-0">Criar Nova Tarefa</h1>

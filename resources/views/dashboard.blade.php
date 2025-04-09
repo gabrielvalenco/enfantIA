@@ -10,6 +10,7 @@
 
 <header class="dashboard-header">
     <div class="d-flex justify-content-between align-items-center">
+        <!-- <img src="{{ asset('favicon.svg') }}" alt="Task Nest Logo" class="logo"> -->
         <h1 class="dashboard-title">TASKNEST</h1>
         
         <div class="dropdown">
@@ -232,8 +233,8 @@
         </div>
 
             <div class="table-responsive">
-                <table class="table table-striped table-hover">
-                    <thead class="table-dark">
+                <table class="table table-hover custom-table">
+                    <thead>
                         <tr>
                             <th>Tarefa</th>
                             <th>Prazo</th>
@@ -267,32 +268,28 @@
             </div>
         </div>
 
-
-    <div class="calendar mt-4">
-        <div class="dashboard-section-title">
-            <i class="fas fa-calendar-alt"></i>
-            Calendário de Tarefas
-        </div>
         <div id="calendar"></div>
-    </div>
 
     <!-- Modal da Tarefa -->
     <div class="modal fade" id="taskModal" tabindex="-1" aria-labelledby="taskModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-sm">
+        <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="taskModalLabel"></h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close-modal" data-bs-dismiss="modal" aria-label="Close">
+                        <i class="fas fa-times"></i>
+                    </button>
                 </div>
                 <div class="modal-body">
                     <div class="task-info mb-3">
-                        <p class="mb-1"><strong>Categoria:</strong> <span id="taskCategory"></span></p>
-                        <p class="mb-1"><strong>Data:</strong> <span id="taskDate"></span></p>
-                        <p class="mb-1"><strong>Urgência:</strong> <span id="taskUrgency"></span></p>
-                        <p class="mb-1"><strong>Descrição:</strong></p>
+                        <div class="calendar-task-desc">
+                            <p class="mb-1"><strong>Categoria:</strong> <span id="taskCategory"></span></p>
+                            <p class="mb-1"><strong>Data:</strong> <span id="taskDate"></span></p>
+                            <p class="mb-1"><strong>Urgência:</strong> <span id="taskUrgency"></span></p>
+                        </div>
                         <p id="taskDescription" class="text-muted mb-3"></p>
                     </div>
-                    <div class="d-flex justify-content-center">
+                    <div class="modal-actions d-flex justify-content-center gap-1">
                         <a href="#" id="editTaskBtn" class="btn btn-sm btn-warning">
                             <i class="fas fa-edit"></i>
                         </a>
@@ -315,7 +312,6 @@
             }
         }
 
-        // Update the completeTask function to use the form submission
         function completeTask(taskId) {
             if (confirm('Deseja marcar esta tarefa como concluída?')) {
                 document.getElementById(`complete-form-${taskId}`).submit();
@@ -354,7 +350,6 @@
                         hexToRgb(info.event.backgroundColor).g + ',' +
                         hexToRgb(info.event.backgroundColor).b + ', 0.1)';
                     
-                    // Adicionar título completo como tooltip
                     info.el.title = info.event.title;
                 },
                 eventClick: function(info) {
@@ -362,25 +357,21 @@
                     const event = info.event;
                     const props = event.extendedProps;
                     
-                    // Preencher o modal com as informações da tarefa
                     document.getElementById('taskModalLabel').textContent = event.title;
                     document.getElementById('taskCategory').textContent = props.category;
                     document.getElementById('taskDate').textContent = new Date(event.start).toLocaleDateString('pt-BR');
                     document.getElementById('taskDescription').textContent = props.description;
                     document.getElementById('taskUrgency').textContent = props.urgency.charAt(0).toUpperCase() + props.urgency.slice(1);
                     
-                    // Configurar URLs dos botões
                     document.getElementById('editTaskBtn').href = props.editUrl;
                     document.getElementById('deleteTaskBtn').onclick = () => deleteTask(event.id, props.deleteUrl);
                     document.getElementById('completeTaskBtn').setAttribute('data-task-id', event.id);
                     
-                    // Abrir o modal
                     new bootstrap.Modal(document.getElementById('taskModal')).show();
                 }
             });
             calendar.render();
 
-            // Add event listener for modal complete button
             document.getElementById('completeTaskBtn').addEventListener('click', function() {
                 const taskId = this.getAttribute('data-task-id');
                 if (taskId) {
@@ -413,7 +404,6 @@
             }
         }
 
-        // Função auxiliar para converter hex para RGB
         function hexToRgb(hex) {
             var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
             return result ? {
@@ -422,16 +412,13 @@
                 b: parseInt(result[3], 16)
             } : null;
         }
-    </script>
 
-    <script>
         function confirmComplete(taskId, taskTitle) {
             if (confirm(`Deseja marcar a tarefa "${taskTitle}" como concluída?`)) {
                 document.getElementById(`complete-form-${taskId}`).submit();
             }
         }
 
-        // Update the completeTask function to use the form submission
         function completeTask(taskId) {
             if (confirm('Deseja marcar esta tarefa como concluída?')) {
                 document.getElementById(`complete-form-${taskId}`).submit();
@@ -439,4 +426,7 @@
         }
     </script>
 </div>
+
+@include('layouts.footer')
+
 @endsection

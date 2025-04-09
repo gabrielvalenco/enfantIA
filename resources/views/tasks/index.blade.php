@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="{{ asset('css/task-form.css') }}">
     <link rel="stylesheet" href="{{ asset('css/category-style.css') }}">
 </head>
-<body class="bg-light">
+<body>
     <div class="container mt-4">
         @if(session('success'))
             <div class="alert alert-success">

@@ -28,7 +28,7 @@
 </header>
 <main>
     <div class="hero">
-        <img src="{{ asset('images/pexels-pixabay-290595.jpg') }}" alt="hero">
+        <img src="{{ asset('images/pexels-pixabay-414659.jpg') }}" alt="hero">
         <div class="hero-text">
             <h1>TaskNest</h1>
             <p class="typing-animation"></p>

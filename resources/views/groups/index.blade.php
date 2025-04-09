@@ -37,7 +37,7 @@
                             <strong class="text-muted">Membros:</strong>
                             <div class="mt-2">
                                 @foreach($group->members as $member)
-                                    <span class="badge bg-light text-dark me-1">
+                                    <span class="badge text-dark me-1">
                                         {{ $member->name }}
                                         @if($group->isAdmin($member))
                                             <i class="fas fa-crown text-warning"></i>

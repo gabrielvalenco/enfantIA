@@ -1,15 +1,39 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
 
 :root {
-    --background: #f8f9fa ;
-    --primary: #2C3E50;
-    --primary-hover: rgb(38, 91, 145);
-    --secondary: #6c757d;
-    --success: #28a745;
-    --danger: #dc3545;
-    --warning: #ffc107;
-    --info: #17a2b8;
-    --info-hover: #1ccde9;
+    /* General Colors */
+    --background-color: #121212;
+    --surface-color: #1E1E1E;
+    --card-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    --border-color: #333333;
+    --button-color: #121212;
+    
+    /* General Colors Hover */
+    --background-color-hover: #202020;
+    --border-hover: #4d4d4d;
+    --button-hover: #121212;
+
+    /* Text Colors */
+    --text-color: #b9b9b9;
+    --text-primary: #ebebeb;
+    --text-secondary: #6C757D;
+    --link-color: rgb(32, 172, 130);
+
+    /* Text Colors Hover */
+    --text-color-hover: #d3d3d3;
+    --text-primary-hover: #ffffff;
+    --text-secondary-hover: #838b93;
+    --link-color-hover: rgb(29, 248, 182);
+
+    /* Action Colors */
+    --edit-color: #F0C05A;
+    --delete-color: #DB3A34;
+    --complete-color: #00A86B;
+
+    /* Action Colors Hover */
+    --edit-color-hover: #FFD700;
+    --delete-color-hover: #FF4C4C;
+    --complete-color-hover: #4CAF50;
 }
 
 html, body {
@@ -21,18 +45,18 @@ html, body {
 
 body {
     font-family: 'Poppins', sans-serif;
-    background-color: var(--background);
-    color: var(--primary);
+    background-color: var(--background-color);
+    color: var(--text-primary);
 }
 
 h1, h2, h3, h4, h5, h6 {
-    color: var(--primary);
+    color: var(--text-primary);
     font-weight: 700;
 }
 
 .dashboard-header {
-    background-color: #2C3E50;
-    padding: 1rem 2rem;
+    background-color: var(--surface-color);
+    padding: 2rem 2rem;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     margin-bottom: 2rem;
 }
@@ -46,7 +70,49 @@ h1, h2, h3, h4, h5, h6 {
 .dashboard-title {
     font-size: 1.5rem;
     margin: 0;
-    color: #ffffff;
+    color: var(--text-primary);
+}
+
+
+.dropdown-menu {
+    background-color: var(--surface-color);
+    border: 2px solid var(--border-color);
+    border-radius: 12px;
+    min-width: 200px;
+    padding: 0.5rem 0;
+    margin: 0;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+}
+
+.dropdown-menu form {
+    width: 100%;
+}
+
+.dropdown-menu a {
+    color: var(--text-primary);
+    transition: all 0.2s ease;
+    padding-left: 1rem;
+}
+
+.dropdown-menu a:hover {
+    color: var(--link-color-hover) !important;
+    
+    padding-left: 1.5rem;
+    transition: all 0.2s ease;
+}
+
+.dropdown-menu .text-muted {
+    color: var(--text-secondary) !important;
+}
+
+.dropdown-item .text-danger {
+    color: var(--delete-color) !important;
+}
+
+.dropdown-item .text-danger:hover {
+    color: var(--delete-color-hover) !important;
+    padding-left: 1.5rem;
+    transition: all 0.2s ease;
 }
 
 .dashboard-header-content {
@@ -81,7 +147,8 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .status-card {
-    background: white;
+    background: var(--surface-color);
+    border: 2px solid var(--border-color);
     border-radius: 12px;
     padding: 1.5rem;
     display: flex;
@@ -93,6 +160,8 @@ h1, h2, h3, h4, h5, h6 {
 
 .status-card:hover {
     transform: translateY(-2px);
+    border: 2px solid var(--border-hover);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .status-card-icon {
@@ -103,13 +172,13 @@ h1, h2, h3, h4, h5, h6 {
     align-items: center;
     justify-content: center;
     font-size: 1.5rem;
-    color: white;
+    color: var(--text-primary);
 }
 
 .status-card-icon.pending { background-color: #3498db; }
 .status-card-icon.completed { background-color: #2ecc71; }
-.status-card-icon.urgent { background-color: #e74c3c; }
-.status-card-icon.categories { background-color: #9b59b6; }
+.status-card-icon.urgent { background-color: var(--delete-color); }
+.status-card-icon.categories { background-color: var(--link-color); }
 
 .status-card-info h3 {
     font-size: 1.5rem;
@@ -124,7 +193,8 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .dashboard-menu {
-    background-color: #2c3e50;
+    background-color: var(--surface-color);
+    border: 2px solid var(--border-color);
     margin: 5rem auto;
     max-width: 800px;
     border-radius: 8px;
@@ -136,7 +206,7 @@ h1, h2, h3, h4, h5, h6 {
     font-size: 1.25rem;
     font-weight: 600;
     margin-bottom: 1.5rem;
-    color: #ffffff;
+    color: var(--text-primary);
     display: flex;
     align-items: center;
     gap: 0.5rem;
@@ -146,14 +216,10 @@ h1, h2, h3, h4, h5, h6 {
     font-size: 1.25rem;
     font-weight: 600;
     margin-bottom: 0.5rem;
-    color: var(--primary);
+    color: var(--text-primary);
     display: flex;
     align-items: center;
     gap: 0.5rem;
-}
-
-.dashboard-menu .dashboard-section-title i {
-    color: #ffffff;
 }
 
 .menu-grid {
@@ -163,26 +229,29 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .menu-item {
-    background: white;
+    background: var(--background-color);
+    border: 2px solid var(--border-color);
     border-radius: 12px;
     padding: 1.5rem;
     display: flex;
     align-items: center;
     gap: 1.25rem;
-    color: #2c3e50;
+    color: var(--text-primary);
     text-decoration: none;
     transition: all 0.2s ease;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
 .menu-item:hover {
+    background-color: var(--background-color-hover);
     transform: translateY(-2px);
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     text-decoration: none;
-    color: var(--primary-color);
+    color: var(--text-primary);
+    border: 2px solid var(--border-hover);
 }
 
-.menu-item-icon {
+.menu-item-icon i {
     width: 48px;
     height: 48px;
     border-radius: 12px;
@@ -190,12 +259,12 @@ h1, h2, h3, h4, h5, h6 {
     align-items: center;
     justify-content: center;
     font-size: 1.5rem;
-    color: var(--primary-color);
+    color: var(--text-primary);
     transition: all 0.2s ease;
 }
 
 .menu-item:hover .menu-item-icon {
-    color: white;
+    color: var(--text-primary);
     background: var(--primary-color);
 }
 
@@ -212,57 +281,219 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .upcoming-tasks {
+    background-color: var(--surface-color);
+    border: 2px solid var(--border-color);
     max-width: 800px;
     margin: 5rem auto;
-    background-color: #2C3E50;
     border-radius: 8px;
     padding: 20px;
 }
 
 .upcoming-tasks .table {
+    border: 2px solid var(--border-color);
+    border-radius: 12px;
     margin: 0;
 }
 
-.upcoming-tasks .table th {
-    border-top: none;
-    font-weight: 600;
-    color: #2c3e50 !important;
-    background-color: #ffffff;
+.upcoming-tasks .table>:not(caption)>*>* {
+    border: none !important;
 }
 
-.upcoming-tasks .table td {
-    vertical-align: middle;
+table tr {
+    border-bottom: 2px solid var(--border-color);
+    cursor: pointer;
 }
 
-.upcoming-tasks .table tr:last-child td {
-    border-bottom: none;
+table td {
+    background-color: var(--background-color) !important;
+    color: var(--text-secondary) !important;
+    cursor: pointer;
 }
 
-.calendar {
-    max-width: 800px;
-    margin: 2rem auto;
-    background-color: #2C3E50;
-    border-radius: 8px;
-    padding: 20px;
+table tr:hover td {
+    background-color: var(--background-color-hover) !important;
+    color: var(--text-primary) !important;
 }
 
 #calendar {
-    background-color: #fff;
+    max-width: 800px;
+    background-color: var(--surface-color);
+    border: 2px solid var(--border-color);
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     padding: 1rem;
+    margin: 2rem auto;
 }
 
-.calendar a {
+#calendar a {
     text-decoration: none;
     color: inherit;
     cursor: pointer;
+    color: var(--text-primary);
+    padding-right: 0.5rem;
+}
+
+/* Calendar table lines styling */
+#calendar .fc-scrollgrid,
+#calendar .fc-scrollgrid-section,
+#calendar .fc-col-header,
+#calendar .fc-daygrid-body,
+#calendar .fc-scrollgrid-sync-table,
+#calendar .fc-timegrid-body,
+#calendar .fc-timegrid-slots,
+#calendar .fc-timegrid-cols,
+#calendar .fc-daygrid-day-frame,
+#calendar .fc-daygrid-day,
+#calendar .fc-col-header-cell,
+#calendar .fc-timegrid-slot,
+#calendar .fc-timegrid-col,
+#calendar .fc-scrollgrid-section-body,
+#calendar .fc-scrollgrid-section-header,
+#calendar table,
+#calendar th,
+#calendar td {
+    border-color: var(--border-color) !important;
+}
+
+.modal-header {
+    border-bottom: 2px solid var(--border-color);
+    padding: 1rem;
+}
+
+.btn-close-modal {
+    font-size: 1rem;
+    font-weight: 300;
+    color: var(--delete-color);
+    cursor: pointer;
+    border: 2px solid var(--delete-color);
+    border-radius: 100%;
+    width: 20px;
+    height: 20px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: transparent;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    padding: 1rem;
+}
+
+.btn-close-modal:hover {
+    background-color: var(--delete-color-hover);
+    color: var(--text-primary);
+}
+
+.modal-content {
+    background-color: var(--surface-color);
+    border-radius: 12px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    max-width: 500px;
+    width: 100%;
+    height: auto;
+    margin: 0 auto;
+    padding: 20px;
+    z-index: 1050;
+}
+
+.modal-actions .btn {
+    border-radius: 100%;
+    width: 40px;
+    height: 40px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-actions .btn-warning {
+    background-color: var(--edit-color);
+    border-color: var(--edit-color);
+}
+
+.modal-actions .btn-warning:hover {
+    background-color: var(--edit-color-hover);
+    border-color: var(--edit-color-hover);
+}
+
+.modal-actions .btn-success {
+    background-color: var(--complete-color);
+    border-color: var(--complete-color);
+}
+
+.modal-actions .btn-success:hover {
+    background-color: var(--complete-color-hover);
+    border-color: var(--complete-color-hover);
+}
+
+.modal-actions .btn-danger {
+    background-color: var(--delete-color);
+    border-color: var(--delete-color);
+}
+
+.modal-actions .btn-danger:hover {
+    background-color: var(--delete-color-hover);
+    border-color: var(--delete-color-hover);
+}
+
+.calendar-task-desc {
+    border: 2px solid var(--border-color);
+    padding: 1rem;
+    border-radius: 12px;
+}
+
+#taskDescription {
+    color: var(--text-secondary) !important;
+    margin-top: 1rem;
+    border: 2px solid var(--border-color);
+    padding: 1rem;
+    border-radius: 12px;
+}
+
+.fc-today-button {
+    background-color: var(--button-color) !important;
+    border-color: var(--border-color) !important;
+    color: var(--text-primary) !important;
+    transition: all 0.2s ease;
+}
+
+.fc-today-button:hover {
+    background-color: var(--button-color-hover) !important;
+    border-color: var(--border-color-hover) !important;
+    color: var(--text-primary-hover) !important;
+}
+
+.fc-prev-button {
+    background-color: var(--button-color) !important;
+    border-color: var(--border-color) !important;
+    color: var(--text-primary) !important;
+    transition: all 0.2s ease;
+}
+
+.fc-next-button {
+    background-color: var(--button-color) !important;
+    border-color: var(--border-color) !important;
+    color: var(--text-primary) !important;
+    transition: all 0.2s ease;
+}
+
+.fc-next-button:hover {
+    background-color: var(--button-color-hover) !important;
+    border-color: var(--border-color-hover) !important;
+    color: var(--text-primary-hover) !important;
+}
+
+.fc-prev-button:hover {
+    background-color: var(--button-color-hover) !important;
+    border-color: var(--border-color-hover) !important;
+    color: var(--text-primary-hover) !important;
 }
 
 /* Notification Box Styles */
 .notification-box {
     max-width: 800px;
     margin: 0 auto;
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    padding: 20px;
 }
 
 .notification-box .card {
@@ -278,7 +509,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .notification-box .list-group-item:hover {
-    background-color: #f8f9fa;
+    background-color: var(--surface-color);
     transform: translateY(-2px);
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
 }

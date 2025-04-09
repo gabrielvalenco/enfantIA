@@ -16,7 +16,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="{{ asset('css/custom-styles.css') }}" rel="stylesheet">
 </head>
-<body class="bg-light">
+<body>
     <main>
         @yield('content')
     </main>
