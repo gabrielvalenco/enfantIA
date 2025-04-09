@@ -11,7 +11,7 @@
 <header class="dashboard-header">
     <div class="d-flex justify-content-between align-items-center">
         <!-- <img src="{{ asset('favicon.svg') }}" alt="Task Nest Logo" class="logo"> -->
-        <h1 class="dashboard-title">TASKNEST</h1>
+        <h1 class="dashboard-title">{{ env('APP_NAME') }}</h1>
         
         <div class="dropdown">
             <button class="btn btn-link text-light p-0 border-0  mb-0" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">

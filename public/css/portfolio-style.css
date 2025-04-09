@@ -1,39 +1,73 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
 
 :root {
-    --background: #f8f9fa ;
-    --text-color: #ffffff;
-    --primary: #2C3E50;
-    --primary-hover: rgb(38, 91, 145);
-    --secondary: #6c757d;
-    --success: #28a745;
-    --danger: #dc3545;
-    --warning: #ffc107;
-    --info: #17a2b8;
-    --info-hover: #1ccde9;
+    /* General Colors */
+    --background-color: #121212;
+    --surface-color: #1E1E1E;
+    --card-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    --border-color: #333333;
+    --button-color: #121212;
+    
+    /* General Colors Hover */
+    --border-hover: #4d4d4d;
+    --button-hover: #121212;
+    /* Text Colors */
+    --text-color: #b9b9b9;
+    --text-primary: #ebebeb;
+    --text-secondary: #6C757D;
+    --link-color: rgb(32, 172, 130);
+
+    /* Text Colors Hover */
+    --text-color-hover: #d3d3d3;
+    --text-primary-hover: #ffffff;
+    --text-secondary-hover: #838b93;
+    --link-color-hover: rgb(29, 248, 182);
+    
+    /* Transition for theme changes */
+    --transition-speed: 0.3s;
 }
 
+/* Light theme colors */
+[data-theme="light"] {
+    /* General Colors */
+    --background-color: #f5f5f5;
+    --surface-color: #ffffff;
+    --card-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    --border-color: #e0e0e0;
+    --button-color: #f5f5f5;
+    
+    /* General Colors Hover */
+    --border-hover: #c0c0c0;
+    --button-hover: #e8e8e8;
+    /* Text Colors */
+    --text-color: #555555;
+    --text-primary: #333333;
+    --text-secondary: #6C757D;
+    --link-color: rgb(32, 172, 130);
+
+    /* Text Colors Hover */
+    --text-color-hover: #333333;
+    --text-primary-hover: #000000;
+    --text-secondary-hover: #495057;
+    --link-color-hover: rgb(29, 248, 182);
+}
 
 html, body {
     height: 100%;
     margin: 0;
     padding: 0;
     scroll-behavior: smooth;
+    transition: background-color var(--transition-speed) ease, color var(--transition-speed) ease;
 }
 
 body {
     font-family: 'Poppins', sans-serif;
-    background-color: var(--background);
-    color: var(--primary);
-}
-
-h1, h2, h3, h4, h5, h6 {
-    font-weight: 700;
-    text-align: center;
+    background-color: var(--background-color);
+    color: var(--text-primary);
 }
 
 section {
-    margin-bottom: 10rem;
+    margin-bottom: 5rem;
     padding: 1rem;
 }
 
@@ -42,7 +76,7 @@ section h2 {
 }
 
 header {
-    background-color: white;
+    background-color: var(--background-color);
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     width: 100%;
 }
@@ -51,69 +85,61 @@ nav {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1.25rem 2rem;
+    padding: 1.5rem 2rem;
     max-width: 1200px;
     margin: 0 auto;
 }
 
-.header-right ul {
-    display: flex;
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-    gap: 1.5rem;
-}
-
-.header-right ul li a {
+nav a {
     text-decoration: none;
-    color: var(--primary);
+    color: var(--text-primary);
     font-weight: 500;
     transition: color 0.3s ease;
     position: relative;
 }
 
-.header-right ul li a::after {
+nav a::after {
     content: '';
     position: absolute;
     width: 0;
     height: 2px;
     bottom: -5px;
     left: 0;
-    background-color: var(--primary-hover);
-    transition: width 0.3s ease;
+    background-color: var(--link-color-hover);
+    transition: width 0.3s ease-in-out;
+    transform-origin: left;
 }
 
-.header-right ul li a:hover {
-    color: var(--primary-hover);
+nav a:hover {
+    color: var(--link-color-hover);
 }
 
-.header-right ul li a:hover::after {
+nav a:hover::after {
     width: 100%;
 }
 
-.header-left ul {
+.nav-links {
+    gap: 1.5rem;
     display: flex;
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-    gap: 2.5rem;
-}
-
-.header-left a {
-    color: var(--primary);
-    text-decoration: none;
+    margin-right: 2rem;
 }
 
 .hero {
     position: relative;
     text-align: center;
     color: var(--text-color);
+    transition: none;
+}
+
+.hero * {
+    transition: none;
 }
 
 .hero img {
     width: 100%;
-    height: auto;
+    height: 730px;
     filter: brightness(0.4);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .hero-text {
@@ -125,42 +151,175 @@ nav {
 }
 
 .hero-text h1 {
-    color: var(--text-color);
-    font-size: 3rem;
+    color: #ebebeb;
+    font-size: 3.5rem;
     margin-bottom: 10px;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .hero-text p {
     font-size: 1.5rem;
 }
 
+.about h2 {
+    text-align: center;
+    margin-bottom: 3rem;
+    color: var(--text-primary);
+}
+
+.about-content {
+    border: 2px solid var(--border-color);
+    padding: 1.25rem;
+    border-radius: 10px;
+    color: var(--text-primary);
+    background-color: var(--surface-color);
+    max-width: 800px;
+    width: 100%;
+    margin: 0 auto 3rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.about-content h3 {
+    text-align: left;
+    border-bottom: 2px solid var(--border-color);
+    padding-bottom: 1rem;
+    margin-top: 0;
+    color: var(--text-primary);
+}
+
+/* Typing animation container */
+.typing-container {
+    display: flex;
+    justify-content: center;
+    min-height: 2.5rem;
+    margin: 1rem 0;
+}
+
+/* Typing animation styling */
 .typing-animation {
-    overflow: hidden;
-    border-right: 0.15em solid var(--text-color);
+    display: inline-block;
+    position: relative;
+    font-family: monospace;
+    font-weight: 700;
+    font-size: 1.5rem;
+    color: var(--link-color-hover);
+    margin: 0;
     white-space: nowrap;
-    margin: 0 auto;
-    letter-spacing: 0.15em;
-    animation: typing 4s steps(40, end) infinite, blink-caret 0.75s step-end infinite;
+    overflow: hidden;
+}
+
+.typing-animation::before {
+    content: "";
+    animation: typing-sequence 16s linear infinite;
 }
 
 .typing-animation::after {
-    content: "Planeje";
-    animation: change-text 16s infinite;
+    content: "";
+    position: absolute;
+    right: -3px;
+    top: 0;
+    height: 100%;
+    width: 3px;
+    background-color: var(--link-color-hover);
+    animation: cursor-blink 0.8s step-end infinite;
 }
 
-.services {
-    background-color: var(--primary);
-    color: var(--text-color);
+@keyframes cursor-blink {
+    from, to { background-color: transparent; }
+    50% { background-color: var(--link-color-hover); }
+}
+
+@keyframes typing-sequence {
+    /* Planeje */
+    0%, 3% { content: ""; }
+    4% { content: "P"; }
+    5% { content: "Pl"; }
+    6% { content: "Pla"; }
+    7% { content: "Plan"; }
+    8% { content: "Plane"; }
+    9% { content: "Planej"; }
+    10% { content: "Planeje"; }
+    15%, 17% { content: "Planeje"; }
+    18% { content: "Planej"; }
+    19% { content: "Plane"; }
+    20% { content: "Plan"; }
+    21% { content: "Pla"; }
+    22% { content: "Pl"; }
+    23% { content: "P"; }
+    24% { content: ""; }
+    
+    /* Estruture */
+    25%, 27% { content: ""; }
+    28% { content: "E"; }
+    29% { content: "Es"; }
+    30% { content: "Est"; }
+    31% { content: "Estr"; }
+    32% { content: "Estru"; }
+    33% { content: "Estrut"; }
+    34% { content: "Estrutu"; }
+    35% { content: "Estrutur"; }
+    36% { content: "Estruture"; }
+    40%, 42% { content: "Estruture"; }
+    43% { content: "Estrutur"; }
+    44% { content: "Estrutu"; }
+    45% { content: "Estrut"; }
+    46% { content: "Estru"; }
+    47% { content: "Estr"; }
+    48% { content: "Est"; }
+    49% { content: "Es"; }
+    50% { content: ""; }
+    
+    /* Organize */
+    51%, 53% { content: ""; }
+    54% { content: "O"; }
+    55% { content: "Or"; }
+    56% { content: "Org"; }
+    57% { content: "Orga"; }
+    58% { content: "Organ"; }
+    59% { content: "Organi"; }
+    60% { content: "Organiz"; }
+    61% { content: "Organize"; }
+    65%, 67% { content: "Organize"; }
+    68% { content: "Organiz"; }
+    69% { content: "Organi"; }
+    70% { content: "Organ"; }
+    71% { content: "Orga"; }
+    72% { content: "Org"; }
+    73% { content: "Or"; }
+    74% { content: "O"; }
+    75% { content: ""; }
+    
+    /* Finalize */
+    76%, 78% { content: ""; }
+    79% { content: "F"; }
+    80% { content: "Fi"; }
+    81% { content: "Fin"; }
+    82% { content: "Fina"; }
+    83% { content: "Final"; }
+    84% { content: "Finali"; }
+    85% { content: "Finaliz"; }
+    86% { content: "Finalize"; }
+    90%, 92% { content: "Finalize"; }
+    93% { content: "Finaliz"; }
+    94% { content: "Finali"; }
+    95% { content: "Final"; }
+    96% { content: "Fina"; }
+    97% { content: "Fin"; }
+    98% { content: "Fi"; }
+    99% { content: "F"; }
+    100% { content: ""; }
 }
 
 .services h2 {
+    text-align: center;
     margin-bottom: 3rem;
+    color: var(--text-primary);
 }
 
 .services-container {
     display: flex;
     justify-content: center;
-    gap: 6rem;
+    gap: 8rem;
     margin: 1rem;
 }
 
@@ -169,23 +328,63 @@ nav {
     height: 300px;
     object-fit: cover;
     border-radius: 10px;
-}
-        
-@keyframes typing {
-    0%, 100% { width: 0; }
-    10%, 90% { width: 100%; }
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
-@keyframes blink-caret {
-    from, to { border-color: transparent; }
-    50% { border-color: var(--text-color); }
+/* Theme Toggle Button */
+.theme-toggle {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background-color: var(--surface-color);
+    border: 2px solid var(--border-color);
+    color: var(--text-primary);
+    cursor: pointer;
+    font-size: 1.2rem;
+    padding: 0;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color var(--transition-speed) ease, 
+                color var(--transition-speed) ease,
+                transform 0.3s ease,
+                box-shadow 0.3s ease;
+    z-index: 1000;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 
-@keyframes change-text {
-    0%, 20% { content: "Planeje"; }
-    30%, 40% { content: "Estruture"; }
-    60%, 70% { content: "Organize"; }
-    90%, 100% { content: "Finalize"; }
+.theme-toggle:hover {
+    background-color: var(--border-hover);
+    color: var(--text-primary-hover);
+    transform: rotate(15deg) scale(1.1);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+}
+
+[data-theme="light"] .theme-toggle {
+    color: var(--text-primary);
+    background-color: var(--surface-color);
+    border-color: var(--border-color);
+}
+
+[data-theme="light"] .theme-toggle:hover {
+    background-color: var(--border-hover);
+}
+
+/* Ensure all elements transition smoothly */
+*, *::before, *::after {
+    transition: background-color var(--transition-speed) ease, 
+                color var(--transition-speed) ease,
+                border-color var(--transition-speed) ease,
+                box-shadow var(--transition-speed) ease;
+}
+
+.contact h2 {
+    text-align: center;
+    margin-bottom: 3rem;
+    color: var(--text-primary);
 }
 
 /* Responsive Design */
