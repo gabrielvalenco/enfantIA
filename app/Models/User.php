@@ -81,4 +81,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(GroupInvitation::class)->where('status', 'pending');
     }
+
+    public function completedTasks()
+    {
+        return $this->hasMany(Task::class)->whereNotNull('completed_at');
+    }
 }

@@ -7,17 +7,16 @@
 
 <div class="container">
     <div class="notes-section">
-        <div class="dashboard-section-title mb-4 d-flex justify-content-between align-items-center">
+        <div class="dashboard-section-title d-flex justify-content-between align-items-center">
             <div class="d-flex align-items-center">
                 <i class="fas fa-sticky-note fa-2x me-3"></i>
                 <h1 class="mb-0">Bloco de Notas</h1>
             </div>
-            <div class="d-flex gap-2">
-            <a href="{{ route('dashboard') }}" class="btn btn-secondary back-button">
-                <i class="fas fa-arrow-left me-2"></i>Voltar
+            <div class="d-flex gap-3">
+            <a href="{{ route('dashboard') }}">
+               Voltar
             </a>
-                <button class="btn btn-primary" id="addNoteBtn" onclick="showAddNoteModal()">
-                    <i class="fas fa-plus me-1"></i>
+                <button class="add-button" id="addNoteBtn" onclick="showAddNoteModal()">
                     Nova Nota
                 </button>
             </div>

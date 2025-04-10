@@ -184,10 +184,12 @@ h1, h2, h3, h4, h5, h6 {
     color: var(--text-primary);
 }
 
-.status-card-icon.pending { background-color: #3498db; }
-.status-card-icon.completed { background-color: #2ecc71; }
-.status-card-icon.urgent { background-color: var(--delete-color); }
+.status-card-icon.pending { background-color: var(--link-color); }
+.status-card-icon.completed { background-color: var(--link-color); }
+.status-card-icon.urgent { background-color: var(--link-color); }
 .status-card-icon.categories { background-color: var(--link-color); }
+
+
 
 .status-card-info h3 {
     font-size: 1.5rem;
@@ -307,9 +309,28 @@ h1, h2, h3, h4, h5, h6 {
     border: none !important;
 }
 
+.complete-button {
+    background-color: var(--complete-color);
+    border: 2px solid var(--complete-color);
+    border-radius: 100%;
+    width: 20px;
+    height: 20px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-primary);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    padding: 1rem;
+}
+
+.complete-button:hover {
+    background-color: var(--complete-color-hover);
+    border-color: var(--complete-color-hover);
+}
+
 table tr {
     border-bottom: 2px solid var(--border-color);
-    cursor: pointer;
 }
 
 table td {
@@ -365,7 +386,8 @@ table tr:hover td {
 
 .modal-header {
     border-bottom: 2px solid var(--border-color);
-    padding: 1rem;
+    margin-bottom: 1.5rem;
+    padding: 0 0 1rem;
 }
 
 .btn-close-modal {
@@ -401,6 +423,10 @@ table tr:hover td {
     margin: 0 auto;
     padding: 20px;
     z-index: 1050;
+}
+
+.modal-body {
+    padding: 0;
 }
 
 .modal-actions .btn {
@@ -443,12 +469,14 @@ table tr:hover td {
 }
 
 .calendar-task-desc {
+    background-color: var(--background-color);
     border: 2px solid var(--border-color);
     padding: 1rem;
     border-radius: 12px;
 }
 
 #taskDescription {
+    background-color: var(--background-color);
     color: var(--text-secondary) !important;
     margin-top: 1rem;
     border: 2px solid var(--border-color);

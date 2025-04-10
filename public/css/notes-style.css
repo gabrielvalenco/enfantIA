@@ -1,15 +1,28 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 
 :root {
-    --background: #f8f9fa ;
-    --primary: #2C3E50;
-    --primary-hover: rgb(38, 91, 145);
-    --secondary: #6c757d;
-    --success: #28a745;
-    --danger: #dc3545;
-    --warning: #ffc107;
-    --info: #17a2b8;
-    --info-hover: #1ccde9;
+    /* General Colors */
+    --background-color: #121212;
+    --surface-color: #1E1E1E;
+    --card-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    --border-color: #333333;
+    --button-color: #121212;
+    
+    /* General Colors Hover */
+    --border-hover: #4d4d4d;
+    --button-hover: #121212;
+
+    /* Text Colors */
+    --text-color: #b9b9b9;
+    --text-primary: #ebebeb;
+    --text-secondary: #6C757D;
+    --link-color: rgb(32, 172, 130);
+
+    /* Text Colors Hover */
+    --text-color-hover: #d3d3d3;
+    --text-primary-hover: #ffffff;
+    --text-secondary-hover: #838b93;
+    --link-color-hover: rgb(29, 248, 182);
 }
 
 html, body {
@@ -25,14 +38,63 @@ body {
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    color: var(--primary);
+    color: var(--text-primary);
 }
 
 h1, h2, h3, h4, h5, h6 {
-    color: var(--primary);
+    color: var(--text-primary);
     font-weight: 700;
 }
 
 .card {
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.116);
+}
+
+.dashboard-section-title {
+    margin-bottom: 3rem;
+    padding-bottom: 2rem;
+    border-bottom: 3px solid var(--border-color);
+}
+
+.dashboard-section-title a {
+    color: var(--link-color);
+    text-decoration: none;
+    transition: all 0.3s ease;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.dashboard-section-title a:hover {
+    color: var(--link-color-hover);
+    transform: translateX(-5px);
+}
+
+.dashboard-section-title a::before {
+    content: '←';
+    font-size: 1.2rem;
+}
+
+.add-button {
+    background-color: var(--button-color);
+    color: var(--text-primary);
+    border: 2px solid var(--border-color);
+    border-radius: 10px;
+    padding: 0.25rem 1.25rem;
+    transition: all 0.2s;
+    cursor: pointer;
+    font-weight: 500;
+    outline: none;
+}
+
+.add-button:hover {
+    background-color: var(--button-hover);
+    color: var(--text-primary-hover);
+}
+
+.alert {
+    background-color: var(--surface-color);
+    border: 2px solid var(--border-hover);
+    color: var(--text-secondary);
 }

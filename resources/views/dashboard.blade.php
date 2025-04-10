@@ -214,16 +214,7 @@
                     <p>Gerencie as categorias de tarefas</p>
                 </div>
             </a>
-
-            <a href="{{ route('notes.index') }}" class="menu-item">
-                <div class="menu-item-icon">
-                    <i class="fas fa-sticky-note"></i>
-                </div>
-                <div class="menu-item-content">
-                    <h3>Bloco de Notas</h3>
-                    <p>Gerencie suas anotações pessoais</p>
-                </div>
-            </a>
+            
         </div>
     </div>
 
@@ -253,7 +244,7 @@
                                 </span>
                             </td>
                             <td class="text-center">
-                                <button onclick="confirmComplete({{ $task->id }}, '{{ $task->title }}')" class="btn next-btn-success btn-sm btn-success" title="Concluir">
+                                <button onclick="confirmComplete({{ $task->id }}, '{{ $task->title }}')" class="complete-button" title="Concluir">
                                     <i class="fas fa-check"></i>
                                 </button>
                                 <form id="complete-form-{{ $task->id }}" action="{{ route('tasks.complete', $task->id) }}" method="POST" class="d-none">

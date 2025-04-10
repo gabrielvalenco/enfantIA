@@ -251,6 +251,44 @@ p {
     color: var(--link-color-hover);
 }
 
+.portfolio {
+    text-align: center;
+    margin-top: 25px;
+}
+
+.portfolio a {
+    color: var(--link-color);
+    text-decoration: none;
+    transition: all 0.3s ease;
+    letter-spacing: 1px;
+    font-weight: 600;
+    font-size: 18px;
+    position: relative;
+}
+
+.portfolio a::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -5px;
+    width: 100%;
+    height: 2px;
+    background-color: var(--link-color);
+    transform: scaleX(0);
+    transform-origin: bottom right;
+    transition: transform 0.3s ease;
+}
+
+.portfolio a:hover {
+    color: var(--link-color-hover);
+}
+
+.portfolio a:hover::after {
+    background-color: var(--link-color-hover);
+    transform: scaleX(1);
+    transform-origin: bottom left;
+}
+
 /* Media Queries */
 @media (max-width: 768px) {
    .auth-wrapper {

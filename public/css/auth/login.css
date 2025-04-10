@@ -125,13 +125,26 @@ p {
 .password-toggle {
     position: absolute;
     right: 15px;
-    top: 50%;
+    top: 33%;
     transform: translateY(-50%);
     cursor: pointer;
     color: var(--text-secondary);
 }
 
 .password-toggle:hover {
+    color: var(--text-secondary-hover);
+}
+
+.password-reset {
+    font-size: 0.85rem;
+    padding-left: 0.5rem;
+    cursor: pointer;
+    color: var(--text-secondary);
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.password-reset:hover {
     color: var(--text-secondary-hover);
 }
 
@@ -143,12 +156,17 @@ p {
     padding-bottom: 15px;
 }
 
+.form-group {
+    margin-bottom: 2rem;
+}
+
 .form-group input {
     border: 2px solid var(--border-color);
     background-color: #121212;
     color: white;
     cursor: pointer;
     transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out, background-color 0.15s ease-in-out;
+    margin-bottom: 0.25rem;
 }
 
 .form-group input:hover,

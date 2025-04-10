@@ -47,12 +47,13 @@
                             <span class="password-toggle" onclick="togglePasswordVisibility()">
                                 <i class="fas fa-eye" id="togglePassword"></i>
                             </span>
+                            <label class="password-reset" for="password-reset">Esqueceu sua senha?</label>
                         </div>
                         @error('password')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
-
+                    
                     <div class="form-check">
                         <input type="checkbox" class="form-check-input" id="remember" name="remember">
                         <label class="form-check-label" for="remember">Lembrar-me</label>
