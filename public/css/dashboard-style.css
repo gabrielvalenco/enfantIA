@@ -109,12 +109,43 @@ h1, h2, h3, h4, h5, h6 {
     color: var(--text-secondary) !important;
 }
 
-.dropdown-item .text-danger {
+.dropdown-item button {
     color: var(--delete-color) !important;
+    background: transparent;
+    border: none;
+    width: 100%;
+    text-align: left;
+    padding: 0.5rem 1rem;
+    transition: all 0.2s ease;
+}
+
+.dropdown-item button:hover {
+    color: var(--delete-color-hover) !important;
+    background-color: rgba(219, 58, 52, 0.1);
+    padding-left: 1.5rem;
+    transition: all 0.2s ease;
 }
 
 .dropdown-item .text-danger:hover {
     color: var(--delete-color-hover) !important;
+    padding-left: 1.5rem;
+    transition: all 0.2s ease;
+}
+
+.dropdown-item.text-danger {
+    color: var(--delete-color) !important;
+    background: transparent;
+    width: 100%;
+    text-align: left;
+    padding: 0.5rem 1rem;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+}
+
+.dropdown-item.text-danger:hover {
+    color: var(--delete-color-hover) !important;
+    background-color: rgba(219, 58, 52, 0.1);
     padding-left: 1.5rem;
     transition: all 0.2s ease;
 }
@@ -572,6 +603,26 @@ table tr:hover td {
 .notification-box .btn-danger {
     background-color: var(--danger);
     border-color: var(--danger);
+}
+
+.logout-btn {
+    color: var(--delete-color) !important;
+    background: transparent;
+    border: none;
+    width: 100%;
+    text-align: left;
+    padding: 0.5rem 1rem;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.logout-btn:hover {
+    color: var(--delete-color-hover) !important;
+    padding-left: 1.5rem;
+    transition: all 0.2s ease;
 }
 
 @media (max-width: 768px) {

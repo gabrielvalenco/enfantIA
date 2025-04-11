@@ -50,7 +50,7 @@
                 <li>
                     <form method="POST" action="{{ route('logout') }}" class="px-2 py-1">
                         @csrf
-                        <button type="submit" class="dropdown-item text-danger">
+                        <button type="submit" class="logout-btn">
                             <i class="fas fa-sign-out-alt me-2"></i>
                             Sair
                         </button>

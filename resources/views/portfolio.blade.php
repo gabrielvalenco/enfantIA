@@ -34,17 +34,23 @@
     </div>
     <section class="about" id="about">
         <h2>Sobre</h2>
-        <div class="about-content">
-            <h3>Lorem</h3>
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatum aut, assumenda explicabo quisquam fuga facere debitis itaque tempora nihil provident consectetur, ratione aspernatur vitae suscipit quas temporibus nemo! Quod, ducimus!</p>
-        </div>
-        <div class="about-content">
-            <h3>Lorem</h3>
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatum aut, assumenda explicabo quisquam fuga facere debitis itaque tempora nihil provident consectetur, ratione aspernatur vitae suscipit quas temporibus nemo! Quod, ducimus!</p>
-        </div>
-        <div class="about-content">
-            <h3>Lorem</h3>
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatum aut, assumenda explicabo quisquam fuga facere debitis itaque tempora nihil provident consectetur, ratione aspernatur vitae suscipit quas temporibus nemo! Quod, ducimus!</p>
+        <div class="about-container">
+            <div class="about-content animate-from-left left-aligned">
+                <h3>Lorem</h3>
+                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatum aut, assumenda explicabo quisquam fuga facere debitis itaque tempora nihil provident consectetur, ratione aspernatur vitae suscipit quas temporibus nemo! Quod, ducimus!</p>
+            </div>
+            <div class="about-content animate-from-right right-aligned">
+                <h3>Lorem</h3>
+                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatum aut, assumenda explicabo quisquam fuga facere debitis itaque tempora nihil provident consectetur, ratione aspernatur vitae suscipit quas temporibus nemo! Quod, ducimus!</p>
+            </div>
+            <div class="about-content animate-from-left left-aligned">
+                <h3>Lorem</h3>
+                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatum aut, assumenda explicabo quisquam fuga facere debitis itaque tempora nihil provident consectetur, ratione aspernatur vitae suscipit quas temporibus nemo! Quod, ducimus!</p>
+            </div>
+            <div class="about-content animate-from-right right-aligned">
+                <h3>Lorem</h3>
+                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatum aut, assumenda explicabo quisquam fuga facere debitis itaque tempora nihil provident consectetur, ratione aspernatur vitae suscipit quas temporibus nemo! Quod, ducimus!</p>
+            </div>
         </div>
     </section>
     <section class="services" id="services">
@@ -115,7 +121,41 @@
                     themeIcon.className = 'fas fa-moon';
                 }
             }
+            
+            // Iniciar verificação de visibilidade para animações
+            checkVisibility();
         });
+        
+        // Função para verificar elementos visíveis e animar
+        function checkVisibility() {
+            const elementsFromLeft = document.querySelectorAll('.animate-from-left');
+            const elementsFromRight = document.querySelectorAll('.animate-from-right');
+            
+            const isInViewport = (element) => {
+                const rect = element.getBoundingClientRect();
+                return (
+                    rect.top <= (window.innerHeight || document.documentElement.clientHeight) * 0.8 &&
+                    rect.bottom >= 0
+                );
+            };
+            
+            // Animar elementos da esquerda
+            elementsFromLeft.forEach(element => {
+                if (isInViewport(element)) {
+                    element.classList.add('visible');
+                }
+            });
+            
+            // Animar elementos da direita
+            elementsFromRight.forEach(element => {
+                if (isInViewport(element)) {
+                    element.classList.add('visible');
+                }
+            });
+        }
+        
+        // Verificar visibilidade ao rolar a página
+        window.addEventListener('scroll', checkVisibility);
     </script>
 
 </main>

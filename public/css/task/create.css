@@ -11,7 +11,7 @@
     /* General Colors Hover */
     --border-hover: #4d4d4d;
     --button-hover: #121212;
-/* Text Colors */
+    /* Text Colors */
     --text-color: #b9b9b9;
     --text-primary: #ebebeb;
     --text-secondary: #6C757D;
@@ -22,4 +22,253 @@
     --text-primary-hover: #ffffff;
     --text-secondary-hover: #838b93;
     --link-color-hover: rgb(29, 248, 182);
+    
+    /* Accent Colors */
+    --primary-color: #20ac82;
+    --primary-hover: #1df8b6;
+    --danger-color: #dc3545;
+    --warning-color: #ffc107;
+}
+
+body {
+    font-family: 'Poppins', sans-serif !important;
+    background-color: var(--background-color);
+    color: var(--text-primary);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px 0;
+}
+
+.task-form-container {
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    background-color: var(--surface-color);
+    border: 2px solid var(--border-color);
+    color: var(--text-primary);
+    transition: all 0.3s ease;
+}
+
+.task-header {
+    margin-bottom: 2rem;
+}
+
+.task-header h1 {
+    font-weight: 600;
+    font-size: 1.8rem;
+    color: var(--text-primary);
+}
+
+.back-button {
+    color: var(--link-color);
+    text-decoration: none;
+    transition: all 0.3s ease;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.back-button:hover {
+    color: var(--link-color-hover);
+    transform: translateX(-5px);
+}
+
+.back-button::before {
+    content: '←';
+    font-size: 1.2rem;
+}
+
+/* Form Elements */
+.form-container {
+    background-color: rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    padding: 10px;
+}
+
+.form-floating > label {
+    color: var(--text-secondary);
+}
+
+.form-control {
+    padding: 0 0 0 1rem !important;
+}
+
+.form-select {
+    padding: 0 0 0 1rem !important;
+}
+
+.form-control, .form-select {
+    background-color: var(--surface-color) !important;
+    border: 1px solid var(--border-color);
+    color: var(--text-primary) !important;
+    transition: all 0.3s ease;
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.25rem rgba(32, 172, 130, 0.25);
+    background-color: var(--surface-color) !important;
+}
+
+.form-control::placeholder {
+    color: var(--text-secondary);
+}
+
+.form-select option {
+    background-color: var(--surface-color);
+    color: var(--text-primary);
+}
+
+/* Categories Section */
+.category-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.form-check {
+    padding: 8px 12px;
+    border-radius: 6px;
+    background-color: rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.form-check:hover {
+    background-color: rgba(32, 172, 130, 0.1);
+}
+
+.form-check-input {
+    background-color: var(--surface-color);
+    border: 1px solid var(--border-color);
+}
+
+.form-check-input:checked {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.form-check-label {
+    color: var(--text-color);
+    font-size: 0.9rem;
+    margin-left: 5px;
+}
+
+.category-warning {
+    font-size: 0.85rem;
+}
+
+/* Date Input Container */
+.date-input-container {
+    position: relative;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    padding: 8px 12px;
+    background-color: var(--surface-color);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.date-input-container:hover {
+    border-color: var(--primary-color);
+    background-color: rgba(32, 172, 130, 0.05);
+}
+
+.date-input-container:focus-within {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.25rem rgba(32, 172, 130, 0.25);
+}
+
+.date-label {
+    display: block;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    margin-bottom: 4px;
+    font-weight: 500;
+}
+
+.date-input-container input[type="datetime-local"] {
+    border: none;
+    background-color: transparent !important;
+    color: var(--text-primary);
+    width: 100%;
+    padding: 4px 0;
+    cursor: pointer;
+    box-shadow: none;
+}
+
+.date-input-container input[type="datetime-local"]:focus {
+    outline: none;
+    box-shadow: none;
+    border: none;
+}
+
+/* Hide the calendar icon in some browsers */
+.date-input-container input[type="datetime-local"]::-webkit-calendar-picker-indicator {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+}
+
+/* Submit Button */
+.submit-button {
+    background-color: var(--primary-color);
+    border: none;
+    padding: 10px 20px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.submit-button:hover {
+    background-color: var(--primary-hover);
+    transform: translateY(-2px);
+}
+
+/* Validation Styles */
+.was-validated .form-control:invalid,
+.was-validated .form-select:invalid {
+    border-color: var(--danger-color);
+}
+
+.was-validated .form-control:valid,
+.was-validated .form-select:valid {
+    border-color: var(--primary-color);
+}
+
+.invalid-feedback {
+    color: var(--danger-color);
+    font-size: 0.85rem;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .task-form-container {
+        padding: 20px;
+    }
+    
+    .task-header {
+        flex-direction: column;
+        align-items: flex-start !important;
+        gap: 15px;
+    }
+    
+    .category-grid {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    }
+}
+
+input {
+    background-color: var(--surface-color) !important;
 }

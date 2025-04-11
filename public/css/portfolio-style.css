@@ -167,16 +167,61 @@ nav a:hover::after {
     color: var(--text-primary);
 }
 
+.about-container {
+    display: flex;
+    flex-direction: column;
+    max-width: 1200px;
+    margin: 0 auto;
+    position: relative;
+}
+
 .about-content {
     border: 2px solid var(--border-color);
     padding: 1.25rem;
     border-radius: 10px;
     color: var(--text-primary);
     background-color: var(--surface-color);
-    max-width: 800px;
-    width: 100%;
-    margin: 0 auto 3rem;
+    width: 65%;
+    margin-bottom: 3.5rem;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    opacity: 0;
+}
+
+.about-content:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+    border-color: var(--link-color);
+}
+
+.left-aligned {
+    align-self: flex-start;
+    margin-left: -10%;
+}
+
+.right-aligned {
+    align-self: flex-end;
+    margin-right: -10%;
+}
+
+/* Animação para blocos que entram da esquerda */
+.animate-from-left {
+    transform: translateX(-100px);
+    opacity: 0;
+    transition: transform 0.8s ease, opacity 0.8s ease;
+}
+
+/* Animação para blocos que entram da direita */
+.animate-from-right {
+    transform: translateX(100px);
+    opacity: 0;
+    transition: transform 0.8s ease, opacity 0.8s ease;
+}
+
+/* Classe aplicada quando o elemento está visível */
+.animate-from-left.visible,
+.animate-from-right.visible {
+    transform: translateX(0);
+    opacity: 1;
 }
 
 .about-content h3 {

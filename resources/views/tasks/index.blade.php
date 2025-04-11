@@ -8,9 +8,7 @@
     <link rel="icon" href="{{ asset('favicon.svg') }}" type="image/svg+xml">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <link rel="stylesheet" href="{{ asset('css/custom-styles.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/task-form.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/category-style.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/task/index.css') }}">
 </head>
 <body>
     <div class="container mt-4">
@@ -44,8 +42,12 @@
         <div class="table-header">
             <h1>Lista de Tarefas</h1>
             <div class="table-actions">
-                <a href="{{ route('dashboard') }}" class="btn btn-secondary">Voltar</a>
-                <a href="{{ route('tasks.create') }}" class="btn btn-primary">Nova Tarefa</a>
+                <a class="back-button" href="{{ route('dashboard') }}">
+                    Voltar ao Dashboard
+                </a>
+                <a class="add-task-button" href="{{ route('tasks.create') }}">
+                    <i class="fas fa-plus-circle"></i> Nova Tarefa
+                </a>
             </div>
         </div>
 
@@ -54,9 +56,9 @@
                     <tr>
                         <th>Título</th>
                         <th>Descrição</th>
-                        <th>Categorias</th>
+                        <th class="text-center">Categorias</th>
                         <th>Urgência</th>
-                        <th>Status</th>
+                        <th class="text-center">Status</th>
                         <th class="due-date-header">Data de Vencimento</th>
                         <th class="actions-column">Ações</th>
                     </tr>
@@ -126,7 +128,7 @@
                                     <td class="due-date">
                                         {{ \Carbon\Carbon::parse($task->due_date)->format('d/m/Y H:i') }}
                                     </td>
-                                    <td class="actions-column">
+                                    <td class="voltar">
                                         <div class="action-buttons">
                                             <a href="{{ route('tasks.edit', $task) }}" class="btn btn-sm btn-warning action-btn">
                                                 <span class="action-text">Editar</span>

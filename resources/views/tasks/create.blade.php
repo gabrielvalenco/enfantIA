@@ -8,14 +8,14 @@
     <link rel="icon" href="{{ asset('favicon.svg') }}" type="image/svg+xml">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <link rel="stylesheet" href="{{ asset('css/task-form.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/task/create.css') }}">
 </head>
 <body>
     <div class="task-form-container">
         <div class="task-header d-flex justify-content-between align-items-center flex-wrap">
-            <h1 class="mb-0">Criar Nova Tarefa</h1>
-            <a href="{{ route('dashboard') }}" class="btn btn-secondary back-button">
-                <i class="fas fa-arrow-left me-2"></i>Voltar
+            <h1>Criar Nova Tarefa</h1>
+            <a class="back-button" href="{{ route('dashboard') }}">
+                Voltar ao Dashboard
             </a>
         </div>
 
@@ -58,22 +58,25 @@
                 <!-- Data e Urgência -->
                 <div class="row g-3 mb-3">
                     <div class="col-md-6">
-                        <div class="form-floating">
+                        <div class="date-input-container">
+                            <label for="due_date" class="date-label">
+                                <i class="far fa-calendar-alt me-2"></i>Data de Vencimento
+                            </label>
                             <input type="datetime-local" 
                                    class="form-control" 
                                    id="due_date" 
                                    name="due_date"
                                    required>
-                            <label for="due_date">
-                                <i class="far fa-calendar-alt me-2"></i>Data de Vencimento
-                            </label>
                             <div class="invalid-feedback">
                                 Selecione uma data de vencimento.
                             </div>
                         </div>
                     </div>
                     <div class="col-md-6">
-                        <div class="form-floating">
+                        <div class="date-input-container">
+                            <label for="urgency" class="date-label">
+                                <i class="fas fa-exclamation-circle me-2"></i>Nível de Urgência
+                            </label>
                             <select class="form-select" 
                                     id="urgency" 
                                     name="urgency"
@@ -84,9 +87,6 @@
                                 <option value="medium">Média</option>
                                 <option value="high">Alta</option>
                             </select>
-                            <label for="urgency">
-                                <i class="fas fa-exclamation-circle me-2"></i>Nível de Urgência
-                            </label>
                             <div class="invalid-feedback">
                                 Selecione um nível de urgência.
                             </div>
