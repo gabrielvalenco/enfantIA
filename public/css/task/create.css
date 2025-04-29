@@ -25,7 +25,7 @@
     
     /* Accent Colors */
     --primary-color: #20ac82;
-    --primary-hover: #1df8b6;
+    --primary-hover: #17d199;
     --danger-color: #dc3545;
     --warning-color: #ffc107;
 }
@@ -39,6 +39,14 @@ body {
     align-items: center;
     justify-content: center;
     padding: 20px 0;
+}
+
+.main-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 900px;
 }
 
 .task-form-container {
@@ -87,6 +95,7 @@ body {
 /* Form Elements */
 .form-container {
     background-color: rgba(0, 0, 0, 0.1);
+    border: 2px solid var(--border-color);
     border-radius: 8px;
     padding: 10px;
 }
@@ -225,10 +234,14 @@ body {
 /* Submit Button */
 .submit-button {
     background-color: var(--primary-color);
+    color: var(--text-primary);
     border: none;
-    padding: 10px 20px;
-    font-weight: 500;
+    border-radius: 6px;
+    padding: 8px 20px;
+    font-weight: 00;
+    cursor: pointer;
     transition: all 0.3s ease;
+    font-family: 'Poppins', sans-serif;
 }
 
 .submit-button:hover {
@@ -254,9 +267,6 @@ body {
 
 /* Responsive Adjustments */
 @media (max-width: 768px) {
-    .task-form-container {
-        padding: 20px;
-    }
     
     .task-header {
         flex-direction: column;
@@ -271,4 +281,61 @@ body {
 
 input {
     background-color: var(--surface-color) !important;
+}
+
+/* Estilos para o Botão e Seção de Subtarefas */
+.subtask-container {
+    width: 100%;
+    margin: 1.5rem 0 1.5rem 0;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    color: var(--text-primary);
+    transition: all 0.3s ease;
+}
+
+#add-subtask-btn {
+    background-color: var(--primary-color);
+    color: var(--text-primary);
+    border: none;
+    border-radius: 6px;
+    padding: 10px 20px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: 'Poppins', sans-serif;
+}
+
+#add-subtask-btn:hover {
+    background-color: var(--primary-hover);
+    transform: translateY(-2px);
+}
+
+.subtask-item {
+    background-color: rgba(0, 0, 0, 0.1);
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+}
+
+.subtask-item .card-title {
+    color: var(--text-primary);
+    font-weight: 500;
+}
+
+.remove-subtask {
+    background-color: transparent;
+    border-color: var(--danger-color);
+    color: var(--danger-color);
+    transition: all 0.3s ease;
+}
+
+.remove-subtask:hover {
+    background-color: var(--danger-color);
+    color: var(--text-primary);
+}
+
+@media (max-width: 768px) {
+    .subtask-container {
+        padding: 15px;
+    }
 }

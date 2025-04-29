@@ -25,7 +25,7 @@
     
     /* Accent Colors */
     --primary-color: #20ac82;
-    --primary-hover: #1df8b6;
+    --primary-hover: #17d199;
     --danger-color: #dc3545;
     --warning-color: #ffc107;
 }
@@ -421,4 +421,165 @@ body {
     .table tbody td {
         padding: 10px;
     }
+}
+
+/* Estilos para o Modal de Subtarefas */
+.modal-content {
+    background-color: var(--surface-color);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    box-shadow: 0 5px 25px rgba(0, 0, 0, 0.3);
+}
+
+.modal-header {
+    border-bottom: 1px solid var(--border-color);
+    padding: 15px 20px;
+}
+
+.modal-title {
+    color: var(--text-primary);
+    font-weight: 600;
+}
+
+.modal-header .close {
+    color: var(--text-primary);
+    opacity: 0.8;
+    text-shadow: none;
+    transition: all 0.3s ease;
+}
+
+.modal-header .close:hover {
+    opacity: 1;
+    color: var(--text-primary-hover);
+}
+
+.modal-body {
+    padding: 20px;
+}
+
+.modal-footer {
+    border-top: 1px solid var(--border-color);
+    padding: 15px 20px;
+}
+
+/* Estilos para elementos dentro do modal */
+#task-title {
+    color: var(--text-primary);
+    font-weight: 600;
+    margin-bottom: 15px;
+    font-size: 1.4rem;
+}
+
+#task-description {
+    color: var(--text-color);
+    margin-bottom: 20px;
+    font-size: 1rem;
+    line-height: 1.5;
+}
+
+.task-info {
+    background-color: rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 25px;
+}
+
+.task-info strong {
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.task-info span {
+    color: var(--text-color);
+}
+
+/* Estilo para Subtarefas */
+.subtask-item {
+    background-color: rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    padding: 10px 15px;
+    transition: all 0.3s ease;
+}
+
+.subtask-item:hover {
+    background-color: rgba(32, 172, 130, 0.05);
+}
+
+.form-check-input {
+    background-color: var(--surface-color);
+    border: 1px solid var(--border-color);
+}
+
+.form-check-input:checked {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.form-check-label {
+    color: var(--text-color);
+    margin-left: 5px;
+    transition: all 0.2s ease;
+}
+
+.delete-subtask {
+    margin-left: auto;
+    background-color: transparent;
+    border: none;
+    color: var(--danger-color);
+    opacity: 0.7;
+    transition: all 0.3s ease;
+}
+
+.delete-subtask:hover {
+    opacity: 1;
+    background-color: rgba(220, 53, 69, 0.1);
+}
+
+#subtask-form input {
+    background-color: var(--surface-color);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    padding: 10px 15px;
+    border-radius: 6px;
+}
+
+#subtask-form input:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.2rem rgba(32, 172, 130, 0.25);
+}
+
+#subtask-form button {
+    background-color: var(--primary-color);
+    border: none;
+    color: var(--text-primary);
+    transition: all 0.3s ease;
+}
+
+#subtask-form button:hover {
+    background-color: var(--primary-hover);
+}
+
+#complete-task-btn {
+    background-color: var(--primary-color);
+    border: none;
+    color: var(--text-primary);
+}
+
+#complete-task-btn:hover {
+    background-color: var(--primary-hover);
+}
+
+.text-decoration-line-through {
+    text-decoration: line-through;
+    opacity: 0.6;
+}
+
+.task-row {
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.task-row:hover {
+    background-color: rgba(32, 172, 130, 0.1);
 }

@@ -72,6 +72,18 @@ class TaskController extends Controller
             if ($request->has('categories')) {
                 $task->categories()->attach($request->categories);
             }
+            
+            // Processar subtarefas
+            if ($request->has('subtasks')) {
+                foreach ($request->subtasks as $subtaskData) {
+                    if (!empty($subtaskData['title'])) {
+                        $task->subtasks()->create([
+                            'title' => $subtaskData['title'],
+                            'description' => $subtaskData['description'] ?? null,
+                        ]);
+                    }
+                }
+            }
 
             if ($request->has('group_id')) {
                 return redirect()->route('groups.show', $request->group_id)
@@ -150,6 +162,11 @@ class TaskController extends Controller
 
     public function complete(Task $task)
     {
+        // Verificar se todas as subtarefas estão concluídas
+        if (!$task->allSubtasksCompleted()) {
+            return redirect()->back()->with('error', 'Esta tarefa possui subtarefas pendentes!');
+        }
+        
         $task->update([
             'status' => true,
             'completed_at' => now()
@@ -177,5 +194,27 @@ class TaskController extends Controller
         } catch (\Exception $e) {
             return back()->with('error', 'Erro ao desfazer conclusão da tarefa. Por favor, tente novamente.');
         }
+    }
+    
+    public function details(Task $task)
+    {
+        $this->authorize('view', $task);
+        $task->load('subtasks');
+        
+        return response()->json([
+            'task' => $task,
+            'due_date_formatted' => $task->due_date->format('d/m/Y H:i'),
+            'urgency_formatted' => ucfirst($task->urgency),
+            'subtasks' => $task->subtasks
+        ]);
+    }
+
+    public function canComplete(Task $task)
+    {
+        $this->authorize('update', $task);
+        
+        return response()->json([
+            'can_complete' => $task->allSubtasksCompleted()
+        ]);
     }
 }

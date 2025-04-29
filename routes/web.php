@@ -10,6 +10,7 @@ use App\Http\Controllers\NoteController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\GroupController;
 use App\Http\Controllers\GroupInvitationController;
+use App\Http\Controllers\SubtaskController;
 
 /*
 |--------------------------------------------------------------------------
@@ -48,6 +49,13 @@ Route::middleware('auth')->group(function () {
     Route::patch('/tasks/{task}/uncomplete', [TaskController::class, 'uncomplete'])->name('tasks.uncomplete');
     Route::delete('/tasks/{task}/clear', [TaskController::class, 'clear'])->name('tasks.clear');
     Route::delete('/tasks/cleared', [TaskController::class, 'cleared'])->name('tasks.cleared');
+    
+    // Rotas para subtarefas
+    Route::get('/tasks/{task}/details', [TaskController::class, 'details']);
+    Route::get('/tasks/{task}/can-complete', [TaskController::class, 'canComplete']);
+    Route::post('/tasks/{task}/subtasks', [SubtaskController::class, 'store']);
+    Route::post('/subtasks/{subtask}/toggle', [SubtaskController::class, 'toggleComplete']);
+    Route::delete('/subtasks/{subtask}', [SubtaskController::class, 'destroy']);
 
     Route::get('/categories', [CategoryController::class, 'index'])->name('categories.index');
     Route::get('/categories/create', [CategoryController::class, 'create'])->name('categories.create');
