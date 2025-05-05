@@ -1,14 +1,33 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Lista de Tarefas</title>
 
     <link rel="icon" href="{{ asset('favicon.svg') }}" type="image/svg+xml">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="stylesheet" href="{{ asset('css/task/index.css') }}">
+
+    <!-- Dados das tarefas para uso nos filtros -->
+    <script>
+        window.taskCategories = [
+            @foreach($tasks as $task)
+                @if(!$task->status)
+                {
+                    taskId: {{ $task->id }},
+                    categories: [
+                        @foreach($task->categories as $category)
+                            { id: {{ $category->id }}, name: "{{ $category->name }}" },
+                        @endforeach
+                    ]
+                },
+                @endif
+            @endforeach
+        ];
+    </script>
 </head>
 <body>
     <div class="container mt-4">
@@ -51,6 +70,69 @@
             </div>
         </div>
 
+        <!-- Filtros e pesquisa -->
+        <div class="filters-container mb-4">
+            <div class="row">
+                <div class="col-lg-6 col-md-12 mb-3">
+                    <div class="input-group search-box">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-search"></i></span>
+                        </div>
+                        <input type="text" id="task-search" class="form-control" placeholder="Pesquisar tarefa por título...">
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-secondary" type="button" id="clear-search">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-12">
+                    <div class="filter-buttons d-flex flex-wrap">
+                        <div class="dropdown filter-dropdown mr-2 mb-2">
+                            <button class="btn dropdown-toggle filter-button" type="button" id="categoryFilterBtn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fas fa-tag mr-1"></i> Categorias
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="categoryFilterBtn">
+                                <a class="dropdown-item" href="#" data-category="all">Todas</a>
+                                <div class="dropdown-divider"></div>
+                                @foreach($categories = \App\Models\Category::where('user_id', auth()->id())->get() as $category)
+                                    <a class="dropdown-item" href="#" data-category="{{ $category->id }}">{{ $category->name }}</a>
+                                @endforeach
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="#" data-category="none">Sem categoria</a>
+                            </div>
+                        </div>
+                        <div class="dropdown filter-dropdown mr-2 mb-2">
+                            <button class="btn dropdown-toggle filter-button" type="button" id="urgencyFilterBtn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fas fa-exclamation-circle mr-1"></i> Urgência
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="urgencyFilterBtn">
+                                <a class="dropdown-item" href="#" data-urgency="all">Todas</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="#" data-urgency="high">Alta</a>
+                                <a class="dropdown-item" href="#" data-urgency="medium">Média</a>
+                                <a class="dropdown-item" href="#" data-urgency="low">Baixa</a>
+                            </div>
+                        </div>
+                        <div class="dropdown filter-dropdown mb-2">
+                            <button class="btn dropdown-toggle filter-button" type="button" id="dateFilterBtn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fas fa-sort mr-1"></i> Ordenar
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="dateFilterBtn">
+                                <a class="dropdown-item" href="#" data-sort="none">Padrão</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item text-truncate" href="#" data-sort="date-asc">Antiga → Recente</a>
+                                <a class="dropdown-item text-truncate" href="#" data-sort="date-desc">Recente → Antiga</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="active-filters" class="mt-2 d-none">
+                <small class="text-muted">Filtros ativos: <span id="filter-tags"></span> <a href="#" id="clear-all-filters" class="ml-2"><i class="fas fa-times-circle"></i> Limpar todos</a></small>
+            </div>
+        </div>
+
             <table class="table table-striped">
                 <thead>
                     <tr>
@@ -76,7 +158,12 @@
                     @else
                         @foreach($tasks as $task)
                             @if(!$task->status)
-                                <tr class="task-row" data-task-id="{{ $task->id }}">
+                                <tr class="task-row" 
+                                    data-task-id="{{ $task->id }}"
+                                    data-category-ids="{{ $task->categories->pluck('id')->join(',') }}"
+                                    data-urgency="{{ $task->urgency }}"
+                                    data-due-date="{{ $task->due_date }}"
+                                    data-original-index="{{ $loop->index }}">
                                     <td class="task-title">{{ $task->title }}</td>
                                     <td class="task-description">{{ $task->description }}</td>
                                     <td class="categories-column">
@@ -101,7 +188,7 @@
                                                     $hoursUntilDue = $now->diffInHours($dueDate, false);
                                                 @endphp
                                                 @if($hoursUntilDue <= 24 && $hoursUntilDue > 0)
-                                                    <span class="badge-urgent p-2">
+                                                    <span class="text-center badge-urgent p-2">
                                                         <i class="fas fa-exclamation-circle"></i>
                                                         Alta Prioridade
                                                     </span>
@@ -128,18 +215,19 @@
                                     <td class="due-date">
                                         {{ \Carbon\Carbon::parse($task->due_date)->format('d/m/Y H:i') }}
                                     </td>
-                                    <td class="voltar">
+                                    <td class="actions-column">
                                         <div class="action-buttons">
-                                            <a href="{{ route('tasks.edit', $task) }}" class="btn btn-sm btn-warning action-btn">
-                                                <span class="action-text">Editar</span>
-                                                <i class="fas fa-edit action-icon"></i>
-                                            </a>
-                                            <form action="{{ route('tasks.destroy', $task) }}" method="POST" style="display: inline;">
+                                            <button type="button" class="btn btn-sm btn-info action-btn view-task-btn" data-task-id="{{ $task->id }}" title="Detalhes">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                            <button type="button" class="btn btn-sm btn-warning action-btn edit-task-btn" data-task-id="{{ $task->id }}" title="Editar">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                            <form action="{{ route('tasks.destroy', $task) }}" method="POST" style="display: inline;" class="delete-task-form">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="btn btn-sm btn-danger action-btn" onclick="return confirm('Tem certeza que deseja excluir esta tarefa?')">
-                                                    <span class="action-text">Excluir</span>
-                                                    <i class="fas fa-trash action-icon"></i>
+                                                <button type="button" class="btn btn-sm btn-danger action-btn delete-task-btn" data-task-id="{{ $task->id }}" data-task-title="{{ $task->title }}" title="Excluir">
+                                                    <i class="fas fa-trash"></i>
                                                 </button>
                                             </form>
                                         </div>
@@ -206,216 +294,110 @@
         </div>
     </div>
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- Modal para Editar Tarefa -->
+    <div class="modal fade" id="editTaskModal" tabindex="-1" aria-labelledby="editTaskModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editTaskModalLabel">Editar Tarefa</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="edit-task-form">
+                        @csrf
+                        @method('PUT')
+                        <input type="hidden" id="edit-task-id">
+                        
+                        <div class="form-group">
+                            <label for="edit-title" class="font-weight-bold">Título</label>
+                            <input type="text" name="title" class="form-control form-control-lg" id="edit-title" required>
+                        </div>
 
-    <script>
-        $(document).ready(function() {
-            let currentTaskId = null;
-            
-            // Abrir modal ao clicar em uma tarefa
-            $('.task-row').on('click', function() {
-                const taskId = $(this).data('task-id');
-                currentTaskId = taskId;
-                
-                console.log('Clicou na tarefa ID:', taskId); // Debug
+                        <div class="form-group">
+                            <label for="edit-description" class="font-weight-bold">Descrição</label>
+                            <textarea name="description" class="form-control" id="edit-description" rows="4" required></textarea>
+                        </div>
 
-                // Buscar informações da tarefa e subtarefas
-                $.ajax({
-                    url: `/tasks/${taskId}/details`,
-                    method: 'GET',
-                    success: function(response) {
-                        console.log('Resposta recebida:', response); // Debug
-                        
-                        // Preencher informações da tarefa
-                        $('#task-title').text(response.task.title);
-                        $('#task-description').text(response.task.description);
-                        $('#task-due-date').text(response.due_date_formatted);
-                        $('#task-urgency').text(response.urgency_formatted);
-                        
-                        // Preencher subtarefas
-                        const subtasksList = $('#subtasks-list');
-                        subtasksList.empty();
-                        
-                        if (response.subtasks.length === 0) {
-                            $('#no-subtasks').removeClass('d-none');
-                        } else {
-                            $('#no-subtasks').addClass('d-none');
-                            
-                            response.subtasks.forEach(function(subtask) {
-                                subtasksList.append(`
-                                    <div class="subtask-item d-flex align-items-center mb-2" data-id="${subtask.id}">
-                                        <div class="form-check">
-                                            <input class="form-check-input subtask-checkbox" 
-                                                   type="checkbox" 
-                                                   ${subtask.completed ? 'checked' : ''}
-                                                   id="subtask-${subtask.id}">
-                                            <label class="form-check-label ${subtask.completed ? 'text-muted text-decoration-line-through' : ''}" 
-                                                   for="subtask-${subtask.id}">
-                                                ${subtask.title}
-                                            </label>
-                                        </div>
-                                        <button class="btn btn-sm btn-danger delete-subtask ml-auto">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </div>
-                                `);
-                            });
-                        }
-                        
-                        // Mostrar o modal
-                        $('#subtasksModal').modal('show');
-                    },
-                    error: function(xhr, status, error) {
-                        console.error('Erro ao carregar dados:', error); // Debug
-                        alert('Erro ao carregar os detalhes da tarefa');
-                    }
-                });
-            });
-            
-            // Adicionar nova subtarefa
-            $('#subtask-form').on('submit', function(e) {
-                e.preventDefault();
-                
-                const title = $('#subtask-title').val();
-                if (!title) return;
-                
-                $.ajax({
-                    url: `/tasks/${currentTaskId}/subtasks`,
-                    method: 'POST',
-                    data: {
-                        _token: '{{ csrf_token() }}',
-                        title: title
-                    },
-                    success: function(response) {
-                        const subtasksList = $('#subtasks-list');
-                        $('#no-subtasks').addClass('d-none');
-                        
-                        subtasksList.append(`
-                            <div class="subtask-item d-flex align-items-center mb-2" data-id="${response.subtask.id}">
-                                <div class="form-check">
-                                    <input class="form-check-input subtask-checkbox" 
-                                           type="checkbox" 
-                                           id="subtask-${response.subtask.id}">
-                                    <label class="form-check-label" for="subtask-${response.subtask.id}">
-                                        ${response.subtask.title}
-                                    </label>
-                                </div>
-                                <button class="btn btn-sm btn-danger delete-subtask ml-auto">
-                                    <i class="fas fa-trash"></i>
-                                </button>
+                        <div class="form-group">
+                            <label class="font-weight-bold">Categorias (opcional - máximo 3)</label>
+                            <div id="edit-categories-container" class="categories-container mt-2">
+                                <!-- Categorias carregadas dinamicamente -->
                             </div>
-                        `);
-                        
-                        $('#subtask-title').val('');
-                    }
-                });
-            });
-            
-            // Concluir/desmarcar subtarefa
-            $(document).on('change', '.subtask-checkbox', function() {
-                const subtaskId = $(this).closest('.subtask-item').data('id');
-                const checkbox = $(this);
-                const label = checkbox.siblings('label');
-                
-                $.ajax({
-                    url: `/subtasks/${subtaskId}/toggle`,
-                    method: 'POST',
-                    data: {
-                        _token: '{{ csrf_token() }}'
-                    },
-                    success: function(response) {
-                        if (response.completed) {
-                            label.addClass('text-muted text-decoration-line-through');
-                        } else {
-                            label.removeClass('text-muted text-decoration-line-through');
-                        }
-                    }
-                });
-            });
-            
-            // Excluir subtarefa
-            $(document).on('click', '.delete-subtask', function(e) {
-                e.stopPropagation();
-                
-                const subtaskItem = $(this).closest('.subtask-item');
-                const subtaskId = subtaskItem.data('id');
-                
-                Swal.fire({
-                    title: 'Tem certeza?',
-                    text: 'Você deseja excluir esta subtarefa?',
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonText: 'Sim, excluir',
-                    cancelButtonText: 'Cancelar'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        $.ajax({
-                            url: `/subtasks/${subtaskId}`,
-                            method: 'DELETE',
-                            data: {
-                                _token: '{{ csrf_token() }}'
-                            },
-                            success: function() {
-                                subtaskItem.remove();
-                                
-                                // Mostrar mensagem se não houver mais subtarefas
-                                if ($('#subtasks-list .subtask-item').length === 0) {
-                                    $('#no-subtasks').removeClass('d-none');
-                                }
-                                
-                                Swal.fire(
-                                    'Excluída!',
-                                    'A subtarefa foi excluída com sucesso.',
-                                    'success'
-                                );
-                            }
-                        });
-                    }
-                });
-            });
-            
-            // Concluir tarefa
-            $('#complete-task-btn').on('click', function() {
-                $.ajax({
-                    url: `/tasks/${currentTaskId}/can-complete`,
-                    method: 'GET',
-                    success: function(response) {
-                        if (response.can_complete) {
-                            // Enviar formulário de conclusão
-                            window.location.href = `/tasks/${currentTaskId}/complete`;
-                        } else {
-                            Swal.fire({
-                                title: 'Não é possível concluir',
-                                text: 'Esta tarefa possui subtarefas pendentes!',
-                                icon: 'warning',
-                                confirmButtonText: 'Ok'
-                            });
-                        }
-                    }
-                });
-            });
+                            <small class="text-muted category-limit-warning" style="display: none;">
+                                <i class="fas fa-exclamation-circle"></i>
+                                Limite máximo de 3 categorias atingido
+                            </small>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="edit-due-date" class="font-weight-bold">
+                                Data e Hora de Vencimento
+                            </label>
+                            <div class="input-group date-input-group">
+                                <input type="datetime-local" 
+                                    name="due_date" 
+                                    class="form-control" 
+                                    id="edit-due-date" 
+                                    required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="edit-urgency" class="font-weight-bold">
+                                Nível de Urgência
+                            </label>
+                            <select name="urgency" id="edit-urgency" class="form-control" required>
+                                <option value="low">Baixa</option>
+                                <option value="medium">Média</option>
+                                <option value="high">Alta</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" id="save-edit-task-btn">
+                        <i class="fas fa-save"></i> Salvar Alterações
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        // Garantir que o CSRF token esteja disponível para todas as requisições AJAX
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
         });
     </script>
+    <script src="{{ asset('js/tasks/index.js') }}"></script>
 
-    @push('scripts')
-    <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Cria o elemento de áudio
-        const audio = new Audio("{{ asset('notification.mp3') }}");
-        
-        // Verifica se há tarefas urgentes
-        const urgentTasks = document.querySelectorAll('.badge-urgent');
-        if (urgentTasks.length > 0) {
-            // Toca o som de notificação
-            audio.play().catch(function(error) {
-                console.log("Reprodução de áudio não permitida");
-            });
-        }
-    });
-    </script>
-    @endpush
+    @stack('scripts')
 </body>
 </html>
+
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Cria o elemento de áudio
+    const audio = new Audio("{{ asset('notification.mp3') }}");
+    
+    // Verifica se há tarefas urgentes
+    const urgentTasks = document.querySelectorAll('.badge-urgent');
+    if (urgentTasks.length > 0) {
+        // Toca o som de notificação
+        audio.play().catch(function(error) {
+            console.log("Reprodução de áudio não permitida");
+        });
+    }
+});
+</script>
+@endpush

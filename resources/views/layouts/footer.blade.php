@@ -7,7 +7,7 @@
                 <h3 class="footer-title">{{ env('APP_NAME') }}</h3>
                 <p class="footer-description">Sistema de gerenciamento de tarefas profissional para aumentar sua produtividade e organização.</p>
                 <div class="contact">
-                    <p><i class="fas fa-envelope"></i> contato@tasknest.com</p>
+                    <p><i class="fas fa-envelope"></i> contato@enfantia.com</p>
                     <p><i class="fas fa-phone"></i> +55 18 99999-9999</p>
                 </div>
             </div>

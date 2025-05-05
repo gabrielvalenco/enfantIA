@@ -29,28 +29,26 @@
                     @endif
                     
                     <!-- Título -->
-                    <div class="form-floating mb-3">
+                    <div class="mb-3">
                         <input type="text" 
                                class="form-control" 
                                id="title" 
                                name="title" 
                                placeholder="Título da Tarefa"
                                required>
-                        <label for="title">Título da Tarefa</label>
                         <div class="invalid-feedback">
                             Por favor, insira um título para a tarefa.
                         </div>
                     </div>
 
                     <!-- Descrição -->
-                    <div class="form-floating mb-3">
+                    <div class="mb-3">
                         <textarea class="form-control" 
                                   id="description" 
                                   name="description" 
                                   placeholder="Descrição da Tarefa" 
                                   style="height: 100px"
                                   required></textarea>
-                        <label for="description">Descrição da Tarefa</label>
                         <div class="invalid-feedback">
                             Por favor, forneça uma descrição para a tarefa.
                         </div>
@@ -115,7 +113,7 @@
                     @endif
 
                     <!-- Categorias -->
-                    <div class="mb-4">
+                    <div class="mb-5">
                         <label class="form-label fw-bold mb-2">
                             Categorias (opcional - máximo 3)
                         </label>
@@ -139,6 +137,19 @@
                             Limite máximo de 3 categorias atingido
                         </div>
                     </div>
+                    
+                    <!-- Subtarefas -->
+                    <div class="subtask-section">
+                        <label class="form-label fw-bold mb-3">
+                            Subtarefas (Opcional)
+                        </label>
+                        <div id="subtasks-container">
+                            <!-- Subtarefas serão adicionadas aqui -->
+                        </div>
+                        <button type="button" id="add-subtask-btn" class="add-subtask-btn">
+                            <i class="fas fa-plus-circle me-2"></i>Adicionar
+                        </button>
+                    </div>
 
                     <!-- Submit Button -->
                     <div class="d-grid gap-2 d-md-flex justify-content-md-end">
@@ -147,18 +158,6 @@
                         </button>
                     </div>
                 </form>
-            </div>
-        </div>
-
-        <div class="subtask-container text-center mt-4">
-            <button type="button" id="add-subtask-btn" class="btn">
-                <i class="fas fa-tasks me-2"></i>Adicionar Subtarefa
-            </button>
-            
-            <div id="subtasks-section" class="mt-3" style="display: none;">
-                <div class="subtask-list container">
-                    <!-- Aqui serão adicionadas as subtarefas dinamicamente -->
-                </div>
             </div>
         </div>
     </div>
@@ -179,6 +178,27 @@
             }
         }
 
+        // Customize date input
+        document.addEventListener('DOMContentLoaded', function() {
+            const dateInput = document.getElementById('due_date');
+            
+            // Set default datetime to current time + 1 day
+            const tomorrow = new Date();
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            tomorrow.setHours(tomorrow.getHours());
+            tomorrow.setMinutes(Math.ceil(tomorrow.getMinutes() / 5) * 5); // Round to nearest 5 min
+            
+            // Format to YYYY-MM-DDThh:mm
+            const year = tomorrow.getFullYear();
+            const month = String(tomorrow.getMonth() + 1).padStart(2, '0');
+            const day = String(tomorrow.getDate()).padStart(2, '0');
+            const hours = String(tomorrow.getHours()).padStart(2, '0');
+            const minutes = String(tomorrow.getMinutes()).padStart(2, '0');
+            
+            // Set as default value
+            dateInput.value = `${year}-${month}-${day}T${hours}:${minutes}`;
+        });
+
         // Bootstrap Form Validation
         (() => {
             'use strict';
@@ -197,17 +217,10 @@
         // Funcionalidade de Subtarefas
         document.addEventListener('DOMContentLoaded', function() {
             const addSubtaskBtn = document.getElementById('add-subtask-btn');
-            const subtasksSection = document.getElementById('subtasks-section');
-            const subtaskList = document.querySelector('.subtask-list');
+            const subtasksContainer = document.getElementById('subtasks-container');
             let subtaskCount = 0;
             
             addSubtaskBtn.addEventListener('click', function() {
-                // Mostrar a seção de subtarefas se estiver oculta
-                if (subtasksSection.style.display === 'none') {
-                    subtasksSection.style.display = 'block';
-                }
-                
-                // Adicionar nova subtarefa
                 addNewSubtask();
             });
             
@@ -215,48 +228,41 @@
                 subtaskCount++;
                 
                 const subtaskDiv = document.createElement('div');
-                subtaskDiv.className = 'subtask-item card mb-3 shadow-sm';
+                subtaskDiv.className = 'subtask-item mb-3';
                 subtaskDiv.dataset.id = subtaskCount;
                 
                 subtaskDiv.innerHTML = `
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-center mb-2">
-                            <h5 class="card-title mb-0">Subtarefa #${subtaskCount}</h5>
-                            <button type="button" class="btn btn-sm btn-outline-danger remove-subtask">
+                    <div class="subtask-item-container">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h6 class="m-0 text-light">Subtarefa #${subtaskCount}</h6>
+                            <button type="button" class="remove-subtask">
                                 <i class="fas fa-times"></i>
                             </button>
                         </div>
-                        <div class="form-floating mb-3">
+                        <div class="mb-3">
                             <input type="text" 
                                    class="form-control" 
                                    id="subtask_title_${subtaskCount}" 
                                    name="subtasks[${subtaskCount}][title]" 
                                    placeholder="Título da Subtarefa"
                                    required>
-                            <label for="subtask_title_${subtaskCount}">Título da Subtarefa</label>
                         </div>
-                        <div class="form-floating">
+                        <div class="mb-3">
                             <textarea class="form-control" 
                                       id="subtask_description_${subtaskCount}" 
                                       name="subtasks[${subtaskCount}][description]" 
                                       placeholder="Descrição da Subtarefa" 
                                       style="height: 80px"></textarea>
-                            <label for="subtask_description_${subtaskCount}">Descrição (opcional)</label>
                         </div>
                     </div>
                 `;
                 
-                subtaskList.appendChild(subtaskDiv);
+                subtasksContainer.appendChild(subtaskDiv);
                 
                 // Adicionar evento para remover subtarefa
                 const removeBtn = subtaskDiv.querySelector('.remove-subtask');
                 removeBtn.addEventListener('click', function() {
                     subtaskDiv.remove();
-                    
-                    // Se não houver mais subtarefas, ocultar a seção
-                    if (subtaskList.children.length === 0) {
-                        subtasksSection.style.display = 'none';
-                    }
                 });
             }
         });

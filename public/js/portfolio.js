@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     overlay.addEventListener('click', function() {
         navbarItems.style.display = 'none';
-        menuIcon.classList.remove('open'); // Remove a classe ao fechar
+        menuIcon.classList.remove('open');
         overlay.classList.remove('menu-open');
     });
 });

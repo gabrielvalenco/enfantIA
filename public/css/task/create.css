@@ -100,19 +100,16 @@ body {
     padding: 10px;
 }
 
-.form-floating > label {
-    color: var(--text-secondary);
-}
-
 .form-control {
-    padding: 0 0 0 1rem !important;
+    padding: 0.45rem 1rem !important;
+    background-color: var(--surface-color) !important;
+    border: 1px solid var(--border-color);
+    color: var(--text-primary) !important;
+    transition: all 0.3s ease;
 }
 
 .form-select {
-    padding: 0 0 0 1rem !important;
-}
-
-.form-control, .form-select {
+    padding: 1rem 2.25rem 1rem 1rem !important;
     background-color: var(--surface-color) !important;
     border: 1px solid var(--border-color);
     color: var(--text-primary) !important;
@@ -127,6 +124,7 @@ body {
 
 .form-control::placeholder {
     color: var(--text-secondary);
+    opacity: 0.8;
 }
 
 .form-select option {
@@ -145,22 +143,23 @@ body {
 .form-check {
     padding: 8px 12px;
     border-radius: 6px;
-    background-color: rgba(0, 0, 0, 0.1);
     transition: all 0.3s ease;
 }
 
-.form-check:hover {
-    background-color: rgba(32, 172, 130, 0.1);
-}
-
-.form-check-input {
+.form-check-input, .category-checkbox {
     background-color: var(--surface-color);
     border: 1px solid var(--border-color);
 }
 
-.form-check-input:checked {
-    background-color: var(--primary-color);
-    border-color: var(--primary-color);
+.form-check-input:checked, .category-checkbox:checked {
+    background-color: var(--link-color) !important;
+    border-color: var(--link-color) !important;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3e%3cpath fill='none' stroke='%23fff' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='M6 10l3 3l6-6'/%3e%3c/svg%3e") !important;
+}
+
+.form-check-input:focus, .category-checkbox:focus {
+    box-shadow: 0 0 0 0.25rem rgba(32, 172, 130, 0.25) !important;
+    border-color: var(--link-color) !important;
 }
 
 .form-check-label {
@@ -171,6 +170,45 @@ body {
 
 .category-warning {
     font-size: 0.85rem;
+}
+
+/* Date Input Styling */
+input[type="datetime-local"] {
+    color-scheme: dark !important;
+    background-color: var(--background-color) !important;
+    color: var(--text-primary) !important;
+}
+
+/* Chrome, Edge, Safari, Opera */
+::-webkit-calendar-picker-indicator {
+    filter: invert(1) brightness(80%) sepia(100%) saturate(500%) hue-rotate(110deg);
+    opacity: 0.7;
+    cursor: pointer;
+}
+
+::-webkit-calendar-picker-indicator:hover {
+    opacity: 1;
+    filter: invert(1) brightness(90%) sepia(100%) saturate(500%) hue-rotate(120deg);
+}
+
+::-webkit-datetime-edit-fields-wrapper {
+    color: var(--text-primary);
+}
+
+::-webkit-datetime-edit {
+    color: var(--text-primary);
+    padding: 0;
+}
+
+/* Firefox */
+input[type="datetime-local"]::-moz-calendar-picker-indicator {
+    filter: invert(1) brightness(80%) sepia(100%) saturate(500%) hue-rotate(110deg);
+}
+
+/* Focus state for date picker */
+input[type="datetime-local"]:focus {
+    border-color: var(--link-color) !important;
+    box-shadow: 0 0 0 0.25rem rgba(32, 172, 130, 0.25) !important;
 }
 
 /* Date Input Container */
@@ -238,7 +276,7 @@ body {
     border: none;
     border-radius: 6px;
     padding: 8px 20px;
-    font-weight: 00;
+    font-weight: 500;
     cursor: pointer;
     transition: all 0.3s ease;
     font-family: 'Poppins', sans-serif;
@@ -283,7 +321,20 @@ input {
     background-color: var(--surface-color) !important;
 }
 
+#due_date {
+    padding: 0.45rem 1rem !important;
+}
+
+#urgency {
+    padding: 0.45rem 1rem !important;
+}
+
 /* Estilos para o Botão e Seção de Subtarefas */
+.subtask-section {
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
 .subtask-container {
     width: 100%;
     margin: 1.5rem 0 1.5rem 0;
@@ -299,7 +350,7 @@ input {
     color: var(--text-primary);
     border: none;
     border-radius: 6px;
-    padding: 10px 20px;
+    padding: 0.25rem 1rem !important;
     font-weight: 500;
     cursor: pointer;
     transition: all 0.3s ease;
@@ -311,8 +362,13 @@ input {
     transform: translateY(-2px);
 }
 
+.subtask-item-container {
+    background-color: var(--background-color);
+    border-radius: 8px;
+    padding: 20px;
+}
+
 .subtask-item {
-    background-color: rgba(0, 0, 0, 0.1);
     border: 2px solid var(--border-color);
     border-radius: 8px;
 }
@@ -322,11 +378,26 @@ input {
     font-weight: 500;
 }
 
+#subtask_title {
+    font-size: 1rem;
+    padding: 0.45rem 1rem !important;
+}
+
 .remove-subtask {
-    background-color: transparent;
-    border-color: var(--danger-color);
-    color: var(--danger-color);
+    width: 30px;
+    height: 30px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     transition: all 0.3s ease;
+    background-color: rgba(220, 53, 69, 0.2);
+    border: 2px solid var(--danger-color);
+    border-radius: 50%;
+    color: var(--danger-color);
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 100;
 }
 
 .remove-subtask:hover {

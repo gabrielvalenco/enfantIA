@@ -100,6 +100,17 @@ class TaskController extends Controller
     {
         $this->authorize('update', $task);
         $categories = Category::where('user_id', auth()->id())->get();
+        
+        // Retornar JSON se for uma requisição AJAX
+        if (request()->ajax()) {
+            return response()->json([
+                'task' => $task,
+                'categories' => $categories,
+                'task_categories' => $task->categories->pluck('id')->toArray()
+            ]);
+        }
+        
+        // Caso contrário, retornar a view normal
         $taskCategories = $task->categories->pluck('id')->toArray();
         return view('tasks.edit', compact('task', 'categories', 'taskCategories'));
     }
