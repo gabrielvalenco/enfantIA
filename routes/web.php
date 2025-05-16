@@ -50,6 +50,14 @@ Route::middleware('auth')->group(function () {
     Route::delete('/tasks/{task}/clear', [TaskController::class, 'clear'])->name('tasks.clear');
     Route::delete('/tasks/cleared', [TaskController::class, 'cleared'])->name('tasks.cleared');
     
+    // Novas rotas para limpar tarefas concluídas
+    Route::delete('/tasks/clear-selected', [TaskController::class, 'clearSelected'])->name('tasks.clear-selected');
+    Route::get('/tasks/clear-all', [TaskController::class, 'clearAll'])->name('tasks.clear-all');
+    
+    // Rotas para ações em massa
+    Route::post('/tasks/complete-multiple', [TaskController::class, 'completeMultiple'])->name('tasks.complete-multiple');
+    Route::post('/tasks/delete-multiple', [TaskController::class, 'deleteMultiple'])->name('tasks.delete-multiple');
+    
     // Rotas para subtarefas
     Route::get('/tasks/{task}/details', [TaskController::class, 'details']);
     Route::get('/tasks/{task}/can-complete', [TaskController::class, 'canComplete']);
@@ -69,9 +77,10 @@ Route::middleware('auth')->group(function () {
     Route::post('/notes', [NoteController::class, 'store'])->name('notes.store');
     Route::put('/notes/{note}', [NoteController::class, 'update'])->name('notes.update');
     Route::delete('/notes/{note}', [NoteController::class, 'destroy'])->name('notes.destroy');
+    Route::get('/notes/{note}/details', [NoteController::class, 'details'])->name('notes.details');
 
     Route::middleware(['auth'])->group(function () {
-        Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+        Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
         Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
         Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
         

@@ -13,11 +13,11 @@
                 <h1 class="mb-0">Bloco de Notas</h1>
             </div>
             <div class="d-flex gap-3">
-            <a href="{{ route('dashboard') }}">
-               Voltar
-            </a>
+                <a href="{{ route('dashboard') }}">
+                   Voltar
+                </a>
                 <button class="add-button" id="addNoteBtn" onclick="showAddNoteModal()">
-                    Nova Nota
+                    <i class="fas fa-plus-circle"></i> Nova Nota
                 </button>
             </div>
         </div>
@@ -25,24 +25,41 @@
         <div class="notes-container">
             <div class="row" id="notesContainer">
                 @forelse ($notes as $note)
-                    <div class="col-md-4 mb-3 note-card" data-note-id="{{ $note->id }}">
+                    <div class="col-md-4 mb-3 note-card" data-note-id="{{ $note->id }}" data-task-id="{{ $note->task_id }}" onclick="viewNote({{ $note->id }})">
                         <div class="card h-100">
-                            <div class="card-header d-flex flex-column justify-content-between align-items-center">
+                            <div class="card-header">
                                 <h5 class="card-title mb-0 note-title">{{ $note->title }}</h5>
-                                <div class="note-actions">
-                                    <button class="btn btn-sm btn-link text-primary" onclick="editNote({{ $note->id }})">
-                                        <i class="fas fa-edit"></i>
-                                    </button>
-                                    <button class="btn btn-sm btn-link text-danger" onclick="deleteNote({{ $note->id }})">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                </div>
+                                @if($note->task && $note->task->categories && $note->task->categories->count() > 0)
+                                    <div class="category-badges">
+                                        @foreach($note->task->categories as $category)
+                                            <span class="category-badge" style="border-color: {{ $category->color ?? '#6c757d' }}; background-color: {{ $category->color }}20;">
+                                                {{ $category->name ?? 'Categoria' }}
+                                            </span>
+                                        @endforeach
+                                    </div>
+                                @endif
                             </div>
                             <div class="card-body">
-                                <p class="card-text note-content">{{ $note->content }}</p>
+                                <p class="card-text note-content">
+                                    {{ Str::limit($note->content, 100, '...') }}
+                                </p>
+                                @if($note->task_id)
+                                    <div class="task-link">
+                                        <i class="fas fa-tasks me-1"></i>
+                                        <small>Vinculado à tarefa: {{ $note->task->title ?? 'Tarefa' }}</small>
+                                    </div>
+                                @endif
                             </div>
-                            <div class="card-footer text-muted">
-                                <small>Última atualização: {{ $note->updated_at->format('d/m/Y H:i') }}</small>
+                            <div class="card-footer text-muted d-flex justify-content-between align-items-center">
+                                <small>{{ $note->updated_at->format('d/m/Y H:i') }}</small>
+                                <div class="note-indicators">
+                                    @if($note->task && $note->task->categories && $note->task->categories->count() > 0)
+                                        <i class="fas fa-tags" title="Categorias da tarefa"></i>
+                                    @endif
+                                    @if($note->task_id)
+                                        <i class="fas fa-link ms-2" title="Vinculado à tarefa"></i>
+                                    @endif
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -58,12 +75,12 @@
         </div>
     </div>
 
-    <!-- Modal para adicionar/editar nota -->
+    <!-- Modal para visualizar/editar nota -->
     <div class="modal fade" id="noteModal" tabindex="-1" aria-labelledby="noteModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="noteModalLabel">Nova Nota</h5>
+                    <h5 class="modal-title" id="noteModalLabel">Visualizar Nota</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -75,139 +92,51 @@
                         </div>
                         <div class="mb-3">
                             <label for="noteContent" class="form-label">Conteúdo</label>
-                            <textarea class="form-control" id="noteContent" rows="4" required></textarea>
+                            <textarea class="form-control" id="noteContent" rows="6" required></textarea>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 mb-3">
+                                <label for="noteTask" class="form-label">Vincular à tarefa (opcional)</label>
+                                <select class="form-control" id="noteTask" onchange="showTaskCategories(this.value)">
+                                    <option value="">Sem vínculo</option>
+                                    @php
+                                        $tasks = Auth::user()->tasks()->with('categories')->where('status', 0)->get();
+                                    @endphp
+                                    @if($tasks && $tasks->count() > 0)
+                                        @foreach($tasks as $task)
+                                            <option value="{{ $task->id }}" data-has-categories="{{ $task->categories->count() > 0 ? 'true' : 'false' }}">
+                                                {{ $task->title }}
+                                                @if($task->categories->count() > 0)
+                                                    ({{ $task->categories->count() }} {{ $task->categories->count() == 1 ? 'categoria' : 'categorias' }})
+                                                @endif
+                                            </option>
+                                        @endforeach
+                                    @endif
+                                </select>
+                            </div>
+                        </div>
+                        <div id="taskCategoriesContainer" class="mb-3" style="display: none;">
+                            <label class="form-label">Categorias da tarefa:</label>
+                            <div class="task-categories-list">
+                                <!-- As categorias da tarefa serão exibidas aqui -->
+                            </div>
+                            <small class="text-muted mt-2">As categorias são herdadas automaticamente da tarefa selecionada.</small>
                         </div>
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn btn-primary" onclick="saveNote()">Salvar</button>
+                    <div class="d-flex justify-content-between w-100">
+                        <button type="button" class="btn btn-danger" id="deleteNoteBtn" onclick="deleteNoteFromModal()"><i class="fas fa-trash me-1"></i> Excluir</button>
+                        <div>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                            <button type="button" class="btn btn-primary" onclick="saveNote()"><i class="fas fa-save me-1"></i> Salvar</button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Inicializa os elementos do modal
-        const noteModal = document.getElementById('noteModal');
-        const noteIdInput = document.getElementById('noteId');
-        const noteTitleInput = document.getElementById('noteTitle');
-        const noteContentInput = document.getElementById('noteContent');
-        const noteModalLabel = document.getElementById('noteModalLabel');
-
-        if (!noteModal || !noteIdInput || !noteTitleInput || !noteContentInput || !noteModalLabel) {
-            console.error('Elementos do formulário não encontrados');
-            return;
-        }
-
-        const modal = new bootstrap.Modal(noteModal);
-
-        // Função para mostrar o modal de adicionar nota
-        window.showAddNoteModal = function() {
-            noteIdInput.value = '';
-            noteTitleInput.value = '';
-            noteContentInput.value = '';
-            noteModalLabel.textContent = 'Nova Nota';
-            modal.show();
-        };
-
-        // Função para editar nota
-        window.editNote = function(noteId) {
-            const noteCard = document.querySelector(`.note-card[data-note-id="${noteId}"]`);
-            if (!noteCard) {
-                console.error('Note card not found');
-                return;
-            }
-
-            const titleElement = noteCard.querySelector('.note-title');
-            const contentElement = noteCard.querySelector('.note-content');
-            
-            if (!titleElement || !contentElement) {
-                console.error('Note elements not found');
-                return;
-            }
-
-            const title = titleElement.textContent || '';
-            const content = contentElement.textContent || '';
-
-            noteIdInput.value = noteId;
-            noteTitleInput.value = title;
-            noteContentInput.value = content;
-            noteModalLabel.textContent = 'Editar Nota';
-            modal.show();
-        };
-
-        // Função para salvar nota
-        window.saveNote = async function() {
-            const noteId = noteIdInput.value;
-            const title = noteTitleInput.value;
-            const content = noteContentInput.value;
-            const isEdit = noteId !== '';
-
-            if (!title || !content) {
-                alert('Por favor, preencha todos os campos.');
-                return;
-            }
-
-            try {
-                const csrfToken = document.querySelector('meta[name="csrf-token"]');
-                if (!csrfToken) {
-                    throw new Error('Token CSRF não encontrado');
-                }
-
-                const response = await fetch(isEdit ? `/notes/${noteId}` : '/notes', {
-                    method: isEdit ? 'PUT' : 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': csrfToken.content
-                    },
-                    body: JSON.stringify({ title, content })
-                });
-
-                const data = await response.json();
-
-                if (!response.ok) {
-                    throw new Error(data.error || 'Erro ao salvar a nota');
-                }
-
-                window.location.reload();
-            } catch (error) {
-                alert(error.message);
-            }
-        };
-
-        // Função para deletar nota
-        window.deleteNote = async function(noteId) {
-            if (!confirm('Tem certeza que deseja excluir esta nota?')) {
-                return;
-            }
-
-            try {
-                const csrfToken = document.querySelector('meta[name="csrf-token"]');
-                if (!csrfToken) {
-                    throw new Error('Token CSRF não encontrado');
-                }
-
-                const response = await fetch(`/notes/${noteId}`, {
-                    method: 'DELETE',
-                    headers: {
-                        'X-CSRF-TOKEN': csrfToken.content
-                    }
-                });
-
-                const data = await response.json();
-
-                if (!response.ok) {
-                    throw new Error(data.error || 'Erro ao excluir a nota');
-                }
-
-                window.location.reload();
-            } catch (error) {
-                alert(error.message);
-            }
-        };
-    });
-</script>
+<script src="{{ asset('js/note/script.js') }}"></script>
 @endsection

@@ -39,16 +39,16 @@ html, body {
 
 body {
     font-family: 'Poppins', sans-serif;
-    background-image: url('../images/task_nest_bg.png');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
     color: var(--primary);
 }
 
 h1, h2, h3, h4, h5, h6 {
     color: var(--primary);
     font-weight: 700;
+}
+
+.container{
+    padding: 16px;
 }
 
 .category-form {
@@ -89,9 +89,16 @@ footer {
     align-items: center;
 }
 
-.form-check-input:checked {
-    background-color: var(--primary);
-    border-color: var(--primary);
+.form-check-input:checked, .category-checkbox:checked {
+    background-color: var(--link-color) !important;
+    border-color: var(--link-color) !important;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3e%3cpath fill='none' stroke='%23fff' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='M6 10l3 3l6-6'/%3e%3c/svg%3e") !important;
+}
+
+.form-check-input:focus, .category-checkbox:focus {
+    border-color: var(--link-color);
+    box-shadow: 0 0 0 0.25rem rgba(32, 172, 130, 0.25);
+    outline: none;
 }
 
 .form-check-label {
@@ -100,19 +107,50 @@ footer {
     cursor: pointer;
 }
 
+.form-control {
+    background-color: var(--surface-color);
+    border: 2px solid var(--border-color);
+    color: var(--text-secondary);
+    padding: 10px 15px;
+    border-radius: 6px;
+}
+
+.form-control:focus, 
+.form-select:focus,
+input:focus,
+textarea:focus,
+select:focus,
+.modal .form-control:focus,
+.modal input[type="color"]:focus,
+.modal input[type="text"]:focus,
+.modal textarea:focus,
+.modal select:focus {
+    border-color: var(--link-color) !important;
+    box-shadow: 0 0 0 0.25rem rgba(32, 172, 130, 0.25) !important;
+    background-color: var(--surface-color) !important;
+    color: var(--text-primary);
+    outline: none;
+}
+
 @media screen and (max-width: 768px) {
     .category-form {
         margin: 0;
         display: block;
+        padding: 0.75rem;
     }
     .form-group {
         display: flex;
         flex-direction: column;
         align-items: flex-start;
-        margin-bottom: 1rem;
+        margin-bottom: 0.75rem;
     }
     .form-group button {
         align-self: flex-end;
+        width: 100%;
+        margin-top: 0.5rem;
+    }
+    .container {
+        padding: 8px;
     }
     footer {
         display: none;
@@ -125,7 +163,33 @@ footer {
     }
     
     .form-check {
-        width: calc(50% - 1rem);
-        margin-bottom: 1rem;
+        width: calc(50% - 0.5rem);
+        margin-bottom: 0.75rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .form-check {
+        width: 100%;
+        margin-bottom: 0.5rem;
+    }
+    
+    .form-control, .form-select {
+        font-size: 14px;
+        padding: 8px 12px;
+    }
+    
+    h1, h2, h3 {
+        font-size: 1.5rem;
+    }
+    
+    .btn {
+        width: 100%;
+        margin-bottom: 0.5rem;
+    }
+    
+    .color-preview {
+        width: 16px;
+        height: 16px;
     }
 }

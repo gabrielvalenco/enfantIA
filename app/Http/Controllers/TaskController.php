@@ -228,4 +228,152 @@ class TaskController extends Controller
             'can_complete' => $task->allSubtasksCompleted()
         ]);
     }
+
+    /**
+     * Remove all selected completed tasks.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function clearSelected(Request $request)
+    {
+        if (!$request->has('selected_tasks') || !is_array($request->selected_tasks)) {
+            return redirect()->route('tasks.completed')->with('error', 'Nenhuma tarefa selecionada para excluir.');
+        }
+
+        try {
+            // Filtra apenas as tarefas concluídas e que pertencem ao usuário atual
+            $tasks = Task::where('status', true)
+                ->where('user_id', auth()->id())
+                ->whereIn('id', $request->selected_tasks)
+                ->get();
+
+            foreach ($tasks as $task) {
+                $task->delete();
+            }
+
+            $count = count($tasks);
+            $message = $count > 1 
+                ? "{$count} tarefas excluídas com sucesso!" 
+                : "Tarefa excluída com sucesso!";
+
+            return redirect()->route('tasks.completed')->with('success', $message);
+        } catch (\Exception $e) {
+            return redirect()->route('tasks.completed')->with('error', 'Erro ao excluir tarefas. Por favor, tente novamente.');
+        }
+    }
+
+    /**
+     * Remove all completed tasks of the authenticated user.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function clearAll()
+    {
+        try {
+            $count = Task::where('status', true)
+                ->where('user_id', auth()->id())
+                ->count();
+
+            Task::where('status', true)
+                ->where('user_id', auth()->id())
+                ->delete();
+
+            $message = $count > 1 
+                ? "Todas as {$count} tarefas concluídas foram excluídas com sucesso!" 
+                : "Todas as tarefas concluídas foram excluídas com sucesso!";
+
+            return redirect()->route('tasks.completed')->with('success', $message);
+        } catch (\Exception $e) {
+            return redirect()->route('tasks.completed')->with('error', 'Erro ao excluir tarefas. Por favor, tente novamente.');
+        }
+    }
+    
+    /**
+     * Complete multiple tasks at once.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function completeMultiple(Request $request)
+    {
+        if (!$request->has('task_ids') || !is_array($request->task_ids)) {
+            return redirect()->route('tasks.index')->with('error', 'Nenhuma tarefa selecionada para concluir.');
+        }
+
+        try {
+            // Filtra apenas as tarefas pendentes que pertencem ao usuário atual
+            $tasks = Task::where('status', false)
+                ->where('user_id', auth()->id())
+                ->whereIn('id', $request->task_ids)
+                ->get();
+
+            $completedCount = 0;
+            $incompleteSubtasks = 0;
+
+            foreach ($tasks as $task) {
+                // Verificar se todas as subtarefas estão concluídas
+                if ($task->allSubtasksCompleted()) {
+                    $task->update([
+                        'status' => true,
+                        'completed_at' => now()
+                    ]);
+                    $completedCount++;
+                } else {
+                    $incompleteSubtasks++;
+                }
+            }
+
+            // Preparar mensagem de sucesso/aviso
+            if ($completedCount > 0 && $incompleteSubtasks > 0) {
+                $message = "{$completedCount} tarefa(s) marcada(s) como concluída(s)! {$incompleteSubtasks} tarefa(s) não puderam ser concluídas por terem subtarefas pendentes.";
+                $type = 'warning';
+            } elseif ($completedCount > 0) {
+                $message = $completedCount > 1 
+                    ? "{$completedCount} tarefas marcadas como concluídas com sucesso!" 
+                    : "Tarefa marcada como concluída com sucesso!";
+                $type = 'success';
+            } else {
+                $message = "Nenhuma tarefa pôde ser concluída. Verifique se há subtarefas pendentes.";
+                $type = 'error';
+            }
+
+            return redirect()->route('tasks.index')->with($type, $message);
+        } catch (\Exception $e) {
+            return redirect()->route('tasks.index')->with('error', 'Erro ao concluir tarefas. Por favor, tente novamente.');
+        }
+    }
+
+    /**
+     * Delete multiple tasks at once.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function deleteMultiple(Request $request)
+    {
+        if (!$request->has('task_ids') || !is_array($request->task_ids)) {
+            return redirect()->route('tasks.index')->with('error', 'Nenhuma tarefa selecionada para excluir.');
+        }
+
+        try {
+            // Filtra apenas as tarefas que pertencem ao usuário atual
+            $tasks = Task::where('user_id', auth()->id())
+                ->whereIn('id', $request->task_ids)
+                ->get();
+
+            foreach ($tasks as $task) {
+                $task->delete();
+            }
+
+            $count = count($tasks);
+            $message = $count > 1 
+                ? "{$count} tarefas excluídas com sucesso!" 
+                : "Tarefa excluída com sucesso!";
+
+            return redirect()->route('tasks.index')->with('success', $message);
+        } catch (\Exception $e) {
+            return redirect()->route('tasks.index')->with('error', 'Erro ao excluir tarefas. Por favor, tente novamente.');
+        }
+    }
 }

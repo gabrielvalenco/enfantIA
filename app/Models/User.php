@@ -7,6 +7,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use App\Models\Category;
+use App\Models\Task;
+use App\Models\Note;
+use App\Models\Group;
+use App\Models\GroupInvitation;
 
 class User extends Authenticatable
 {
@@ -59,6 +64,11 @@ class User extends Authenticatable
     {
         return $this->hasMany(Note::class);
     }
+    
+    public function categories()
+    {
+        return $this->hasMany(Category::class);
+    }
 
     public function groups()
     {
@@ -84,6 +94,6 @@ class User extends Authenticatable
 
     public function completedTasks()
     {
-        return $this->hasMany(Task::class)->whereNotNull('completed_at');
+        return $this->hasMany(Task::class)->where('status', true);
     }
 }

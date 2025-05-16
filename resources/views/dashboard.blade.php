@@ -27,7 +27,7 @@
                 </li>
                 <li><hr class="dropdown-divider"></li>
                 <li>
-                    <a href="{{ route('profile.edit') }}" class="dropdown-item">
+                    <a href="{{ route('profile.index') }}" class="dropdown-item">
                         <i class="fas fa-user-edit me-2"></i>
                         Editar Perfil
                     </a>
@@ -297,125 +297,41 @@
     </div>
 
     <script>
-        function confirmComplete(taskId, taskTitle) {
-            if (confirm(`Deseja marcar a tarefa "${taskTitle}" como concluída?`)) {
-                document.getElementById(`complete-form-${taskId}`).submit();
-            }
-        }
-
-        function completeTask(taskId) {
-            if (confirm('Deseja marcar esta tarefa como concluída?')) {
-                document.getElementById(`complete-form-${taskId}`).submit();
-            }
-        }
-
-        document.addEventListener('DOMContentLoaded', function() {
-            var calendarEl = document.getElementById('calendar');
-            var calendar = new FullCalendar.Calendar(calendarEl, {
-                initialView: 'dayGridMonth',
-                locale: 'pt-br',
-                events: [
-                    @foreach ($upcomingTasks as $task)
-                    {
-                        id: {{ $task->id }},
-                        title: '{{ $task->category ? $task->category->name . " • " : "" }}{{ $task->title }}',
-                        start: '{{ $task->due_date }}',
-                        color: '{{ $task->urgency === 'high' ? '#dc3545' : ($task->urgency === 'medium' ? '#ffc107' : '#0d6efd') }}',
-                        display: 'block',
-                        textColor: 'var(--primary)',
-                        extendedProps: {
-                            category: '{{ $task->category ? $task->category->name : "Sem categoria" }}',
-                            description: '{{ $task->description ?? "Sem descrição" }}',
-                            urgency: '{{ $task->urgency }}',
-                            editUrl: '{{ route('tasks.edit', $task->id) }}',
-                            deleteUrl: '{{ route('tasks.destroy', $task->id) }}',
-                            completeUrl: '{{ route('tasks.complete', $task->id) }}'
-                        }
-                    },
-                    @endforeach
-                ],
-                eventDidMount: function(info) {
-                    info.el.style.borderLeft = '8px solid ' + info.event.backgroundColor;
-                    info.el.style.backgroundColor = 'rgba(' + 
-                        hexToRgb(info.event.backgroundColor).r + ',' +
-                        hexToRgb(info.event.backgroundColor).g + ',' +
-                        hexToRgb(info.event.backgroundColor).b + ', 0.1)';
-                    
-                    info.el.title = info.event.title;
-                },
-                eventClick: function(info) {
-                    info.jsEvent.preventDefault();
-                    const event = info.event;
-                    const props = event.extendedProps;
-                    
-                    document.getElementById('taskModalLabel').textContent = event.title;
-                    document.getElementById('taskCategory').textContent = props.category;
-                    document.getElementById('taskDate').textContent = new Date(event.start).toLocaleDateString('pt-BR');
-                    document.getElementById('taskDescription').textContent = props.description;
-                    document.getElementById('taskUrgency').textContent = props.urgency.charAt(0).toUpperCase() + props.urgency.slice(1);
-                    
-                    document.getElementById('editTaskBtn').href = props.editUrl;
-                    document.getElementById('deleteTaskBtn').onclick = () => deleteTask(event.id, props.deleteUrl);
-                    document.getElementById('completeTaskBtn').setAttribute('data-task-id', event.id);
-                    
-                    new bootstrap.Modal(document.getElementById('taskModal')).show();
+        // Define category colors for the external script
+        var categoryColors = {
+            @foreach(\App\Models\Category::where('user_id', Auth::id())->get() as $category)
+                '{{ $category->name }}': '{{ $category->color }}',
+            @endforeach
+            'default': '#20ac82'
+        };
+        
+        // Define calendar events data for the external script
+        var calendarEvents = [
+            @foreach ($upcomingTasks as $task)
+            {
+                id: {{ $task->id }},
+                title: '{{ $task->title }}',
+                start: '{{ $task->due_date }}',
+                color: '{{ $task->urgency === 'high' ? '#dc3545' : ($task->urgency === 'medium' ? '#ffc107' : '#20ac82') }}',
+                display: 'block',
+                textColor: 'var(--primary)',
+                extendedProps: {
+                    categories: [
+                        @foreach($task->categories as $category)
+                            '{{ $category->name }}',
+                        @endforeach
+                    ],
+                    description: '{{ $task->description ?? "Sem descrição" }}',
+                    urgency: '{{ $task->urgency === "high" ? "Alta" : ($task->urgency === "medium" ? "Média" : "Baixa") }}',
+                    editUrl: '{{ route('tasks.edit', $task->id) }}',
+                    deleteUrl: '{{ route('tasks.destroy', $task->id) }}',
+                    completeUrl: '{{ route('tasks.complete', $task->id) }}'
                 }
-            });
-            calendar.render();
-
-            document.getElementById('completeTaskBtn').addEventListener('click', function() {
-                const taskId = this.getAttribute('data-task-id');
-                if (taskId) {
-                    completeTask(taskId);
-                }
-            });
-        });
-
-        function deleteTask(taskId, deleteUrl) {
-            if (confirm('Tem certeza que deseja excluir esta tarefa?')) {
-                const form = document.createElement('form');
-                form.method = 'POST';
-                form.action = deleteUrl;
-                form.style.display = 'none';
-
-                const methodInput = document.createElement('input');
-                methodInput.type = 'hidden';
-                methodInput.name = '_method';
-                methodInput.value = 'DELETE';
-
-                const tokenInput = document.createElement('input');
-                tokenInput.type = 'hidden';
-                tokenInput.name = '_token';
-                tokenInput.value = document.querySelector('meta[name="csrf-token"]').content;
-
-                form.appendChild(methodInput);
-                form.appendChild(tokenInput);
-                document.body.appendChild(form);
-                form.submit();
-            }
-        }
-
-        function hexToRgb(hex) {
-            var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-            return result ? {
-                r: parseInt(result[1], 16),
-                g: parseInt(result[2], 16),
-                b: parseInt(result[3], 16)
-            } : null;
-        }
-
-        function confirmComplete(taskId, taskTitle) {
-            if (confirm(`Deseja marcar a tarefa "${taskTitle}" como concluída?`)) {
-                document.getElementById(`complete-form-${taskId}`).submit();
-            }
-        }
-
-        function completeTask(taskId) {
-            if (confirm('Deseja marcar esta tarefa como concluída?')) {
-                document.getElementById(`complete-form-${taskId}`).submit();
-            }
-        }
+            },
+            @endforeach
+        ];
     </script>
+    <script src="{{ asset('js/dashboard/script.js') }}"></script>
 </div>
 
 @include('layouts.footer')

@@ -48,7 +48,7 @@
                 <div class="alert alert-warning alert-dismissible fade show" role="alert">
                     <div class="d-flex align-items-center">
                         <i class="fas fa-exclamation-triangle me-2"></i>
-                        <div>
+                        <div class="alert-body">
                             <strong>Atenção!</strong> A tarefa "<span class="fw-bold">{{ $task->title }}</span>" vence em menos de 24 horas.
                             <br>
                             <small>Data de vencimento: {{ $dueDate->format('d/m/Y H:i') }}</small>
@@ -125,6 +125,15 @@
                                 <a class="dropdown-item text-truncate" href="#" data-sort="date-desc">Recente → Antiga</a>
                             </div>
                         </div>
+                        <!-- Botões de ação em massa -->
+                        <div class="multi-action-buttons">
+                            <button type="button" class="selectable btn action-button mb-2 mr-2" id="multi-complete-btn" title="Selecionar para concluir" onclick="toggleSelectionMode('complete')">
+                                <i class="fas fa-check-circle"></i>
+                            </button>
+                            <button type="button" class="selectable btn action-button mb-2" id="multi-delete-btn" title="Selecionar para excluir" onclick="toggleSelectionMode('delete')">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -136,19 +145,18 @@
             <table class="table table-striped">
                 <thead>
                     <tr>
-                        <th>Título</th>
-                        <th>Descrição</th>
-                        <th class="text-center">Categorias</th>
-                        <th>Urgência</th>
-                        <th class="text-center">Status</th>
-                        <th class="due-date-header">Data de Vencimento</th>
-                        <th class="actions-column">Ações</th>
+                        <th id="title-header">Título</th>
+                        <th id="description-header">Descrição</th>
+                        <th id="categories-header" class="text-center">Categorias</th>
+                        <th id="urgency-header">Urgência</th>
+                        <th id="due-date-header" class="due-date-header">Data de Vencimento</th>
+                        <th id="actions-header" class="actions-column">Ações</th>
                     </tr>
                 </thead>
                 <tbody>
                     @if($tasks->isEmpty())
                         <tr>
-                            <td colspan="7" class="text-center">
+                            <td colspan="6" class="text-center">
                                 <div class="alert alert-info mb-0">
                                     <i class="fas fa-info-circle mr-2"></i>
                                     Não há tarefas pendentes no momento.
@@ -170,7 +178,7 @@
                                         @if($task->categories->isNotEmpty())
                                             <div class="d-block gap-2">
                                                 @foreach($task->categories as $category)
-                                                    <div class="category-badge p-2 m-1" style="background-color: {{ $category->color }};">
+                                                    <div class="category-badge p-2 m-1" style="border-color: {{ $category->color }}; background-color: {{ $category->color }}20;">
                                                         {{ $category->name }}
                                                     </div>
                                                 @endforeach
@@ -203,15 +211,6 @@
                                                 <span class="badge bg-info p-2">Baixa</span>
                                         @endswitch
                                     </td>
-                                    <td>
-                                        <form action="{{ route('tasks.complete', $task) }}" method="POST" style="display: inline;">
-                                            @csrf
-                                            @method('PATCH')
-                                            <button type="submit" class="btn index-status btn-sm pb-1 {{ $task->status ? 'btn-secondary' : 'btn-secondary' }}">
-                                                <i class="fas fa-clock"></i> {{ $task->status ? 'Concluída' : ''}}
-                                            </button>
-                                        </form>
-                                    </td>
                                     <td class="due-date">
                                         {{ \Carbon\Carbon::parse($task->due_date)->format('d/m/Y H:i') }}
                                     </td>
@@ -240,6 +239,18 @@
             </table>
         </div>
     </div>
+
+    <!-- Indicador de modo de seleção -->
+    <div class="selection-mode-active" id="selection-mode-indicator">
+        <span class="selection-count">0 selecionada(s)</span>
+        <button class="btn btn-confirm" id="confirm-selection" onclick="confirmSelection()">Confirmar</button>
+        <button class="btn btn-cancel" id="cancel-selection" onclick="exitSelectionMode()">Cancelar</button>
+    </div>
+    
+    <!-- Overlay para modo de seleção -->
+    <div id="selection-overlay" class="selection-overlay"></div>
+    
+    <!-- Os scripts de seleção de tarefas estão no arquivo index.js -->
 
     <!-- Modal para Subtarefas -->
     <div class="modal fade" id="subtasksModal" tabindex="-1" aria-labelledby="subtasksModalLabel" aria-hidden="true">
@@ -384,20 +395,4 @@
 </body>
 </html>
 
-@push('scripts')
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    // Cria o elemento de áudio
-    const audio = new Audio("{{ asset('notification.mp3') }}");
-    
-    // Verifica se há tarefas urgentes
-    const urgentTasks = document.querySelectorAll('.badge-urgent');
-    if (urgentTasks.length > 0) {
-        // Toca o som de notificação
-        audio.play().catch(function(error) {
-            console.log("Reprodução de áudio não permitida");
-        });
-    }
-});
-</script>
-@endpush
+

@@ -42,7 +42,7 @@ body {
 }
 
 .container {
-    max-width: 1200px;
+    max-width: 1400px;
     width: 100%;
 }
 
@@ -201,6 +201,18 @@ body {
     color: #fff;
 }
 
+.btn-success {
+    background-color: rgba(32, 172, 130, 0.2);
+    border-color: var(--link-color);
+    color: var(--link-color);
+}
+
+.btn-success:hover {
+    background-color: rgba(32, 172, 130, 0.3);
+    border-color: var(--link-color);
+    color: #fff;
+}
+
 .btn-sm {
     padding: 5px 10px;
     font-size: 0.875rem;
@@ -228,8 +240,17 @@ body {
     padding: 15px;
     font-weight: 600;
     text-transform: uppercase;
-    font-size: 0.8rem;
+    font-size: 0.9rem;
     letter-spacing: 0.5px;
+    text-align: center;
+    vertical-align: middle;
+    display: table-cell;
+    height: 60px;
+}
+
+#title-header {
+    text-align: left;
+    padding-left: 1rem;
 }
 
 .table tbody td {
@@ -248,11 +269,14 @@ body {
 
 /* Task Columns */
 .task-title {
+    font-size: 0.9rem;
+    color: var(--text-color);
     font-weight: 500;
-    color: var(--text-primary);
 }
 
 .task-description {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
     max-width: 250px;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -264,25 +288,54 @@ body {
 }
 
 .actions-column {
-    width: 180px;
+    width: 150px;
     text-align: center;
+}
+
+/* Specific column widths */
+.table th:nth-child(1) { /* Título */
+    width: 20%;
+}
+
+.table th:nth-child(2) { /* Descrição */
+    width: 25%;
+}
+
+.table th:nth-child(3) { /* Categorias */
+    width: 18%;
+}
+
+.table th:nth-child(4) { /* Urgência */
+    width: 12%;
+}
+
+.table th:nth-child(5) { /* Status */
+    width: 8%;
+}
+
+.table th:nth-child(6) { /* Data de Vencimento */
+    width: 12%;
+}
+
+.table th:nth-child(7) { /* Ações */
+    width: 10%;
 }
 
 .action-buttons {
     display: flex;
-    gap: 8px;
+    gap: 10px;
     justify-content: center;
 }
 
 .action-btn {
-    width: 36px;
-    height: 36px;
+    width: 42px;
+    height: 42px;
     padding: 0;
     display: flex;
     align-items: center;
     justify-content: center;
     transition: all 0.3s ease;
-    border: none;
+    border: none;   
     border-radius: 50%;
 }
 
@@ -292,7 +345,7 @@ body {
 }
 
 .action-btn i {
-    font-size: 14px;
+    font-size: 16px;
 }
 
 /* Botão específico para visualizar detalhes */
@@ -346,43 +399,54 @@ body {
     min-width: 150px;
 }
 
+.alert-body {
+    padding-left: 1rem;
+}
+
 .category-badge {
     text-align: center;
-    color: var(--background-color);
-    border: 1px solid var(--border-color);
-    background-color: rgba(0, 0, 0, 0.2);
-    padding: 2px 10px;
-    border-radius: 4px;
+    color: var(--text-primary);
+    border: 2px solid; /* Border color will be set inline */
+    background-color: var(--surface-color);
+    padding: 1px 8px;
+    border-radius: 10px;
     font-weight: 500;
-    font-size: 0.8rem;
-    letter-spacing: 0.5px;
+    font-size: 0.7rem;
+    letter-spacing: 0.3px;
+    margin: 0.3rem !important;
+    display: inline-block;
 }
 
 /* Status Badges */
 .badge {
-    display: inline-block;
-    padding: 2px 10px;
+    width: 75px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2px 6px;
     border-radius: 4px;
     font-weight: 500;
-    font-size: 0.75rem;
+    font-size: 0.8rem;
+    margin: 0 auto;
+    text-align: center;
 }
 
 .bg-danger {
     background-color: rgba(220, 53, 69, 0.2) !important;
     color: #ff8c96;
-    border: 1px solid var(--danger-color);
+    border: 2px solid var(--danger-color);
 }
 
 .bg-warning {
     background-color: rgba(255, 193, 7, 0.2) !important;
     color: #ffe066;
-    border: 1px solid var(--warning-color);
+    border: 2px solid var(--warning-color);
 }
 
 .bg-info {
     background-color: rgba(23, 162, 184, 0.2) !important;
     color: #a8e4f0;
-    border: 1px solid var(--info-color);
+    border: 2px solid var(--link-color);
 }
 
 .badge-urgent {
@@ -410,16 +474,68 @@ body {
 
 /* Status Button */
 .index-status {
-    width: 100px;
     text-align: center;
+    border-radius: 50%;
+    padding: 1rem 1.1rem;
     background-color: var(--surface-color);
-    border: 1px solid var(--border-color);
+    border: 3px solid var(--border-color);
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+}
+
+.index-status::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at center, rgba(32, 172, 130, 0.05) 0%, transparent 70%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    border-radius: 50%;
+}
+
+.index-status .fa-check {
+    color: #6c757d; /* Gray color for the checkmark */
+    font-size: 1.25rem;
+    position: relative;
+    z-index: 2;
+    transition: all 0.3s ease, transform 0.2s ease;
+}
+
+.index-status.completed-animation {
+    background-color: rgba(32, 172, 130, 0.1);
+    border-color: var(--link-color);
+    box-shadow: 0 0 10px rgba(32, 172, 130, 0.3);
+    transform: scale(1.05);
+}
+
+.index-status.completed-animation .fa-check {
+    color: var(--link-color);
+    transform: scale(1.2);
 }
 
 .index-status:hover {
-    background-color: rgba(32, 172, 130, 0.2);
+    background-color: rgba(32, 172, 130, 0.1);
     border-color: var(--link-color);
-    color: var(--text-primary);
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+}
+
+.index-status:hover::before {
+    opacity: 1;
+}
+
+.index-status:hover .fa-check {
+    color: var(--link-color);
+    transform: scale(1.1);
+}
+
+.index-status:active {
+    transform: scale(0.95);
 }
 
 /* Responsive Adjustments */
@@ -447,13 +563,29 @@ body {
     }
 }
 
-/* Estilos para o Modal de Subtarefas */
+/* Styles for modals and form inputs */
 .modal-content {
     background-color: var(--surface-color);
     color: var(--text-primary);
     border: 1px solid var(--border-color);
-    border-radius: 10px;
-    box-shadow: 0 5px 25px rgba(0, 0, 0, 0.3);
+}
+
+/* Form inputs consistent styling across the site */
+.form-control:focus, 
+.form-select:focus,
+input:focus,
+textarea:focus,
+select:focus,
+.modal .form-control:focus,
+.modal input[type="color"]:focus,
+.modal input[type="text"]:focus,
+.modal textarea:focus,
+.modal select:focus {
+    border-color: var(--link-color) !important;
+    box-shadow: 0 0 0 0.25rem rgba(32, 172, 130, 0.25) !important;
+    background-color: var(--surface-color) !important;
+    color: var(--text-primary);
+    outline: none;
 }
 
 .modal-header {
@@ -467,15 +599,28 @@ body {
 }
 
 .modal-header .close {
-    color: var(--text-primary);
-    opacity: 0.8;
-    text-shadow: none;
-    transition: all 0.3s ease;
+    background: transparent;
+    border: none;
+    font-size: 1.5rem;
+    color: #6c757d;
+    opacity: 0.7;
+    transition: all 0.2s ease;
+    padding: 0.5rem;
+    margin: -0.5rem -0.5rem -0.5rem auto;
+    border-radius: 50%;
+    width: 2rem;
+    height: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    outline: none !important;
 }
 
 .modal-header .close:hover {
+    color: var(--link-color, rgb(32, 172, 130));
     opacity: 1;
-    color: var(--text-primary-hover);
+    background-color: rgba(32, 172, 130, 0.1);
+    transform: rotate(90deg);
 }
 
 .modal-body {
@@ -535,15 +680,62 @@ body {
     border: 1px solid var(--border-color);
 }
 
-.form-check-input:checked {
-    background-color: var(--primary-color);
-    border-color: var(--primary-color);
+/* Custom Checkbox Styling */
+.form-check-input:checked, .category-checkbox:checked {
+    background-color: var(--link-color) !important;
+    border-color: var(--link-color) !important;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3e%3cpath fill='none' stroke='%23fff' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='M6 10l3 3l6-6'/%3e%3c/svg%3e") !important;
+}
+
+.form-check-input:focus, .category-checkbox:focus {
+    border-color: var(--link-color) !important;
+    box-shadow: 0 0 0 0.25rem rgba(32, 172, 130, 0.25) !important;
+    outline: 0;
 }
 
 .form-check-label {
     color: var(--text-color);
     margin-left: 5px;
     transition: all 0.2s ease;
+    cursor: pointer;
+    padding: 3px 0;
+}
+
+.form-check-label:hover {
+    color: var(--text-primary);
+}
+
+/* Completed subtask styling */
+.text-decoration-line-through {
+    text-decoration: line-through;
+    color: var(--text-secondary) !important;
+    opacity: 0.8;
+    transition: all 0.3s ease;
+}
+
+/* Animation for completing subtasks */
+@keyframes checkmarkAnimation {
+    0% { transform: scale(0); opacity: 0; }
+    50% { transform: scale(1.2); opacity: 1; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+.form-check-input:checked, .category-checkbox:checked {
+    animation: checkmarkAnimation 0.3s ease-in-out forwards;
+}
+
+/* Subtask Item Styling */
+.subtask-item {
+    background-color: rgba(32, 172, 130, 0.05);
+    border-radius: 6px;
+    padding: 8px 12px;
+    transition: all 0.2s ease;
+    border: 1px solid transparent;
+}
+
+.subtask-item:hover {
+    background-color: rgba(32, 172, 130, 0.1);
+    border-color: rgba(32, 172, 130, 0.2);
 }
 
 .delete-subtask {
@@ -553,6 +745,8 @@ body {
     color: var(--danger-color);
     opacity: 0.7;
     transition: all 0.3s ease;
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
 }
 
 .delete-subtask:hover {
@@ -630,9 +824,9 @@ body {
 }
 
 .filters-container .form-control:focus {
-    background-color: var(--surface-color);
+    background-color: var(--surface-color) !important;
     border-color: var(--primary-color);
-    box-shadow: 0 0 0 0.2rem rgba(32, 172, 130, 0.25);
+    box-shadow: 0 0 0 0.25rem rgba(32, 172, 130, 0.25);
     color: var(--text-primary);
 }
 
@@ -935,3 +1129,130 @@ body {
 .search-container {
     margin-top: 10px;
 }
+
+        /* Estilos para os botões de ação em massa */
+        .multi-action-buttons {
+            display: flex;
+        }
+        
+        .action-button {
+            border-radius: 50%;
+            width: 38px;
+            height: 38px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+        }
+        
+        .action-button:hover {
+            transform: scale(1.1);
+        }
+        
+        .action-button.active {
+            background-color: rgba(32, 172, 130, 0.2);
+            border-color: var(--link-color, rgb(32, 172, 130));
+        }
+        
+        #multi-complete-btn {
+            color: var(--link-color, rgb(32, 172, 130));
+        }
+        
+        #multi-delete-btn {
+            color: #dc3545;
+        }
+        
+        /* Estilo para linhas selecionadas */
+        .task-row {
+            cursor: default;
+            transition: background-color 0.2s ease;
+        }
+        
+        .task-row.selectable {
+            cursor: pointer;
+            position: relative;
+        }
+        
+        .task-row.selectable:hover {
+            background-color: rgba(32, 172, 130, 0.05) !important;
+        }
+        
+        .task-row.selected {
+            background-color: rgba(32, 172, 130, 0.2) !important;
+        }
+        
+        /* Estilo para o modo de seleção */
+
+        .selectable {
+            background-color: var(--surface-color);
+            border: 2px solid var(--border-color);
+        }
+
+        .selectable:focus {
+            box-shadow: none;
+        }
+        
+        .selection-mode-active {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: var(--background-color);
+            color: var(--text-primary);
+            padding: 15px 25px;
+            border-radius: 50px;
+            z-index: 9999;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            font-size: 16px;
+        }
+        
+        .selection-mode-active .selection-count {
+            margin-right: 10px;
+            font-weight: bold;
+        }
+        
+        .selection-mode-active .btn {
+            margin-left: 10px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            padding: 5px 15px;
+        }
+        
+        .selection-mode-active .btn-confirm {
+            background-color: var(--link-color, rgb(32, 172, 130));
+            border-color: var(--link-color, rgb(32, 172, 130));
+            color: var(--text-primary);
+        }
+        
+        .selection-mode-active .btn-cancel {
+            background-color: #6c757d;
+            border-color: #6c757d;
+            color: var(--text-primary);
+        }
+        
+        /* Overlay para modo de seleção */
+        .selection-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.05);
+            z-index: 1000;
+            display: none;
+            pointer-events: none;
+        }
+        
+        /* Importante: cursor especial para os itens selecionáveis */
+        body.selection-mode-on * {
+            cursor: default;
+        }
+        
+        body.selection-mode-on .task-row {
+            cursor: pointer !important;
+        }

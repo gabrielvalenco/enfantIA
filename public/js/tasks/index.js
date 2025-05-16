@@ -1,5 +1,279 @@
 // Garantir que o código só execute após o DOM e as variáveis globais estarem disponíveis
 document.addEventListener('DOMContentLoaded', function() {
+    // Desabilitar temporariamente o evento de seleção de texto
+    document.body.style.userSelect = 'none';
+    
+    // Variáveis globais para a seleção
+    var selectedTasksIds = [];
+    var selectionMode = null;
+    
+    // Função para entrar no modo de seleção de tarefas
+    window.toggleSelectionMode = function(mode) {
+        console.log('Ativando modo:', mode);
+        
+        // Se já estiver neste modo, desativa
+        if (selectionMode === mode) {
+            console.log('Saindo do modo de seleção');
+            exitSelectionMode();
+            return;
+        }
+        
+        // Configurar modo e limpar seleções anteriores
+        selectionMode = mode;
+        selectedTasksIds = [];
+        
+        // Ativar indicador visual
+        document.getElementById('selection-mode-indicator').style.display = 'flex';
+        document.getElementById('selection-overlay').style.display = 'block';
+        document.body.classList.add('selection-mode-on');
+        
+        // Destaca o botão ativo
+        if (mode === 'complete') {
+            document.getElementById('multi-complete-btn').classList.add('active');
+            document.getElementById('multi-delete-btn').classList.remove('active');
+        } else {
+            document.getElementById('multi-delete-btn').classList.add('active');
+            document.getElementById('multi-complete-btn').classList.remove('active');
+        }
+        
+        // Desativar botões de ação normais
+        var actionButtons = document.querySelectorAll('.action-btn');
+        for (var i = 0; i < actionButtons.length; i++) {
+            actionButtons[i].style.pointerEvents = 'none';
+            actionButtons[i].style.opacity = '0.5';
+        }
+        
+        // Adicionar handlers de clique para selecionar linhas
+        var taskRows = document.querySelectorAll('.task-row');
+        for (var i = 0; i < taskRows.length; i++) {
+            taskRows[i].classList.add('selectable');
+            taskRows[i].onclick = function(e) {
+                // Ignorar cliques em botões
+                if (e.target.closest('button') || e.target.closest('a') || e.target.closest('.action-buttons')) {
+                    return;
+                }
+                
+                var row = this;
+                var taskId = row.getAttribute('data-task-id');
+                
+                // Toggle seleção
+                if (row.classList.contains('selected')) {
+                    row.classList.remove('selected');
+                    // Remover da lista
+                    var index = selectedTasksIds.indexOf(taskId);
+                    if (index !== -1) {
+                        selectedTasksIds.splice(index, 1);
+                    }
+                } else {
+                    row.classList.add('selected');
+                    // Adicionar à lista
+                    if (selectedTasksIds.indexOf(taskId) === -1) {
+                        selectedTasksIds.push(taskId);
+                    }
+                }
+                
+                // Atualizar contador
+                document.querySelector('.selection-count').textContent = selectedTasksIds.length + ' selecionada(s)';
+            };
+        }
+        
+        // Resetar contador
+        document.querySelector('.selection-count').textContent = '0 selecionada(s)';
+    }
+    
+    // Função para sair do modo de seleção
+    window.exitSelectionMode = function() {
+        selectionMode = null;
+        selectedTasksIds = [];
+        
+        // Resetar interface
+        document.getElementById('selection-mode-indicator').style.display = 'none';
+        document.getElementById('selection-overlay').style.display = 'none';
+        document.body.classList.remove('selection-mode-on');
+        document.getElementById('multi-complete-btn').classList.remove('active');
+        document.getElementById('multi-delete-btn').classList.remove('active');
+        
+        // Limpar seleções visuais
+        var selectedRows = document.querySelectorAll('.task-row.selected');
+        for (var i = 0; i < selectedRows.length; i++) {
+            selectedRows[i].classList.remove('selected');
+        }
+        
+        // Limpar handlers de clique
+        var taskRows = document.querySelectorAll('.task-row');
+        for (var i = 0; i < taskRows.length; i++) {
+            taskRows[i].classList.remove('selectable');
+            taskRows[i].onclick = null;
+        }
+        
+        // Reativar botões de ação
+        var actionButtons = document.querySelectorAll('.action-btn');
+        for (var i = 0; i < actionButtons.length; i++) {
+            actionButtons[i].style.pointerEvents = '';
+            actionButtons[i].style.opacity = '';
+        }
+    }
+    
+    // Função para confirmar a ação selecionada
+    window.confirmSelection = function() {
+        if (selectedTasksIds.length === 0) {
+            Swal.fire({
+                title: 'Nenhuma tarefa selecionada',
+                text: 'Selecione pelo menos uma tarefa para continuar.',
+                icon: 'info',
+                background: getComputedStyle(document.documentElement).getPropertyValue('--surface-color'),
+                color: getComputedStyle(document.documentElement).getPropertyValue('--text-primary'),
+                customClass: {
+                    confirmButton: 'swal-confirm-button',
+                    title: 'swal-title',
+                    htmlContainer: 'swal-html-container'
+                }
+            });
+            return;
+        }
+        
+        if (selectionMode === 'complete') {
+            Swal.fire({
+                title: 'Concluir tarefas',
+                text: 'Deseja marcar ' + selectedTasksIds.length + ' tarefa(s) como concluída(s)?',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: 'var(--link-color)',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'Sim, concluir!',
+                cancelButtonText: 'Cancelar',
+                background: getComputedStyle(document.documentElement).getPropertyValue('--surface-color'),
+                color: getComputedStyle(document.documentElement).getPropertyValue('--text-primary'),
+                customClass: {
+                    confirmButton: 'swal-confirm-button',
+                    cancelButton: 'swal-cancel-button',
+                    title: 'swal-title',
+                    htmlContainer: 'swal-html-container'
+                }
+            }).then(function(result) {
+                if (result.isConfirmed) {
+                    submitTasks('complete');
+                }
+            });
+        } else if (selectionMode === 'delete') {
+            Swal.fire({
+                title: 'Excluir tarefas',
+                text: 'Deseja excluir ' + selectedTasksIds.length + ' tarefa(s)?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#dc3545',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'Sim, excluir!',
+                cancelButtonText: 'Cancelar',
+                background: getComputedStyle(document.documentElement).getPropertyValue('--surface-color'),
+                color: getComputedStyle(document.documentElement).getPropertyValue('--text-primary'),
+                customClass: {
+                    confirmButton: 'swal-confirm-button',
+                    cancelButton: 'swal-cancel-button',
+                    title: 'swal-title',
+                    htmlContainer: 'swal-html-container'
+                }
+            }).then(function(result) {
+                if (result.isConfirmed) {
+                    submitTasks('delete');
+                }
+            });
+        }
+    }
+    
+    // Função para enviar o formulário com as tarefas selecionadas
+    function submitTasks(action) {
+        var form = document.createElement('form');
+        form.method = 'POST';
+        
+        if (action === 'complete') {
+            form.action = '/tasks/complete-multiple';
+        } else {
+            form.action = '/tasks/delete-multiple';
+        }
+        
+        // CSRF token
+        var token = document.createElement('input');
+        token.type = 'hidden';
+        token.name = '_token';
+        token.value = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+        form.appendChild(token);
+        
+        // IDs das tarefas
+        for (var i = 0; i < selectedTasksIds.length; i++) {
+            var input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = 'task_ids[]';
+            input.value = selectedTasksIds[i];
+            form.appendChild(input);
+        }
+        
+        document.body.appendChild(form);
+        form.submit();
+    }
+    
+    // Manipulador para os botões de completar tarefa
+    document.querySelectorAll('.complete-task-btn').forEach(button => {
+        button.addEventListener('click', function() {
+            const taskId = this.getAttribute('data-task-id');
+            const taskRoute = this.getAttribute('data-task-route');
+            const buttonElement = this;
+            
+            // Mostrar confirmação com SweetAlert2
+            Swal.fire({
+                title: 'Concluir tarefa?',
+                text: 'Deseja marcar esta tarefa como concluída?',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: 'var(--link-color)',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'Sim, concluir!',
+                cancelButtonText: 'Cancelar',
+                background: getComputedStyle(document.documentElement).getPropertyValue('--surface-color'),
+                color: getComputedStyle(document.documentElement).getPropertyValue('--text-primary'),
+                customClass: {
+                    confirmButton: 'swal-confirm-button',
+                    cancelButton: 'swal-cancel-button',
+                    title: 'swal-title',
+                    htmlContainer: 'swal-html-container'
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Adicionar classe para animação
+                    buttonElement.classList.add('completed-animation');
+                    
+                    // Criar e enviar o formulário programaticamente
+                    const form = document.createElement('form');
+                    form.method = 'POST';
+                    form.action = taskRoute;
+                    form.style.display = 'none';
+                    
+                    // Adicionar CSRF token
+                    const csrfToken = document.createElement('input');
+                    csrfToken.type = 'hidden';
+                    csrfToken.name = '_token';
+                    csrfToken.value = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+                    form.appendChild(csrfToken);
+                    
+                    // Adicionar método PATCH
+                    const methodField = document.createElement('input');
+                    methodField.type = 'hidden';
+                    methodField.name = '_method';
+                    methodField.value = 'PATCH';
+                    form.appendChild(methodField);
+                    
+                    // Adicionar ao documento e enviar
+                    document.body.appendChild(form);
+                    
+                    // Aguardar um pouco para mostrar a animação antes de enviar
+                    setTimeout(() => {
+                        form.submit();
+                    }, 800);
+                }
+            });
+        });
+    });
+    
     // Aguardar um pouco para garantir que a variável global taskCategories esteja disponível
     setTimeout(function() {
         $(function() {
@@ -24,8 +298,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (!window.taskCategories) {
                     console.error('Variável taskCategories não encontrada!');
                     window.taskCategories = [];
-                } else {
-                    console.log('taskCategories carregadas com sucesso:', window.taskCategories.length, 'tarefas');
                 }
                 
                 // ==== FILTROS E PESQUISA ==== 
@@ -43,14 +315,10 @@ document.addEventListener('DOMContentLoaded', function() {
                     applyFilters();
                 });
                 
-                // Atualizar log para depuração do filtro de categorias
-                console.log('Inicializando filtros de categorias');
-                
                 // Filtro por categoria - usando delegação de eventos
                 $(document).on('click', '.dropdown-item[data-category]', function(e) {
                     e.preventDefault();
                     const category = $(this).data('category');
-                    console.log('Categoria selecionada:', category);
                     
                     activeFilters.category = category;
                     
@@ -165,8 +433,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 
                 // Função para aplicar todos os filtros ativos
                 function applyFilters() {
-                    console.log('Aplicando filtros:', activeFilters);
-                    
                     // Primeiro limpar qualquer ordenação anterior
                     resetOriginalOrder();
                     
@@ -191,8 +457,6 @@ document.addEventListener('DOMContentLoaded', function() {
                             const taskInfo = window.taskCategories.find(t => t.taskId === taskId);
                             const categoryIds = taskInfo ? taskInfo.categories.map(c => c.id.toString()) : [];
                             
-                            console.log('Tarefa ID:', taskId, 'Categorias:', categoryIds);
-                            
                             if (activeFilters.category === 'none') {
                                 // Caso especial: "Sem categoria"
                                 if (categoryIds.length > 0) {
@@ -202,7 +466,6 @@ document.addEventListener('DOMContentLoaded', function() {
                                 // Verificar se a categoria está na lista
                                 const categoryToFind = activeFilters.category.toString();
                                 const found = categoryIds.includes(categoryToFind);
-                                console.log('Buscando categoria:', categoryToFind, 'Na lista:', categoryIds, 'Encontrado:', found);
                                 
                                 if (!found) {
                                     showRow = false;
@@ -648,8 +911,73 @@ document.addEventListener('DOMContentLoaded', function() {
                     });
                 });
                 
+                // Concluir tarefa
+                $('#complete-task-btn').on('click', function() {
+                    $.ajax({
+                        url: `/tasks/${currentTaskId}/can-complete`,
+                        method: 'GET',
+                        success: function(response) {
+                            if (response.can_complete) {
+                                // Usar AJAX com método PATCH em vez de redirecionamento GET
+                                $.ajax({
+                                    url: `/tasks/${currentTaskId}/complete`,
+                                    method: 'POST',
+                                    data: {
+                                        _token: $('meta[name="csrf-token"]').attr('content'),
+                                        _method: 'PATCH'
+                                    },
+                                    success: function(response) {
+                                        Swal.fire({
+                                            title: 'Sucesso!',
+                                            text: 'Tarefa concluída com sucesso!',
+                                            icon: 'success',
+                                            confirmButtonText: 'Ok',
+                                            background: getComputedStyle(document.documentElement).getPropertyValue('--surface-color'),
+                                            color: getComputedStyle(document.documentElement).getPropertyValue('--text-primary'),
+                                            customClass: {
+                                                confirmButton: 'swal-confirm-button',
+                                                title: 'swal-title',
+                                                htmlContainer: 'swal-html-container'
+                                            }
+                                        }).then(() => {
+                                            // Recarregar a página após conclusão
+                                            window.location.reload();
+                                        });
+                                    },
+                                    error: function(xhr, status, error) {
+                                        console.error('Erro ao concluir a tarefa:', error);
+                                        
+                                        Swal.fire({
+                                            title: 'Erro!',
+                                            text: 'Não foi possível concluir a tarefa.',
+                                            icon: 'error',
+                                            confirmButtonText: 'Ok',
+                                            background: getComputedStyle(document.documentElement).getPropertyValue('--surface-color'),
+                                            color: getComputedStyle(document.documentElement).getPropertyValue('--text-primary')
+                                        });
+                                    }
+                                });
+                            } else {
+                                Swal.fire({
+                                    title: 'Não é possível concluir',
+                                    text: 'Esta tarefa possui subtarefas pendentes!',
+                                    icon: 'warning',
+                                    confirmButtonText: 'Ok',
+                                    background: getComputedStyle(document.documentElement).getPropertyValue('--surface-color'),
+                                    color: getComputedStyle(document.documentElement).getPropertyValue('--text-primary'),
+                                    customClass: {
+                                        confirmButton: 'swal-confirm-button',
+                                        title: 'swal-title',
+                                        htmlContainer: 'swal-html-container'
+                                    }
+                                });
+                            }
+                        }
+                    });
+                });
+                
                 // Excluir tarefa com SweetAlert
-                $(document).on('click', '.delete-task-btn', function(e) {
+                $(document).on('click', '.delete-task-btn, .delete-task-btn i', function(e) {
                     e.preventDefault();
                     e.stopPropagation(); // Impedir que o clique se propague para a linha da tabela
                     
@@ -680,52 +1008,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         }
                     });
                 });
-                
-                // Concluir tarefa
-                $('#complete-task-btn').on('click', function() {
-                    $.ajax({
-                        url: `/tasks/${currentTaskId}/can-complete`,
-                        method: 'GET',
-                        success: function(response) {
-                            if (response.can_complete) {
-                                // Enviar formulário de conclusão
-                                window.location.href = `/tasks/${currentTaskId}/complete`;
-                            } else {
-                                Swal.fire({
-                                    title: 'Não é possível concluir',
-                                    text: 'Esta tarefa possui subtarefas pendentes!',
-                                    icon: 'warning',
-                                    confirmButtonText: 'Ok',
-                                    background: getComputedStyle(document.documentElement).getPropertyValue('--surface-color'),
-                                    color: getComputedStyle(document.documentElement).getPropertyValue('--text-primary'),
-                                    customClass: {
-                                        confirmButton: 'swal-confirm-button',
-                                        title: 'swal-title',
-                                        htmlContainer: 'swal-html-container'
-                                    }
-                                });
-                            }
-                        }
-                    });
-                });
-                
-                // Notificação sonora para tarefas urgentes
-                function checkUrgentTasks() {
-                    // Cria o elemento de áudio
-                    const audio = new Audio("/notification.mp3");
-                    
-                    // Verifica se há tarefas urgentes
-                    const urgentTasks = document.querySelectorAll('.badge-urgent');
-                    if (urgentTasks.length > 0) {
-                        // Toca o som de notificação
-                        audio.play().catch(function(error) {
-                            console.log("Reprodução de áudio não permitida");
-                        });
-                    }
-                }
-                
-                // Executar verificação de tarefas urgentes
-                checkUrgentTasks();
+
             });
         }, 100);
     });

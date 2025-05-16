@@ -34,10 +34,6 @@ html, body {
 
 body {
     font-family: 'Poppins', sans-serif;
-    background-image: url('../images/task_nest_bg.png');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
     color: var(--text-primary);
 }
 
@@ -77,24 +73,196 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .add-button {
-    background-color: var(--button-color);
-    color: var(--text-primary);
-    border: 2px solid var(--border-color);
-    border-radius: 10px;
-    padding: 0.25rem 1.25rem;
-    transition: all 0.2s;
-    cursor: pointer;
+    color: var(--link-color);
+    text-decoration: none;
+    transition: all 0.3s ease;
     font-weight: 500;
-    outline: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: none;
+    border: none;
 }
 
 .add-button:hover {
-    background-color: var(--button-hover);
-    color: var(--text-primary-hover);
+    color: var(--link-color-hover);
+    transform: translateX(-5px);
 }
 
 .alert {
     background-color: var(--surface-color);
     border: 2px solid var(--border-hover);
     color: var(--text-secondary);
+}
+
+/* Estilos para os cards de notas */
+.note-card {
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.note-card:hover {
+    transform: translateY(-5px);
+}
+
+.note-card .card {
+    background-color: var(--surface-color);
+    border: 2px solid var(--border-color);
+    border-radius: 10px;
+    overflow: hidden;
+    height: 100%;
+    transition: all 0.3s ease;
+}
+
+.note-card:hover .card {
+    border-color: var(--link-color);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.note-card .card-header {
+    background-color: var(--background-color) !important;
+    border-bottom: 2px solid var(--border-color);
+    padding: 1rem;
+    position: relative;
+}
+
+.note-card .card-title {
+    color: var(--text-primary);
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.note-card .card-body {
+    padding: 1rem;
+    color: var(--text-color);
+}
+
+.note-card .card-footer {
+    background-color: var(--background-color);
+    border-top: 1px solid var(--border-color);
+    padding: 0.75rem 1rem;
+    font-size: 0.85rem;
+}
+
+.card-footer small {
+    color: var(--text-color);
+}
+
+.note-indicators i {
+    color: var(--link-color);
+    opacity: 0.7;
+}
+
+.category-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem;
+    margin-top: 0.5rem;
+}
+
+.category-badge {
+    display: inline-block;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    color: var(--text-primary);
+    margin-right: 0.25rem;
+    margin-bottom: 0.25rem;
+    border: 1px solid;
+    background-color: transparent !important;
+}
+
+.task-categories-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem;
+    padding: 0.5rem;
+    background-color: var(--background-color);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+}
+
+.task-link {
+    margin-top: 0.75rem;
+    padding-top: 0.5rem;
+    border-top: 1px dashed var(--border-color);
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+}
+
+.task-link i {
+    color: var(--link-color);
+}
+
+/* Estilos para o modal */
+.modal-content {
+    background-color: var(--surface-color);
+    border: 2px solid var(--border-color);
+    border-radius: 10px;
+    color: var(--text-primary);
+}
+
+.modal-header {
+    border-bottom: 2px solid var(--border-color);
+    background-color: var(--background-color);
+}
+
+.modal-footer {
+    border-top: 2px solid var(--border-color);
+    background-color: var(--background-color);
+}
+
+.form-control, .form-select {
+    background-color: var(--background-color);
+    border: 2px solid var(--border-color);
+    color: var(--text-primary);
+    border-radius: 6px;
+}
+
+.form-control:focus, .form-select:focus {
+    background-color: var(--background-color);
+    border-color: var(--link-color);
+    color: var(--text-primary);
+    box-shadow: 0 0 0 0.25rem rgba(32, 172, 130, 0.25);
+}
+
+.btn-primary {
+    background-color: var(--link-color);
+    border-color: var(--link-color);
+}
+
+.btn-primary:hover {
+    background-color: var(--link-color-hover);
+    border-color: var(--link-color-hover);
+}
+
+.btn-secondary {
+    background-color: var(--border-color);
+    border-color: var(--border-color);
+}
+
+.btn-danger {
+    background-color: #dc3545;
+    border-color: #dc3545;
+}
+
+/* Ajustes para responsividade */
+@media (max-width: 768px) {
+    .note-card {
+        margin-bottom: 1rem;
+    }
+
+    form {
+        display: block;
+    }
+    
+    .dashboard-section-title {
+        flex-direction: column;
+        align-items: flex-start !important;
+        gap: 1rem;
+    }
+    
+    .dashboard-section-title .d-flex.gap-3 {
+        width: 100%;
+    }
 }

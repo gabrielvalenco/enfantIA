@@ -6,10 +6,10 @@ use Illuminate\Http\Request;
 
 class ProfileController extends Controller
 {
-    public function edit()
+    public function index()
     {
         $user = auth()->user();
-        return view('profile.edit', compact('user'));
+        return view('profile.index', compact('user'));
     }
 
     public function update(Request $request)
@@ -22,7 +22,6 @@ class ProfileController extends Controller
             'phone' => 'nullable|string|max:20',
             'position' => 'nullable|string|max:100',
             'bio' => 'nullable|string|max:500',
-            'timezone' => 'required|string|timezone',
             'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
         ]);
 
@@ -31,21 +30,28 @@ class ProfileController extends Controller
             $user->avatar = $avatarPath;
         }
 
-        $user->update([
+        // Handle position field - if 'Outro' is selected, use the custom_position value
+        $position = $request->position;
+        if ($position === 'Outro' && $request->filled('custom_position')) {
+            $position = $request->custom_position;
+        }
+        
+        $updateData = [
             'name' => $request->name,
             'email' => $request->email,
             'phone' => $request->phone,
-            'position' => $request->position,
+            'position' => $position,
             'bio' => $request->bio,
-            'timezone' => $request->timezone,
-            'preferences' => [
-                'task_notifications' => $request->boolean('task_notifications'),
-                'deadline_reminders' => $request->boolean('deadline_reminders'),
-                'weekly_summary' => $request->boolean('weekly_summary')
-            ]
-        ]);
+            'preferences' => $user->preferences ?? []
+        ];
+        
+        if ($request->hasFile('avatar')) {
+            $updateData['avatar'] = $user->avatar;
+        }
+        
+        $user->update($updateData);
 
-        return redirect()->route('profile.edit')
+        return redirect()->route('profile.index')
             ->with('success', 'Perfil atualizado com sucesso!');
     }
 }
