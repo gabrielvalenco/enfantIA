@@ -34,11 +34,44 @@
     --edit-color-hover: #FFD700;
     --delete-color-hover: #FF4C4C;
     --complete-color-hover: #4CAF50;
+    
+    /* Transition for theme changes */
+    --transition-speed: 0.3s;
+}
+
+/* Light theme colors */
+[data-theme="light"] {
+    /* General Colors */
+    --background-color: #f5f5f5;
+    --surface-color: #ffffff;
+    --card-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    --border-color: #e0e0e0;
+    --button-color: #f5f5f5;
+    
+    /* General Colors Hover */
+    --background-color-hover: #e8e8e8;
+    --border-hover: #c0c0c0;
+    --button-hover: #e8e8e8;
+
+    /* Text Colors */
+    --text-color: #555555;
+    --text-primary: #333333;
+    --text-secondary: #6C757D;
+    --link-color: rgb(32, 172, 130);
+
+    /* Text Colors Hover */
+    --text-color-hover: #333333;
+    --text-primary-hover: #000000;
+    --text-secondary-hover: #495057;
+    --link-color-hover: rgb(29, 248, 182);
+
+    /* Action Colors remain the same */
 }
 
 html, body {
     height: 100%;
     margin: 0;
+    transition: background-color var(--transition-speed) ease, color var(--transition-speed) ease;
     padding: 0;
     scroll-behavior: smooth;
 }
@@ -212,13 +245,30 @@ h1, h2, h3, h4, h5, h6 {
     align-items: center;
     justify-content: center;
     font-size: 1.5rem;
-    color: var(--text-primary);
+    color: white; /* Default icon color */
+    transition: all 0.3s ease;
 }
 
-.status-card-icon.pending { background-color: var(--link-color); }
-.status-card-icon.completed { background-color: var(--link-color); }
-.status-card-icon.urgent { background-color: var(--link-color); }
-.status-card-icon.categories { background-color: var(--link-color); }
+/* Background and icon colors for different status cards */
+.status-card-icon.pending { 
+    background-color: #4e73df; /* Blue for pending tasks */
+    color: white;
+}
+
+.status-card-icon.completed { 
+    background-color: #1cc88a; /* Green for completed tasks */
+    color: white;
+}
+
+.status-card-icon.urgent { 
+    background-color: #e74a3b; /* Red for urgent tasks */
+    color: white;
+}
+
+.status-card-icon.categories { 
+    background-color: #f6c23e; /* Yellow for categories */
+    color: white;
+}
 
 
 
@@ -718,4 +768,36 @@ table tr:hover td {
         margin-top: 10px !important;
     }
 
+}
+
+/* Theme Toggle Button */
+.theme-toggle {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background-color: var(--surface-color);
+    border: 2px solid var(--border-color);
+    color: var(--text-primary);
+    cursor: pointer;
+    font-size: 1.2rem;
+    padding: 0;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color var(--transition-speed) ease, 
+                color var(--transition-speed) ease,
+                transform 0.3s ease,
+                box-shadow 0.3s ease;
+    z-index: 1000;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.theme-toggle:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+    background-color: var(--background-color-hover);
+    border-color: var(--border-hover);
 }

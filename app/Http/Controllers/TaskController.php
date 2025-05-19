@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Task;
 use App\Models\Category;
+use App\Models\Group;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 
@@ -11,7 +12,13 @@ class TaskController extends Controller
 {
     public function index()
     {
-        $tasks = auth()->user()->tasks()->with('categories')->where('status', false)->get();
+        // Buscar apenas tarefas pessoais (sem grupo)
+        $tasks = auth()->user()->tasks()
+            ->with('categories')
+            ->where('status', false)
+            ->whereNull('group_id') // Apenas tarefas sem grupo
+            ->get();
+            
         $nearDeadlineTasks = $tasks->filter(function ($task) {
             $dueDate = Carbon::parse($task->due_date);
             $now = now();
@@ -22,10 +29,26 @@ class TaskController extends Controller
         return view('tasks.index', compact('tasks', 'nearDeadlineTasks'));
     }
 
-    public function create()
+    public function create(Request $request)
     {
         $categories = Category::where('user_id', auth()->id())->get();
-        return view('tasks.create', compact('categories'));
+        
+        // Se estiver criando uma tarefa para um grupo, adiciona o ID do grupo à view
+        $groupId = $request->input('group_id');
+        $isGroupTask = !empty($groupId);
+        $groupName = null;
+        
+        if ($isGroupTask) {
+            // Verifica se o grupo existe e se o usuário é membro
+            $group = Group::find($groupId);
+            if ($group && $group->isMember(auth()->user())) {
+                $groupName = $group->name;
+            } else {
+                return redirect()->route('dashboard')->with('error', 'Você não tem permissão para criar tarefas neste grupo.');
+            }
+        }
+        
+        return view('tasks.create', compact('categories', 'isGroupTask', 'groupName'));
     }
 
     public function store(Request $request)
@@ -192,7 +215,13 @@ class TaskController extends Controller
 
     public function completed()
     {
-        $tasks = auth()->user()->tasks()->with('categories')->where('status', true)->get();
+        // Buscar apenas tarefas pessoais concluídas (sem grupo)
+        $tasks = auth()->user()->tasks()
+            ->with('categories')
+            ->where('status', true)
+            ->whereNull('group_id') // Apenas tarefas sem grupo
+            ->get();
+            
         return view('tasks.completed', compact('tasks'));
     }
 
@@ -237,15 +266,16 @@ class TaskController extends Controller
      */
     public function clearSelected(Request $request)
     {
-        if (!$request->has('selected_tasks') || !is_array($request->selected_tasks)) {
+        if (!$request->has('task_ids') || !is_array($request->task_ids)) {
             return redirect()->route('tasks.completed')->with('error', 'Nenhuma tarefa selecionada para excluir.');
         }
 
         try {
-            // Filtra apenas as tarefas concluídas e que pertencem ao usuário atual
+            // Filtra apenas as tarefas pessoais concluídas (sem grupo) que pertencem ao usuário atual
             $tasks = Task::where('status', true)
                 ->where('user_id', auth()->id())
-                ->whereIn('id', $request->selected_tasks)
+                ->whereNull('group_id') // Apenas tarefas sem grupo
+                ->whereIn('id', $request->task_ids)
                 ->get();
 
             foreach ($tasks as $task) {
@@ -273,10 +303,12 @@ class TaskController extends Controller
         try {
             $count = Task::where('status', true)
                 ->where('user_id', auth()->id())
+                ->whereNull('group_id') // Apenas tarefas sem grupo
                 ->count();
 
             Task::where('status', true)
                 ->where('user_id', auth()->id())
+                ->whereNull('group_id') // Apenas tarefas sem grupo
                 ->delete();
 
             $message = $count > 1 
@@ -302,9 +334,10 @@ class TaskController extends Controller
         }
 
         try {
-            // Filtra apenas as tarefas pendentes que pertencem ao usuário atual
+            // Filtra apenas as tarefas pessoais pendentes que pertencem ao usuário atual
             $tasks = Task::where('status', false)
                 ->where('user_id', auth()->id())
+                ->whereNull('group_id') // Apenas tarefas sem grupo
                 ->whereIn('id', $request->task_ids)
                 ->get();
 
@@ -357,8 +390,9 @@ class TaskController extends Controller
         }
 
         try {
-            // Filtra apenas as tarefas que pertencem ao usuário atual
+            // Filtra apenas as tarefas pessoais que pertencem ao usuário atual
             $tasks = Task::where('user_id', auth()->id())
+                ->whereNull('group_id') // Apenas tarefas sem grupo
                 ->whereIn('id', $request->task_ids)
                 ->get();
 

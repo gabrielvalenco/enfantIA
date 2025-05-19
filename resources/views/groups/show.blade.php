@@ -3,7 +3,7 @@
 @section('content')
 
 <link rel="icon" href="{{ asset('favicon.svg') }}" type="image/svg+xml">
-<link rel="stylesheet" href="{{ asset('css/group-style.css') }}">
+<link rel="stylesheet" href="{{ asset('css/group/unique-group.css') }}">
 
 <div class="container">
     <div class="dashboard-section-title mb-4">
@@ -21,11 +21,11 @@
                 </button>
             @endif
             @if($group->isAdmin(Auth::user()))
-            <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteGroupModal">
+            <button type="button" class="btn btn-danger btn-sm" id="delete-group-btn">
                 <i class="fas fa-trash"></i> Excluir Grupo
             </button>
             @else
-            <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#leaveGroupModal">
+            <button type="button" class="btn btn-danger btn-sm" id="leave-group-btn">
                 <i class="fas fa-sign-out-alt"></i> Sair do Grupo
             </button>
             @endif
@@ -151,13 +151,20 @@
                 <div class="modal-body">
                     <div class="mb-3">
                         <label for="email" class="form-label">Email do novo membro</label>
-                        <input type="email" class="form-control" id="email" name="email" required>
+                        <div class="input-group">
+                            <input type="email" class="form-control" id="email" name="email" autocomplete="off">
+                            <button type="button" class="btn btn-primary" id="checkEmailBtn">Verificar</button>
+                        </div>
                         <div id="emailFeedback" class="mt-2"></div>
+                    </div>
+                    
+                    <div class="alert alert-info small">
+                        <i class="fas fa-info-circle"></i> Digite o email do usuário que deseja convidar para o grupo.
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="submit" class="btn btn-primary" id="addMemberBtn">Adicionar</button>
+                    <button type="submit" class="btn btn-primary" id="addMemberBtn" disabled>Adicionar</button>
                 </div>
             </form>
         </div>
@@ -188,31 +195,173 @@
     </div>
 </div>
 
+<!-- Modal Sair do Grupo -->
+<div class="modal fade" id="leaveGroupModal" tabindex="-1" aria-labelledby="leaveGroupModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="leaveGroupModalLabel">Sair do Grupo</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="{{ route('groups.leave', $group) }}" method="POST">
+                @csrf
+                @method('DELETE')
+                <div class="modal-body">
+                    <p>Tem certeza que deseja sair deste grupo?</p>
+                    <p class="text-danger"><strong>Atenção:</strong> Você não terá mais acesso às tarefas e informações do grupo.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-danger">Confirmar Saída</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 @push('scripts')
+<!-- SweetAlert2 CDN -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <script>
     document.addEventListener('DOMContentLoaded', function() {
+        // Botão para excluir grupo
+        const deleteGroupBtn = document.getElementById('delete-group-btn');
+        if (deleteGroupBtn) {
+            deleteGroupBtn.addEventListener('click', function() {
+                Swal.fire({
+                    title: 'Tem certeza?',
+                    text: 'Esta ação excluirá permanentemente o grupo e todas as suas tarefas!',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: 'var(--link-color)',
+                    cancelButtonColor: 'var(--text-secondary)',
+                    confirmButtonText: 'Sim, excluir!',
+                    cancelButtonText: 'Cancelar',
+                    background: getComputedStyle(document.documentElement).getPropertyValue('--surface-color'),
+                    color: getComputedStyle(document.documentElement).getPropertyValue('--text-primary'),
+                    customClass: {
+                        confirmButton: 'swal-confirm-button',
+                        cancelButton: 'swal-cancel-button',
+                        title: 'swal-title',
+                        htmlContainer: 'swal-html-container'
+                    }
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Criar e enviar formulário via JavaScript
+                        const form = document.createElement('form');
+                        form.method = 'POST';
+                        form.action = '{{ route("groups.delete", $group) }}';
+                        form.style.display = 'none';
+                        
+                        const csrfToken = document.createElement('input');
+                        csrfToken.type = 'hidden';
+                        csrfToken.name = '_token';
+                        csrfToken.value = '{{ csrf_token() }}';
+                        form.appendChild(csrfToken);
+                        
+                        const methodField = document.createElement('input');
+                        methodField.type = 'hidden';
+                        methodField.name = '_method';
+                        methodField.value = 'DELETE';
+                        form.appendChild(methodField);
+                        
+                        document.body.appendChild(form);
+                        form.submit();
+                    }
+                });
+            });
+        }
+        
+        // Botão para sair do grupo
+        const leaveGroupBtn = document.getElementById('leave-group-btn');
+        if (leaveGroupBtn) {
+            leaveGroupBtn.addEventListener('click', function() {
+                Swal.fire({
+                    title: 'Confirmar saída',
+                    text: 'Tem certeza que deseja sair deste grupo? Você não terá mais acesso às tarefas e informações do grupo.',
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonColor: 'var(--link-color)',
+                    cancelButtonColor: 'var(--text-secondary)',
+                    confirmButtonText: 'Sim, sair',
+                    cancelButtonText: 'Cancelar',
+                    background: getComputedStyle(document.documentElement).getPropertyValue('--surface-color'),
+                    color: getComputedStyle(document.documentElement).getPropertyValue('--text-primary'),
+                    customClass: {
+                        confirmButton: 'swal-confirm-button',
+                        cancelButton: 'swal-cancel-button',
+                        title: 'swal-title',
+                        htmlContainer: 'swal-html-container'
+                    }
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Criar e enviar formulário via JavaScript
+                        const form = document.createElement('form');
+                        form.method = 'POST';
+                        form.action = '{{ route("groups.leave", $group) }}';
+                        form.style.display = 'none';
+                        
+                        const csrfToken = document.createElement('input');
+                        csrfToken.type = 'hidden';
+                        csrfToken.name = '_token';
+                        csrfToken.value = '{{ csrf_token() }}';
+                        form.appendChild(csrfToken);
+                        
+                        const methodField = document.createElement('input');
+                        methodField.type = 'hidden';
+                        methodField.name = '_method';
+                        methodField.value = 'DELETE';
+                        form.appendChild(methodField);
+                        
+                        document.body.appendChild(form);
+                        form.submit();
+                    }
+                });
+            });
+        }
+        
         const emailInput = document.getElementById('email');
         const emailFeedback = document.getElementById('emailFeedback');
         const addMemberBtn = document.getElementById('addMemberBtn');
+        const checkEmailBtn = document.getElementById('checkEmailBtn');
         const addMemberForm = document.getElementById('addMemberForm');
         const currentUserEmail = "{{ Auth::user()->email }}";
         const groupId = "{{ $group->id }}";
         
-        if (emailInput) {
-            emailInput.addEventListener('blur', validateEmail);
-            emailInput.addEventListener('input', function() {
-                // Clear validation when user starts typing again
-                emailInput.classList.remove('is-invalid', 'is-valid');
-                emailFeedback.innerHTML = '';
-                addMemberBtn.disabled = false;
-            });
-            
-            addMemberForm.addEventListener('submit', function(e) {
-                if (emailInput.classList.contains('is-invalid')) {
-                    e.preventDefault();
+        // Inicialmente, desabilitar o botão de adicionar
+        addMemberBtn.disabled = true;
+        
+        // Listener para o botão de verificar email
+        checkEmailBtn.addEventListener('click', validateEmail);
+        
+        // Listener para limpar a validação quando o usuário digita
+        emailInput.addEventListener('input', function() {
+            emailInput.classList.remove('is-invalid', 'is-valid');
+            emailFeedback.innerHTML = '';
+            addMemberBtn.disabled = true; // Manter desabilitado até validar
+        });
+        
+        // Listener para pressionar Enter no campo de email
+        emailInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                validateEmail();
+            }
+        });
+        
+        // Prevenir submissão se o email for inválido
+        addMemberForm.addEventListener('submit', function(e) {
+            if (emailInput.classList.contains('is-invalid') || !emailInput.classList.contains('is-valid')) {
+                e.preventDefault();
+                
+                if (!emailInput.value.trim()) {
+                    showError('Por favor, insira um email para convidar.');
+                } else if (!emailInput.classList.contains('is-valid')) {
+                    showError('Por favor, verifique o email antes de adicionar.');
                 }
-            });
-        }
+            }
+        });
         
         function validateEmail() {
             const email = emailInput.value.trim();
@@ -220,15 +369,25 @@
             // Reset validation
             emailInput.classList.remove('is-invalid', 'is-valid');
             emailFeedback.innerHTML = '';
-            addMemberBtn.disabled = false;
+            addMemberBtn.disabled = true;
             
             if (email === '') {
+                showError('Por favor, insira um email para convidar.');
                 return;
             }
+            
+            // Mostrar mensagem de carregamento
+            emailFeedback.innerHTML = `<div class="alert alert-info"><i class="fas fa-spinner fa-spin"></i> Verificando email...</div>`;
+            
+            // Desabilitar inputs durante a verificação
+            emailInput.disabled = true;
+            checkEmailBtn.disabled = true;
             
             // Check if user is trying to invite themselves
             if (email.toLowerCase() === currentUserEmail.toLowerCase()) {
                 showError('Você não pode convidar a si mesmo para o grupo.');
+                emailInput.disabled = false;
+                checkEmailBtn.disabled = false;
                 return;
             }
             
@@ -236,6 +395,8 @@
             const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             if (!emailPattern.test(email)) {
                 showError('Por favor, insira um email válido.');
+                emailInput.disabled = false;
+                checkEmailBtn.disabled = false;
                 return;
             }
             
@@ -243,28 +404,37 @@
             fetch(`/api/check-user?email=${encodeURIComponent(email)}&group_id=${groupId}`)
                 .then(response => response.json())
                 .then(data => {
+                    // Habilitar inputs novamente
+                    emailInput.disabled = false;
+                    checkEmailBtn.disabled = false;
+                    
                     if (!data.exists) {
                         showError('Este usuário não existe no sistema.');
                     } else if (data.inGroup) {
                         showError('Este usuário já é membro do grupo.');
+                    } else if (data.hasPendingInvitation) {
+                        showError('Este usuário já possui um convite pendente para este grupo.');
                     } else {
-                        showSuccess('Usuário encontrado! Um convite será enviado.');
+                        showSuccess('Usuário encontrado! Clique em "Adicionar" para enviar o convite.');
                     }
                 })
                 .catch(error => {
                     console.error('Error checking user:', error);
+                    showError('Ocorreu um erro ao verificar o usuário. Tente novamente.');
+                    emailInput.disabled = false;
+                    checkEmailBtn.disabled = false;
                 });
         }
         
         function showError(message) {
             emailInput.classList.add('is-invalid');
-            emailFeedback.innerHTML = `<div class="alert alert-danger">${message}</div>`;
+            emailFeedback.innerHTML = `<div class="alert alert-danger"><i class="fas fa-exclamation-circle"></i> ${message}</div>`;
             addMemberBtn.disabled = true;
         }
         
         function showSuccess(message) {
             emailInput.classList.add('is-valid');
-            emailFeedback.innerHTML = `<div class="alert alert-success">${message}</div>`;
+            emailFeedback.innerHTML = `<div class="alert alert-success"><i class="fas fa-check-circle"></i> ${message}</div>`;
             addMemberBtn.disabled = false;
         }
     });

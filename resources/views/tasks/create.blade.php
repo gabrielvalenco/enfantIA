@@ -178,7 +178,7 @@
             }
         }
 
-        // Customize date input
+        // Customize date input and add validation for preventing past dates
         document.addEventListener('DOMContentLoaded', function() {
             const dateInput = document.getElementById('due_date');
             
@@ -197,6 +197,32 @@
             
             // Set as default value
             dateInput.value = `${year}-${month}-${day}T${hours}:${minutes}`;
+            
+            // Set min attribute to today's date
+            const today = new Date();
+            const todayYear = today.getFullYear();
+            const todayMonth = String(today.getMonth() + 1).padStart(2, '0');
+            const todayDay = String(today.getDate()).padStart(2, '0');
+            const todayHours = String(today.getHours()).padStart(2, '0');
+            const todayMinutes = String(today.getMinutes()).padStart(2, '0');
+            
+            // Set min attribute to current datetime
+            dateInput.min = `${todayYear}-${todayMonth}-${todayDay}T${todayHours}:${todayMinutes}`;
+            
+            // Add event listener to validate date
+            dateInput.addEventListener('change', validateDateTime);
+            
+            // Validate the date on form submission
+            function validateDateTime() {
+                const selectedDate = new Date(dateInput.value);
+                const currentDate = new Date();
+                
+                if (selectedDate < currentDate) {
+                    dateInput.setCustomValidity('Não é possível criar tarefas com datas passadas');
+                } else {
+                    dateInput.setCustomValidity('');
+                }
+            }
         });
 
         // Bootstrap Form Validation

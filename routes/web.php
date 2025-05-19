@@ -89,7 +89,7 @@ Route::middleware('auth')->group(function () {
         Route::post('/groups/{group}/members', [GroupController::class, 'addMember'])->name('groups.add-member');
         Route::delete('/groups/{group}/members', [GroupController::class, 'removeMember'])->name('groups.remove-member');
         Route::delete('/groups/{group}/delete', [GroupController::class, 'delete'])->name('groups.delete');
-        Route::get('/groups/{group}/leave', [GroupController::class, 'leave'])->name('groups.leave');
+        Route::delete('/groups/{group}/leave', [GroupController::class, 'leave'])->name('groups.leave');
         
         // Group Invitations
         Route::get('/invitations', [GroupInvitationController::class, 'index'])->name('invitations.index');
@@ -101,3 +101,11 @@ Route::middleware('auth')->group(function () {
 Route::get('/portfolio', function () {
     return view('portfolio');
 })->name('portfolio');
+
+Route::get('/terms', function () {
+    return view('terms.terms');
+})->name('terms');
+
+Route::get('/politic', function () {
+    return view('terms.politic');
+})->name('politic');

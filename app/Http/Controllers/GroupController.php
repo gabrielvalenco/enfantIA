@@ -47,13 +47,20 @@ class GroupController extends Controller
                     $user = User::where('email', $email)->first();
                     // Skip if the user is trying to invite themselves
                     if ($user && $user->id !== Auth::id()) {
-                        // Create invitation
-                        GroupInvitation::create([
-                            'group_id' => $group->id,
-                            'user_id' => $user->id,
-                            'status' => 'pending'
-                        ]);
-                        $invitedMembers[] = $email;
+                        // Check if there's already a pending invitation
+                        $existingInvitation = GroupInvitation::where('group_id', $group->id)
+                            ->where('user_id', $user->id)
+                            ->exists();
+                        
+                        if (!$existingInvitation) {
+                            // Create invitation
+                            GroupInvitation::create([
+                                'group_id' => $group->id,
+                                'user_id' => $user->id,
+                                'status' => 'pending'
+                            ]);
+                            $invitedMembers[] = $email;
+                        }
                     }
                 }
             }
@@ -158,8 +165,15 @@ class GroupController extends Controller
 
     public function leave(Group $group)
     {
+        // Remove o usuário da lista de membros do grupo
         $group->members()->detach(Auth::id());
+        
+        // Remove todos os convites anteriores do mesmo usuário para este grupo
+        GroupInvitation::where('group_id', $group->id)
+            ->where('user_id', Auth::id())
+            ->delete();
+        
         return redirect()->route('groups.index')
-            ->with('success', 'Saída realizada com sucesso!');
+            ->with('success', 'Saída realizada com sucesso!');
     }
 }

@@ -14,8 +14,8 @@
             <div class="footer-section terms">
                 <h3 class="footer-title">Termos e Politicas</h3>
                 <ul>
-                    <li><a href="#">Termos de Uso</a></li>
-                    <li><a href="#">Privacidade</a></li>
+                    <li><a href="{{ route('terms') }}">Termos de Uso</a></li>
+                    <li><a href="{{ route('politic') }}">Privacidade</a></li>
                 </ul>
             </div>
             <div class="footer-section links">
