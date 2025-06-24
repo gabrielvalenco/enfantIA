@@ -11,6 +11,37 @@ function completeTask(taskId) {
 }
 
 document.addEventListener('DOMContentLoaded', function() {
+    // Theme toggle functionality
+    const themeToggle = document.getElementById('theme-toggle');
+    if (themeToggle) {
+        const themeIcon = themeToggle.querySelector('i');
+        
+        // Check if user previously set a theme preference
+        const currentTheme = localStorage.getItem('theme') || 'dark';
+        
+        // Apply the saved theme or default to dark
+        document.documentElement.setAttribute('data-theme', currentTheme);
+        updateThemeIcon(currentTheme);
+        
+        // Toggle theme when button is clicked
+        themeToggle.addEventListener('click', function() {
+            // Get current theme
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            
+            // Switch to the opposite theme
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            
+            // Update the theme
+            document.documentElement.setAttribute('data-theme', newTheme);
+            
+            // Save the theme preference
+            localStorage.setItem('theme', newTheme);
+            
+            // Update the icon
+            updateThemeIcon(newTheme);
+        });
+    }
+    
     var calendarEl = document.getElementById('calendar');
     if (calendarEl) {
         var calendar = new FullCalendar.Calendar(calendarEl, {
@@ -89,9 +120,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
                 urgencyElement.style.fontWeight = 'bold';
                 
-                document.getElementById('editTaskBtn').href = props.editUrl;
-                document.getElementById('deleteTaskBtn').onclick = () => deleteTask(event.id, props.deleteUrl);
-                document.getElementById('completeTaskBtn').setAttribute('data-task-id', event.id);
+                // Update view task button with the proper task ID
+                const viewTaskBtn = document.querySelector('.view-task-btn');
+                if (viewTaskBtn) {
+                    viewTaskBtn.setAttribute('data-task-id', event.id);
+                    viewTaskBtn.href = viewTaskBtn.href.replace(':taskId', event.id);
+                }
                 
                 new bootstrap.Modal(document.getElementById('taskModal')).show();
             }
@@ -141,4 +175,16 @@ function hexToRgb(hex) {
         g: parseInt(result[2], 16),
         b: parseInt(result[3], 16)
     } : null;
+}
+
+// Function to update the theme icon
+function updateThemeIcon(theme) {
+    const themeIcon = document.querySelector('#theme-toggle i');
+    if (!themeIcon) return;
+    
+    if (theme === 'dark') {
+        themeIcon.className = 'fas fa-sun';
+    } else {
+        themeIcon.className = 'fas fa-moon';
+    }
 }

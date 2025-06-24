@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>Lista de Tarefas</title>
+    <title>{{ $title ?? 'Lista de Tarefas' }}</title>
 
     <link rel="icon" href="{{ asset('favicon.svg') }}" type="image/svg+xml">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
@@ -59,14 +59,23 @@
         @endforeach
 
         <div class="table-header">
-            <h1>Lista de Tarefas</h1>
+            <h1>{{ $title ?? 'Lista de Tarefas' }}</h1>
             <div class="table-actions">
-                <a class="back-button" href="{{ route('dashboard') }}">
-                    Voltar ao Dashboard
-                </a>
-                <a class="add-task-button" href="{{ route('tasks.create') }}">
-                    <i class="fas fa-plus-circle"></i> Nova Tarefa
-                </a>
+                @if(isset($group))
+                    <a class="back-button" href="{{ route('groups.show', $group->id) }}">
+                        <i class="fas fa-arrow-left"></i> Voltar ao Grupo
+                    </a>
+                    <a class="add-task-button" href="{{ route('tasks.create', ['group_id' => $group->id]) }}">
+                        <i class="fas fa-plus-circle"></i> Nova Tarefa no Grupo
+                    </a>
+                @else
+                    <a class="back-button" href="{{ route('dashboard') }}">
+                        Voltar ao Dashboard
+                    </a>
+                    <a class="add-task-button" href="{{ route('tasks.create') }}">
+                        <i class="fas fa-plus-circle"></i> Nova Tarefa
+                    </a>
+                @endif
             </div>
         </div>
 
@@ -198,7 +207,7 @@
                                                 @if($hoursUntilDue <= 24 && $hoursUntilDue > 0)
                                                     <span class="text-center badge-urgent p-2">
                                                         <i class="fas fa-exclamation-circle"></i>
-                                                        Alta Prioridade
+                                                        Prioridade
                                                     </span>
                                                 @else
                                                     <span class="badge bg-danger p-2">Alta</span>
@@ -244,6 +253,7 @@
     <div class="selection-mode-active" id="selection-mode-indicator">
         <span class="selection-count">0 selecionada(s)</span>
         <button class="btn btn-confirm" id="confirm-selection" onclick="confirmSelection()">Confirmar</button>
+        <button class="btn btn-warning" id="mark-all-btn" onclick="markAllTasks()">Marcar todas</button>
         <button class="btn btn-cancel" id="cancel-selection" onclick="exitSelectionMode()">Cancelar</button>
     </div>
     

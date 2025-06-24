@@ -10,15 +10,39 @@ use Carbon\Carbon;
 
 class TaskController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        // Buscar apenas tarefas pessoais (sem grupo)
-        $tasks = auth()->user()->tasks()
-            ->with('categories')
-            ->where('status', false)
-            ->whereNull('group_id') // Apenas tarefas sem grupo
-            ->get();
+        // Verificar se é para mostrar tarefas de um grupo específico
+        $groupId = $request->input('group_id');
+        $group = null;
+        
+        if ($groupId) {
+            // Buscar o grupo e verificar se o usuário é membro
+            $group = Group::find($groupId);
             
+            if (!$group || !$group->isMember(auth()->user())) {
+                return redirect()->route('dashboard')
+                    ->with('error', 'Você não tem permissão para visualizar as tarefas deste grupo.');
+            }
+            
+            // Buscar tarefas do grupo
+            $tasks = $group->tasks()
+                ->with(['categories', 'assignedUser'])
+                ->where('status', false)
+                ->get();
+                
+            $title = "Tarefas do Grupo: {$group->name}";
+        } else {
+            // Buscar apenas tarefas pessoais (sem grupo)
+            $tasks = auth()->user()->tasks()
+                ->with('categories')
+                ->where('status', false)
+                ->whereNull('group_id') // Apenas tarefas sem grupo
+                ->get();
+                
+            $title = "Minhas Tarefas";
+        }
+        
         $nearDeadlineTasks = $tasks->filter(function ($task) {
             $dueDate = Carbon::parse($task->due_date);
             $now = now();
@@ -26,7 +50,7 @@ class TaskController extends Controller
             return $hoursUntilDue <= 24 && $hoursUntilDue > 0;
         });
 
-        return view('tasks.index', compact('tasks', 'nearDeadlineTasks'));
+        return view('tasks.index', compact('tasks', 'nearDeadlineTasks', 'group', 'title'));
     }
 
     public function create(Request $request)
@@ -330,16 +354,32 @@ class TaskController extends Controller
     public function completeMultiple(Request $request)
     {
         if (!$request->has('task_ids') || !is_array($request->task_ids)) {
-            return redirect()->route('tasks.index')->with('error', 'Nenhuma tarefa selecionada para concluir.');
+            return redirect()->back()->with('error', 'Nenhuma tarefa selecionada para concluir.');
         }
 
         try {
-            // Filtra apenas as tarefas pessoais pendentes que pertencem ao usuário atual
-            $tasks = Task::where('status', false)
-                ->where('user_id', auth()->id())
-                ->whereNull('group_id') // Apenas tarefas sem grupo
-                ->whereIn('id', $request->task_ids)
-                ->get();
+            $groupId = $request->input('group_id');
+            $redirectRoute = $groupId ? 
+                redirect()->route('tasks.index', ['group_id' => $groupId]) : 
+                redirect()->route('tasks.index');
+            
+            $query = Task::where('status', false)
+                ->whereIn('id', $request->task_ids);
+                
+            // Se estiver em um grupo, filtra por tarefas do grupo
+            // Se não, filtra por tarefas pessoais
+            if ($groupId) {
+                $group = Group::find($groupId);
+                if (!$group || !$group->isMember(auth()->user())) {
+                    return $redirectRoute->with('error', 'Você não tem permissão para realizar esta ação.');
+                }
+                $query->where('group_id', $groupId);
+            } else {
+                $query->where('user_id', auth()->id())
+                      ->whereNull('group_id');
+            }
+            
+            $tasks = $query->get();
 
             $completedCount = 0;
             $incompleteSubtasks = 0;
@@ -371,9 +411,9 @@ class TaskController extends Controller
                 $type = 'error';
             }
 
-            return redirect()->route('tasks.index')->with($type, $message);
+            return $redirectRoute->with($type, $message);
         } catch (\Exception $e) {
-            return redirect()->route('tasks.index')->with('error', 'Erro ao concluir tarefas. Por favor, tente novamente.');
+            return redirect()->back()->with('error', 'Erro ao concluir tarefas. Por favor, tente novamente.');
         }
     }
 
@@ -386,15 +426,31 @@ class TaskController extends Controller
     public function deleteMultiple(Request $request)
     {
         if (!$request->has('task_ids') || !is_array($request->task_ids)) {
-            return redirect()->route('tasks.index')->with('error', 'Nenhuma tarefa selecionada para excluir.');
+            return redirect()->back()->with('error', 'Nenhuma tarefa selecionada para excluir.');
         }
 
         try {
-            // Filtra apenas as tarefas pessoais que pertencem ao usuário atual
-            $tasks = Task::where('user_id', auth()->id())
-                ->whereNull('group_id') // Apenas tarefas sem grupo
-                ->whereIn('id', $request->task_ids)
-                ->get();
+            $groupId = $request->input('group_id');
+            $redirectRoute = $groupId ? 
+                redirect()->route('tasks.index', ['group_id' => $groupId]) : 
+                redirect()->route('tasks.index');
+            
+            $query = Task::whereIn('id', $request->task_ids);
+                
+            // Se estiver em um grupo, filtra por tarefas do grupo
+            // Se não, filtra por tarefas pessoais
+            if ($groupId) {
+                $group = Group::find($groupId);
+                if (!$group || !$group->isMember(auth()->user())) {
+                    return $redirectRoute->with('error', 'Você não tem permissão para realizar esta ação.');
+                }
+                $query->where('group_id', $groupId);
+            } else {
+                $query->where('user_id', auth()->id())
+                      ->whereNull('group_id');
+            }
+            
+            $tasks = $query->get();
 
             foreach ($tasks as $task) {
                 $task->delete();
@@ -405,9 +461,9 @@ class TaskController extends Controller
                 ? "{$count} tarefas excluídas com sucesso!" 
                 : "Tarefa excluída com sucesso!";
 
-            return redirect()->route('tasks.index')->with('success', $message);
+            return $redirectRoute->with('success', $message);
         } catch (\Exception $e) {
-            return redirect()->route('tasks.index')->with('error', 'Erro ao excluir tarefas. Por favor, tente novamente.');
+            return redirect()->back()->with('error', 'Erro ao excluir tarefas. Por favor, tente novamente.');
         }
     }
 }

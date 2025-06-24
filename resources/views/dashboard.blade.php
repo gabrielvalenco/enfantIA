@@ -291,15 +291,9 @@
                         <p id="taskDescription" class="text-muted mb-3"></p>
                     </div>
                     <div class="modal-actions d-flex justify-content-center gap-1">
-                        <a href="#" id="editTaskBtn" class="btn btn-sm btn-warning">
-                            <i class="fas fa-edit"></i>
+                        <a href="{{ route('tasks.index', ['open_task' => ':taskId']) }}" class="btn btn-sm btn-primary view-task-btn" data-task-id="">
+                            <i class="fas fa-eye"></i> Visualizar
                         </a>
-                        <button id="completeTaskBtn" class="btn btn-sm btn-success" data-task-id="">
-                            <i class="fas fa-check"></i>
-                        </button>
-                        <button id="deleteTaskBtn" class="btn btn-sm btn-danger">
-                            <i class="fas fa-trash"></i>
-                        </button>
                     </div>
                 </div>
             </div>
@@ -349,47 +343,5 @@
 <button id="theme-toggle" class="theme-toggle" aria-label="Toggle dark/light mode">
     <i class="fas fa-moon"></i>
 </button>
-
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Get the theme toggle button
-        const themeToggle = document.getElementById('theme-toggle');
-        const themeIcon = themeToggle.querySelector('i');
-        
-        // Check if user previously set a theme preference
-        const currentTheme = localStorage.getItem('theme') || 'dark';
-        
-        // Apply the saved theme or default to dark
-        document.documentElement.setAttribute('data-theme', currentTheme);
-        updateThemeIcon(currentTheme);
-        
-        // Toggle theme when button is clicked
-        themeToggle.addEventListener('click', function() {
-            // Get current theme
-            const currentTheme = document.documentElement.getAttribute('data-theme');
-            
-            // Switch to the opposite theme
-            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-            
-            // Update the theme
-            document.documentElement.setAttribute('data-theme', newTheme);
-            
-            // Save the theme preference
-            localStorage.setItem('theme', newTheme);
-            
-            // Update the icon
-            updateThemeIcon(newTheme);
-        });
-        
-        // Function to update the theme icon
-        function updateThemeIcon(theme) {
-            if (theme === 'dark') {
-                themeIcon.className = 'fas fa-sun';
-            } else {
-                themeIcon.className = 'fas fa-moon';
-            }
-        }
-    });
-</script>
 
 @endsection
