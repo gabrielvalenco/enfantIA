@@ -64,8 +64,34 @@
     --text-primary-hover: #000000;
     --text-secondary-hover: #495057;
     --link-color-hover: rgb(29, 248, 182);
+}
 
-    /* Action Colors remain the same */
+/* Theme Toggle Button */
+.theme-toggle {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: var(--surface-color);
+    border: none;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    color: var(--text-primary);
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 999;
+    transition: all 0.3s ease;
+}
+
+.theme-toggle:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+    background-color: var(--background-color-hover);
+    border-color: var(--border-hover);
 }
 
 html, body {
@@ -77,82 +103,51 @@ html, body {
 
 body {
     font-family: 'Poppins', sans-serif;
-    color: var(--primary);
+    color: var(--text-primary);
+    background-color: var(--background-color);
 }
 
 h1, h2, h3, h4, h5, h6 {
-    color: var(--primary);
+    color: var(--text-primary);
     font-weight: 700;
 }
 
-/* CREATE-TAKS */
-.task-form-container {
-    max-width: 1200px;
+.container {
+    max-width: 1400px;
+    width: 100%;
     margin: 0 auto;
-    padding: 2rem;
+    padding: 0 1rem;
+    box-sizing: border-box;
 }
 
-.task-header {
-    margin-bottom: 2rem;    
+
+.table-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    border-bottom: 2px solid var(--border-color);
+    padding-top: 1rem;
+    padding-bottom:1.5rem;
 }
 
-.task-form-container button {
-    background-color: var(--primary);
-    border: none;
-}
-
-.task-form-container button:hover {
-    background-color: var(--primary-hover);
-    border: none;
-}
-
-.form-container {
-    background-color: white;
-    padding: 1rem;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.185);
-}
-
-.color-preview {
-    display: inline-block;
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    margin-right: 8px;
-    vertical-align: middle;
-    border: 2px solid #fff;
-    box-shadow: 0 0 0 1px #ccc;
-}
-
-.category-badge {
-    display: inline-block;
-    padding: 10px 15px;
-    border-radius: 20px;
-    font-size: 0.875rem;
-    color: #fff;
+.back-button {
+    color: var(--link-color);
+    text-decoration: none;
+    transition: all 0.3s ease;
     font-weight: 500;
-    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
 }
 
-.categories-column {
-    min-width: 150px;
+.back-button:hover {
+    color: var(--link-color-hover);
+    transform: translateX(-5px);
+    text-decoration: none;
 }
 
-.gap-2 {
-    gap: 0.75rem !important;
-}
-
-@media (max-width: 768px) {
-    body {
-        background-image: url('../images/task_nest_mobile_bg.png');
-        background-size: cover;
-        background-position: center;
-        background-repeat: no-repeat;
-    }
-
-    .container {
-        width: 450px;
-        margin: 0 auto;
-        padding: 0 15px;
-    }
+.back-button::before {
+    content: '←';
+    font-size: 1.2rem;
 }

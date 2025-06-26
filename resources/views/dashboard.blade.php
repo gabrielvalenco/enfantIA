@@ -336,6 +336,7 @@
         ];
     </script>
     <script src="{{ asset('js/dashboard/script.js') }}"></script>
+    <script src="{{ asset('js/script.js') }}"></script>
 </div>
 
 @include('layouts.footer')
