@@ -95,7 +95,7 @@
 }
 
 html, body {
-    height: 100%;
+    height: auto;
     margin: 0;
     padding: 0;
     scroll-behavior: smooth;
@@ -120,7 +120,6 @@ h1, h2, h3, h4, h5, h6 {
     box-sizing: border-box;
 }
 
-
 .table-header {
     display: flex;
     justify-content: space-between;
@@ -128,7 +127,7 @@ h1, h2, h3, h4, h5, h6 {
     margin-bottom: 1rem;
     border-bottom: 2px solid var(--border-color);
     padding-top: 1rem;
-    padding-bottom:1.5rem;
+    padding-bottom:1rem;
 }
 
 .back-button {
