@@ -17,7 +17,8 @@
             <h1>Criar Tarefa</h1>
             <div class="table-actions">
                 <a class="back-button" href="{{ route('dashboard') }}">
-                    Voltar ao Dashboard
+                    <span class="back-text">Voltar ao Dashboard</span>
+                    <i class="fas fa-sign-out-alt mobile-icon"></i>
                 </a>
             </div>
         </div>
@@ -28,7 +29,8 @@
             @if(request()->has('group_id'))
                 <input type="hidden" name="group_id" value="{{ request('group_id') }}">
             @endif
-
+            
+            <!-- Form content wrapper for responsive layout -->
             <div class="form-container">
                 <!-- Left Content -->
                 <div class="left-content">

@@ -41,6 +41,121 @@
     padding-left: 2%;
 }
 
+/* Back button styles */
+.mobile-icon {
+    display: none;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+    .container {
+        display: flex;
+        flex-direction: column;
+        padding: 12px;
+    }
+    
+    /* Ensure table header is always at the top */
+    .table-header {
+        position: relative;
+        z-index: 10;
+        margin-bottom: 1.5rem;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    .table-header .table-actions {
+        display: flex;
+        justify-content: flex-end;
+    }
+    
+    /* Show icon and hide text on mobile */
+    .back-button .mobile-icon {
+        display: inline-block;
+        font-size: 1.2rem;
+    }
+    
+    .back-button .back-text {
+        display: none;
+    }
+    
+    /* Remove the arrow before the back button on mobile */
+    .back-button::before {
+        content: '';
+    }
+    
+    form#task-form {
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .form-container {
+        flex-direction: column;
+        margin-top: 1rem;
+        margin-bottom: 1rem;
+    }
+    
+    .form-container::after {
+        display: none; /* Hide vertical divider on mobile */
+    }
+    
+    .left-content {
+        width: 100%;
+        max-width: 100%;
+        padding: 0;
+        margin-bottom: 2rem;
+    }
+    
+    .right-content {
+        width: 100%;
+        max-width: 100%;
+        padding: 0;
+    }
+    
+    .submit-container {
+        margin-top: 1.5rem;
+    }
+    
+    .submit-button {
+        width: 100%;
+        max-width: 100%;
+        padding: 0.75rem 1rem;
+    }
+    
+    .sub-itens {
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .category-grid {
+        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    }
+    
+    .category-label {
+        padding: 0.4rem 0.6rem;
+    }
+    
+    .category-name {
+        font-size: 0.85rem;
+    }
+    
+    .color-preview {
+        width: 14px;
+        height: 14px;
+    }
+    
+    .form-group h3 {
+        font-size: 1rem;
+    }
+    
+    .char-count-inside {
+        font-size: 0.7rem;
+        right: 8px;
+        bottom: 8px;
+    }
+}
+
 .form-group {
     margin-bottom: 1.5rem;
 }
@@ -240,7 +355,7 @@ select.form-control option:checked {
 /* Subtasks styling */
 .subtasks-header {
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
     align-items: center;
     margin-bottom: 1rem;
 }
@@ -261,6 +376,58 @@ select.form-control option:checked {
 
 .add-subtask-btn:hover {
     background-color: rgba(32, 172, 130, 0.8);
+}
+
+.add-subtask-btn.disabled,
+.add-subtask-btn:disabled {
+    background-color: var(--surface-color);
+    color: var(--text-secondary);
+    border: 1px solid var(--border-color);
+    cursor: not-allowed;
+    opacity: 0.8;
+    transition: none;
+}
+
+.subtask-limit-warning {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--delete-color);
+    font-size: 0.85rem;
+    margin-top: 0.75rem;
+    padding: 0.6rem 0.8rem;
+    border-radius: 6px;
+    background-color: rgba(219, 58, 52, 0.08);
+    border-left: 3px solid var(--delete-color);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    font-weight: 500;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-5px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Estilo para o ícone do calendário */
+input[type="datetime-local"]::-webkit-calendar-picker-indicator {
+    filter: invert(48%) sepia(79%) saturate(2476%) hue-rotate(130deg) brightness(95%) contrast(80%);
+    cursor: pointer;
+}
+
+/* Estilo para o select */
+select.form-control {
+    padding-right: 2.5rem;
+    background-position: right 0.75rem center;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%2320AC82' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+}
+
+.subtask-limit-warning i {
+    font-size: 1rem;
 }
 
 .subtasks-container {
@@ -314,15 +481,16 @@ select.form-control option:checked {
     color: white;
     border: none;
     border-radius: 20px;
-    padding: 0.5rem 1rem;
-    font-size: 1rem;
+    padding: 0.6rem 1.2rem;
+    font-size: 0.95rem;
     font-weight: 500;
     cursor: pointer;
-    display: flex;
+    display: inline-flex;
     align-items: center;
     gap: 0.5rem;
-    transition: background-color 0.3s ease;
-    margin: 0.5rem auto;
+    transition: all 0.3s ease;
+    margin: 0.5rem 0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .remove-subtask {

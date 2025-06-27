@@ -122,9 +122,30 @@ document.addEventListener('DOMContentLoaded', function() {
     
     if (addSubtaskBtn && subtasksContainer) {
         let subtaskCounter = 0;
+        const maxSubtasks = 5;
         
         addSubtaskBtn.addEventListener('click', function() {
-            addNewSubtask();
+            const currentSubtasks = subtasksContainer.querySelectorAll('.subtask-item').length;
+            
+            if (currentSubtasks < maxSubtasks) {
+                addNewSubtask();
+                
+                // Verificar se atingiu o limite após adicionar
+                if (subtasksContainer.querySelectorAll('.subtask-item').length >= maxSubtasks) {
+                    addSubtaskBtn.disabled = true;
+                    addSubtaskBtn.classList.add('disabled');
+                    
+                    // Adicionar mensagem de aviso
+                    if (!document.querySelector('.subtask-limit-warning')) {
+                        const warning = document.createElement('div');
+                        warning.className = 'subtask-limit-warning';
+                        warning.innerHTML = '<i class="fas fa-exclamation-circle"></i> Limite máximo de 5 subtarefas atingido.';
+                        warning.style.textAlign = 'center';
+                        warning.style.width = '100%';
+                        addSubtaskBtn.parentNode.appendChild(warning);
+                    }
+                }
+            }
         });
         
         function updateSubtaskNumbers() {
@@ -189,6 +210,19 @@ document.addEventListener('DOMContentLoaded', function() {
             removeBtn.addEventListener('click', function() {
                 subtaskDiv.remove();
                 updateSubtaskNumbers(); // Renumber subtasks after removal
+                
+                // Reativar o botão se estiver abaixo do limite
+                const currentSubtasks = subtasksContainer.querySelectorAll('.subtask-item').length;
+                if (currentSubtasks < maxSubtasks && addSubtaskBtn.disabled) {
+                    addSubtaskBtn.disabled = false;
+                    addSubtaskBtn.classList.remove('disabled');
+                    
+                    // Remover mensagem de aviso se existir
+                    const warning = document.querySelector('.subtask-limit-warning');
+                    if (warning) {
+                        warning.remove();
+                    }
+                }
             });
             
             updateSubtaskNumbers(); // Update numbers after adding a new subtask
