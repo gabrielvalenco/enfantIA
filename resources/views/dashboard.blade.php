@@ -215,12 +215,12 @@
                 </div>
             </a>
 
-            <a href="#" class="menu-item">
+            <a href="{{ route('reports.index') }}" class="menu-item">
                 <div class="menu-item-icon">
-                    <i class="fas fa-file"></i>
+                    <i class="fas fa-chart-line"></i>
                 </div>
                 <div class="menu-item-content">
-                    <h3>Relatório</h3>
+                    <h3>Relatório de Desempenho</h3>
                     <p>Melhore sua produtividade com a ajuda do BIRDU</p>
                 </div>
             </a>
