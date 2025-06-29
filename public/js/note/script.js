@@ -177,7 +177,8 @@ document.addEventListener('DOMContentLoaded', function() {
         const noteId = noteIdInput.value;
         const title = noteTitleInput.value;
         const content = noteContentInput.value;
-        const taskId = noteTaskSelect ? noteTaskSelect.value : null;
+        // Remover temporariamente a referência à tarefa até que o problema do banco de dados seja resolvido
+        // const taskId = noteTaskSelect ? noteTaskSelect.value : null;
         const isEdit = noteId !== '';
 
         if (!title || !content) {
@@ -199,18 +200,27 @@ document.addEventListener('DOMContentLoaded', function() {
                 },
                 body: JSON.stringify({ 
                     title, 
-                    content,
-                    task_id: taskId
+                    content
+                    // task_id: taskId  // Comentado até o problema de banco de dados ser resolvido
                 })
             });
 
-            const data = await response.json();
-
-            if (!response.ok) {
-                throw new Error(data.error || 'Erro ao salvar a nota');
+            // Verificar se a resposta é JSON antes de tentar fazer parse
+            const contentType = response.headers.get('content-type');
+            if (contentType && contentType.includes('application/json')) {
+                const data = await response.json();
+                
+                if (!response.ok) {
+                    throw new Error(data.error || 'Erro ao salvar a nota');
+                }
+                
+                window.location.reload();
+            } else {
+                // Se não for JSON, pode ser um erro HTML - exibir uma mensagem mais clara
+                const text = await response.text();
+                console.error('Resposta não-JSON recebida:', text);
+                throw new Error('Erro no servidor. Por favor, verifique o console para mais detalhes.');
             }
-
-            window.location.reload();
         } catch (error) {
             alert(error.message);
         }

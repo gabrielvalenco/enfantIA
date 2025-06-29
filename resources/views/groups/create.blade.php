@@ -6,7 +6,9 @@
 <link rel="stylesheet" href="{{ asset('css/group-style.css') }}">
 <link rel="stylesheet" href="{{ asset('css/dashboard-style.css') }}">
 <link rel="stylesheet" href="{{ asset('css/group/create.css') }}">
+<link rel="stylesheet" href="{{ asset('css/group/settings.css') }}">
 <meta name="user-email" content="{{ Auth::user()->email }}">
+<meta name="csrf-token" content="{{ csrf_token() }}">
 
 <div class="container mt-4">
     <!-- Toast container -->
@@ -102,11 +104,104 @@
                     <!-- Tab de Configurações -->
                     <div class="tab-pane fade" id="settings-tab-pane" role="tabpanel" 
                         aria-labelledby="settings-tab" tabindex="0">
-                        <div class="settings-container p-3">
-                            <div class="settings-placeholder text-center py-5">
-                                <i class="fas fa-cog fa-4x mb-3 text-muted"></i>
-                                <h4 class="text-muted">Configurações avançadas</h4>
-                                <p class="text-muted">Este painel será implementado em breve.</p>
+                        <div class="settings-container p-4">
+                            <h4 class="mb-4"><i class="fas fa-cog me-2"></i>Configurações do Grupo</h4>
+                            
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <!-- Modo Competitivo -->
+                                    <div class="card mb-4 settings-card">
+                                        <div class="card-header d-flex align-items-center">
+                                            <i class="fas fa-trophy me-2 text-warning"></i>
+                                            <h5 class="mb-0">Modo Competitivo</h5>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="form-check form-switch mb-3">
+                                                <input class="form-check-input" type="checkbox" id="competitiveMode">
+                                                <label class="form-check-label" for="competitiveMode">Ativar modo competitivo</label>
+                                            </div>
+                                            <p class="text-muted">O modo competitivo exibe um ranking dos membros que mais completaram tarefas no grupo.</p>
+                                            
+                                            <div class="competitive-preview mt-3 p-3 border rounded bg-light">
+                                                <h6 class="mb-3">Prévia do Ranking</h6>
+                                                <div class="ranking-list">
+                                                    <div class="ranking-item d-flex align-items-center mb-2">
+                                                        <div class="rank-badge rank-1 me-2">1</div>
+                                                        <div class="rank-avatar me-2">
+                                                            <i class="fas fa-user-circle"></i>
+                                                        </div>
+                                                        <div class="rank-info">
+                                                            <span class="rank-name">Maria Silva</span>
+                                                            <div class="rank-stats">
+                                                                <span class="badge bg-success">32 tarefas</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="ranking-item d-flex align-items-center mb-2">
+                                                        <div class="rank-badge rank-2 me-2">2</div>
+                                                        <div class="rank-avatar me-2">
+                                                            <i class="fas fa-user-circle"></i>
+                                                        </div>
+                                                        <div class="rank-info">
+                                                            <span class="rank-name">João Costa</span>
+                                                            <div class="rank-stats">
+                                                                <span class="badge bg-success">28 tarefas</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="ranking-item d-flex align-items-center">
+                                                        <div class="rank-badge rank-3 me-2">3</div>
+                                                        <div class="rank-avatar me-2">
+                                                            <i class="fas fa-user-circle"></i>
+                                                        </div>
+                                                        <div class="rank-info">
+                                                            <span class="rank-name">Ana Paula</span>
+                                                            <div class="rank-stats">
+                                                                <span class="badge bg-success">21 tarefas</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Permissões de Membros -->
+                                    <div class="card mb-4 settings-card">
+                                        <div class="card-header d-flex align-items-center">
+                                            <i class="fas fa-users-cog me-2 text-primary"></i>
+                                            <h5 class="mb-0">Permissões de Membros</h5>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="permission-option mb-3">
+                                                <div class="form-check form-switch">
+                                                    <input class="form-check-input" type="checkbox" id="allowMembersInvite">
+                                                    <label class="form-check-label" for="allowMembersInvite">
+                                                        <strong>Membros podem adicionar novos membros</strong>
+                                                    </label>
+                                                </div>
+                                                <p class="text-muted ms-4">Se ativado, todos os membros podem enviar convites para novas pessoas ingressarem no grupo.</p>
+                                            </div>
+                                            
+                                            <div class="permission-option mb-3">
+                                                <div class="form-check form-switch">
+                                                    <input class="form-check-input" type="checkbox" id="allowMembersCreateTasks">
+                                                    <label class="form-check-label" for="allowMembersCreateTasks">
+                                                        <strong>Membros podem criar tarefas</strong>
+                                                    </label>
+                                                </div>
+                                                <p class="text-muted ms-4">Se ativado, todos os membros podem criar novas tarefas para o grupo.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Botões de Ação -->
+                                    <div class="d-flex justify-content-end mt-4">
+                                        <button class="btn btn-primary" id="saveSettings">
+                                            <i class="fas fa-save me-2"></i>Salvar Configurações
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -118,5 +213,6 @@
 
 @push('scripts')
 <script src="{{ asset('js/group/create.js') }}"></script>
+<script src="{{ asset('js/group/settings.js') }}"></script>
 @endpush
 @endsection

@@ -28,8 +28,9 @@ class NoteController extends Controller
     {
         $request->validate([
             'title' => 'required|max:255',
-            'content' => 'required',
-            'task_id' => 'nullable|exists:tasks,id'
+            'content' => 'required'
+            // Comentado temporariamente até resolver o problema da migração
+            // 'task_id' => 'nullable|exists:tasks,id'
         ]);
 
         $notesCount = auth()->user()->notes()->count();
@@ -37,6 +38,8 @@ class NoteController extends Controller
             return response()->json(['error' => 'Você já atingiu o limite máximo de 3 notas.'], 422);
         }
         
+        // Comentado temporariamente até resolver o problema da migração
+        /*
         // Verificar se a tarefa pertence ao usuário
         if ($request->task_id) {
             $task = Task::find($request->task_id);
@@ -44,11 +47,13 @@ class NoteController extends Controller
                 return response()->json(['error' => 'Tarefa inválida'], 422);
             }
         }
+        */
 
         $note = auth()->user()->notes()->create([
             'title' => $request->title,
-            'content' => $request->content,
-            'task_id' => $request->task_id
+            'content' => $request->content
+            // Comentado temporariamente até resolver o problema da migração
+            // 'task_id' => $request->task_id
         ]);
 
         return response()->json($note);
@@ -58,14 +63,17 @@ class NoteController extends Controller
     {
         $request->validate([
             'title' => 'required|max:255',
-            'content' => 'required',
-            'task_id' => 'nullable|exists:tasks,id'
+            'content' => 'required'
+            // Comentado temporariamente até resolver o problema da migração
+            // 'task_id' => 'nullable|exists:tasks,id'
         ]);
 
         if ($note->user_id !== auth()->id()) {
             return response()->json(['error' => 'Não autorizado'], 403);
         }
         
+        // Comentado temporariamente até resolver o problema da migração
+        /*
         // Verificar se a tarefa pertence ao usuário
         if ($request->task_id) {
             $task = Task::find($request->task_id);
@@ -73,11 +81,13 @@ class NoteController extends Controller
                 return response()->json(['error' => 'Tarefa inválida'], 422);
             }
         }
+        */
 
         $note->update([
             'title' => $request->title,
-            'content' => $request->content,
-            'task_id' => $request->task_id
+            'content' => $request->content
+            // Comentado temporariamente até resolver o problema da migração
+            // 'task_id' => $request->task_id
         ]);
 
         return response()->json($note);

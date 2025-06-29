@@ -11,6 +11,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\GroupController;
 use App\Http\Controllers\GroupInvitationController;
 use App\Http\Controllers\SubtaskController;
+use App\Http\Controllers\ReportController;
 
 /*
 |--------------------------------------------------------------------------
@@ -79,17 +80,24 @@ Route::middleware('auth')->group(function () {
     Route::delete('/notes/{note}', [NoteController::class, 'destroy'])->name('notes.destroy');
     Route::get('/notes/{note}/details', [NoteController::class, 'details'])->name('notes.details');
 
+    // Report routes
+    Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
+
     Route::middleware(['auth'])->group(function () {
         Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
         Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
         Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
         
         // Rotas de Grupos
-        Route::resource('groups', GroupController::class);
+        Route::resource('groups', GroupController::class)->except(['edit', 'update']);
         Route::post('/groups/{group}/members', [GroupController::class, 'addMember'])->name('groups.add-member');
         Route::delete('/groups/{group}/members', [GroupController::class, 'removeMember'])->name('groups.remove-member');
         Route::delete('/groups/{group}/delete', [GroupController::class, 'delete'])->name('groups.delete');
         Route::delete('/groups/{group}/leave', [GroupController::class, 'leave'])->name('groups.leave');
+        
+        // Rotas para configurações de grupo
+        Route::get('/groups/{group}/settings', [GroupController::class, 'getSettings'])->name('groups.get-settings');
+        Route::post('/groups/{group}/settings', [GroupController::class, 'saveSettings'])->name('groups.save-settings');
         
         // Group Invitations
         Route::get('/invitations', [GroupInvitationController::class, 'index'])->name('invitations.index');
