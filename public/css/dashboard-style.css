@@ -390,9 +390,6 @@ h1, h2, h3, h4, h5, h6 {
     border: none !important;
 }
 
-.btn-close {
-}
-
 .pendingSubtasksMessage {
     color: var(--text-primary);
     font-size: 0.875rem;

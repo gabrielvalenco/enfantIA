@@ -55,7 +55,7 @@
                     </div>
                     
                     <div class="form-check">
-                        <input type="checkbox" class="form-check-input" id="remember" name="remember">
+                        <input type="checkbox" class="form-check-input" id="remember" name="remember" {{ old('remember') ? 'checked' : '' }}>
                         <label class="form-check-label" for="remember">Lembrar-me</label>
                     </div>
 

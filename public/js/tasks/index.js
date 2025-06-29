@@ -114,6 +114,38 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
+    // Função para selecionar todas as tarefas visíveis
+    window.markAllTasks = function() {
+        // Garantir que estamos em modo de seleção
+        if (!selectionMode) return;
+        
+        // Limpar seleções anteriores
+        selectedTasksIds = [];
+        var taskRows = document.querySelectorAll('.task-row.selectable:not([style*="display: none"])');
+        
+        // Primeiro remover a classe selected de todas as tarefas
+        document.querySelectorAll('.task-row.selected').forEach(function(row) {
+            row.classList.remove('selected');
+        });
+        
+        // Depois selecionar todas as tarefas visíveis (considerando os filtros aplicados)
+        taskRows.forEach(function(row) {
+            // Verificar se a tarefa está visível na interface (considerando os filtros)
+            if (window.getComputedStyle(row).display !== 'none') {
+                var taskId = row.getAttribute('data-task-id');
+                row.classList.add('selected');
+                
+                // Adicionar à lista de IDs selecionados
+                if (selectedTasksIds.indexOf(taskId) === -1) {
+                    selectedTasksIds.push(taskId);
+                }
+            }
+        });
+        
+        // Atualizar contador
+        document.querySelector('.selection-count').textContent = selectedTasksIds.length + ' selecionada(s)';
+    };
+    
     // Função para confirmar a ação selecionada
     window.confirmSelection = function() {
         if (selectedTasksIds.length === 0) {
@@ -206,6 +238,17 @@ document.addEventListener('DOMContentLoaded', function() {
             input.name = 'task_ids[]';
             input.value = selectedTasksIds[i];
             form.appendChild(input);
+        }
+        
+        // Verificar se há um parâmetro group_id na URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const groupId = urlParams.get('group_id');
+        if (groupId) {
+            var groupInput = document.createElement('input');
+            groupInput.type = 'hidden';
+            groupInput.name = 'group_id';
+            groupInput.value = groupId;
+            form.appendChild(groupInput);
         }
         
         document.body.appendChild(form);
