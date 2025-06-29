@@ -57,12 +57,9 @@
                                     <i class="fas fa-eye"></i> Ver
                                 </a>
                                 @if($group->isAdmin(Auth::user()))
-                                    <a href="{{ route('groups.edit', $group) }}" class="btn btn-warning btn-sm action-btn">
-                                        <i class="fas fa-edit"></i> Editar
-                                    </a>
-                                    <a href="{{ route('groups.delete', $group) }}" class="btn btn-danger btn-sm action-btn delete-group-btn">
+                                    <button type="button" class="btn btn-danger btn-sm action-btn delete-group-btn" data-group-id="{{ $group->id }}">
                                         <i class="fas fa-trash"></i> Excluir
-                                    </a>
+                                    </button>
                                 @else
                                     <button type="button" class="btn btn-danger btn-sm action-btn leave-group-btn" data-group-id="{{ $group->id }}">
                                         <i class="fas fa-sign-out-alt"></i> Sair

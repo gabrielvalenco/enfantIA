@@ -85,7 +85,7 @@ Route::middleware('auth')->group(function () {
         Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
         
         // Rotas de Grupos
-        Route::resource('groups', GroupController::class);
+        Route::resource('groups', GroupController::class)->except(['edit', 'update']);
         Route::post('/groups/{group}/members', [GroupController::class, 'addMember'])->name('groups.add-member');
         Route::delete('/groups/{group}/members', [GroupController::class, 'removeMember'])->name('groups.remove-member');
         Route::delete('/groups/{group}/delete', [GroupController::class, 'delete'])->name('groups.delete');
