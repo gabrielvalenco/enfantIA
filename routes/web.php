@@ -95,6 +95,10 @@ Route::middleware('auth')->group(function () {
         Route::delete('/groups/{group}/delete', [GroupController::class, 'delete'])->name('groups.delete');
         Route::delete('/groups/{group}/leave', [GroupController::class, 'leave'])->name('groups.leave');
         
+        // Rotas para configurações de grupo
+        Route::get('/groups/{group}/settings', [GroupController::class, 'getSettings'])->name('groups.get-settings');
+        Route::post('/groups/{group}/settings', [GroupController::class, 'saveSettings'])->name('groups.save-settings');
+        
         // Group Invitations
         Route::get('/invitations', [GroupInvitationController::class, 'index'])->name('invitations.index');
         Route::post('/invitations/{invitation}/accept', [GroupInvitationController::class, 'accept'])->name('invitations.accept');

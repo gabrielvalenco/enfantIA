@@ -176,4 +176,89 @@ class GroupController extends Controller
         return redirect()->route('groups.index')
             ->with('success', 'Saída realizada com sucesso!');
     }
+    
+    /**
+     * Salva as configurações do grupo
+     *
+     * @param Request $request
+     * @param Group $group
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function saveSettings(Request $request, Group $group)
+    {
+        // Verifica se o usuário é administrador do grupo
+        if (!$group->isAdmin(Auth::user())) {
+            return response()->json(['success' => false, 'message' => 'Você não tem permissão para alterar as configurações deste grupo.'], 403);
+        }
+
+        $validated = $request->validate([
+            'competitive_mode' => 'required|boolean',
+            'allow_member_invite' => 'required|boolean',
+            'allow_member_tasks' => 'required|boolean',
+        ]);
+
+        // Atualiza as configurações do grupo
+        $group->update([
+            'competitive_mode' => $validated['competitive_mode'],
+            'allow_member_invite' => $validated['allow_member_invite'],
+            'allow_member_tasks' => $validated['allow_member_tasks'],
+        ]);
+
+        return response()->json([
+            'success' => true, 
+            'message' => 'Configurações salvas com sucesso!',
+            'data' => [
+                'competitive_mode' => $group->competitive_mode,
+                'allow_member_invite' => $group->allow_member_invite,
+                'allow_member_tasks' => $group->allow_member_tasks,
+            ]
+        ]);
+    }
+    
+    /**
+     * Obtém as configurações do grupo
+     *
+     * @param Group $group
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getSettings(Group $group)
+    {
+        // Verifica se o usuário é membro do grupo
+        if (!$group->isMember(Auth::user())) {
+            return response()->json(['success' => false, 'message' => 'Você não tem acesso a este grupo.'], 403);
+        }
+        
+        // Verifica se o usuário é administrador para determinar permissões de edição
+        $isAdmin = $group->isAdmin(Auth::user());
+        
+        // Obtém ranking de membros mais produtivos (se modo competitivo estiver ativo)
+        $topMembers = [];
+        if ($group->competitive_mode) {
+            $topMembers = $group->members()
+                ->withCount(['tasks' => function ($query) {
+                    $query->where('status', true); // tarefas completas
+                }])
+                ->orderByDesc('tasks_count')
+                ->take(3)
+                ->get()
+                ->map(function ($member) {
+                    return [
+                        'name' => $member->name,
+                        'email' => $member->email,
+                        'tasks_completed' => $member->tasks_count
+                    ];
+                });
+        }
+        
+        return response()->json([
+            'success' => true,
+            'data' => [
+                'can_edit' => $isAdmin,
+                'competitive_mode' => $group->competitive_mode,
+                'allow_member_invite' => $group->allow_member_invite,
+                'allow_member_tasks' => $group->allow_member_tasks,
+                'top_members' => $topMembers
+            ]
+        ]);
+    }
 }

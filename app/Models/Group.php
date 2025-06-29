@@ -12,7 +12,13 @@ use App\Models\GroupInvitation;
 
 class Group extends Model
 {
-    protected $fillable = ['name', 'description', 'created_by'];
+    protected $fillable = ['name', 'description', 'created_by', 'competitive_mode', 'allow_member_invite', 'allow_member_tasks'];
+    
+    protected $casts = [
+        'competitive_mode' => 'boolean',
+        'allow_member_invite' => 'boolean',
+        'allow_member_tasks' => 'boolean'
+    ];
 
     public function creator(): BelongsTo
     {
