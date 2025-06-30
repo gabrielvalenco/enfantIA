@@ -8,6 +8,18 @@ use Illuminate\Http\Request;
 
 class SubtaskController extends Controller
 {
+    /**
+     * Lista todas as subtarefas de uma tarefa específica
+     */
+    public function index(Task $task)
+    {
+        $subtasks = $task->subtasks()->orderBy('created_at', 'asc')->get();
+        
+        return response()->json([
+            'success' => true,
+            'subtasks' => $subtasks
+        ]);
+    }
     public function store(Request $request, Task $task)
     {
         $validated = $request->validate([

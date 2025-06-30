@@ -62,6 +62,7 @@ Route::middleware('auth')->group(function () {
     // Rotas para subtarefas
     Route::get('/tasks/{task}/details', [TaskController::class, 'details']);
     Route::get('/tasks/{task}/can-complete', [TaskController::class, 'canComplete']);
+    Route::get('/tasks/{task}/subtasks', [SubtaskController::class, 'index']);
     Route::post('/tasks/{task}/subtasks', [SubtaskController::class, 'store']);
     Route::post('/subtasks/{subtask}/toggle', [SubtaskController::class, 'toggleComplete']);
     Route::delete('/subtasks/{subtask}', [SubtaskController::class, 'destroy']);

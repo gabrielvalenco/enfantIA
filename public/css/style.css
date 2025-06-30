@@ -64,6 +64,16 @@
     --text-primary-hover: #000000;
     --text-secondary-hover: #495057;
     --link-color-hover: rgb(29, 248, 182);
+    
+    /* Action Colors */
+    --edit-color: #D4A017;
+    --delete-color: #C41E3A;
+    --complete-color: #008744;
+    
+    /* Action Colors Hover */
+    --edit-color-hover: #B8860B;
+    --delete-color-hover: #A91B0D;
+    --complete-color-hover: #006400;
 }
 
 /* Theme Toggle Button */
@@ -154,3 +164,5 @@ h1, h2, h3, h4, h5, h6 {
     content: '←';
     font-size: 1.2rem;
 }
+
+

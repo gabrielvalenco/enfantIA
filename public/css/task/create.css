@@ -324,7 +324,7 @@ select.form-control option:checked {
 }
 
 .category-warning {
-    color: var(--danger-color);
+    color: var(--delete-color);
     font-size: 0.85rem;
     margin-top: 0.5rem;
 }
@@ -496,7 +496,7 @@ select.form-control {
 .remove-subtask {
     background: none;
     border: none;
-    color: var(--danger-color);
+    color: var(--delete-color);
     cursor: pointer;
     padding: 0.25rem 0.5rem;
     border-radius: 4px;

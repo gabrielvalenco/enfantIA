@@ -289,9 +289,18 @@
                             <p class="mb-1"><strong>Urgência:</strong> <span id="taskUrgency"></span></p>
                         </div>
                         <p id="taskDescription" class="text-muted mb-3"></p>
+                        
+                        <!-- Subtarefas -->
+                        <div id="subtasksContainer" class="subtasks-section mt-4">
+                            <h6 class="subtasks-title">Subtarefas</h6>
+                            <div id="subtasksList" class="subtasks-list">
+                                <!-- As subtarefas serão inseridas aqui via JavaScript -->
+                            </div>
+                            <p id="noSubtasks" class="noSubtasks d-none">Nenhuma subtarefa cadastrada.</p>
+                        </div>
                     </div>
                     <div class="modal-actions d-flex justify-content-center gap-1">
-                        <a href="{{ route('tasks.index', ['open_task' => ':taskId']) }}" class="btn btn-sm btn-primary view-task-btn" data-task-id="">
+                        <a href="{{ route('tasks.index', ['open_task' => ':taskId']) }}" class="view-task-btn" data-task-id="">
                             <i class="fas fa-eye"></i> Visualizar
                         </a>
                     </div>
@@ -329,7 +338,15 @@
                     urgency: '{{ $task->urgency === "high" ? "Alta" : ($task->urgency === "medium" ? "Média" : "Baixa") }}',
                     editUrl: '{{ route('tasks.edit', $task->id) }}',
                     deleteUrl: '{{ route('tasks.destroy', $task->id) }}',
-                    completeUrl: '{{ route('tasks.complete', $task->id) }}'
+                    completeUrl: '{{ route('tasks.complete', $task->id) }}',
+                    subtasks: [
+                        @foreach($task->subtasks as $subtask)
+                            {
+                                id: {{ $subtask->id }},
+                                description: '{{ addslashes($subtask->description) }}'
+                            },
+                        @endforeach
+                    ]
                 }
             },
             @endforeach

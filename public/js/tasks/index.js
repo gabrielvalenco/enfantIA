@@ -57,15 +57,17 @@ document.addEventListener('DOMContentLoaded', function() {
                 var taskId = row.getAttribute('data-task-id');
                 
                 // Toggle seleção
-                if (row.classList.contains('selected')) {
-                    row.classList.remove('selected');
+                var selectedClass = selectionMode === 'delete' ? 'selected-delete' : 'selected';
+                
+                if (row.classList.contains(selectedClass)) {
+                    row.classList.remove(selectedClass);
                     // Remover da lista
                     var index = selectedTasksIds.indexOf(taskId);
                     if (index !== -1) {
                         selectedTasksIds.splice(index, 1);
                     }
                 } else {
-                    row.classList.add('selected');
+                    row.classList.add(selectedClass);
                     // Adicionar à lista
                     if (selectedTasksIds.indexOf(taskId) === -1) {
                         selectedTasksIds.push(taskId);
@@ -94,9 +96,10 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('multi-delete-btn').classList.remove('active');
         
         // Limpar seleções visuais
-        var selectedRows = document.querySelectorAll('.task-row.selected');
+        var selectedRows = document.querySelectorAll('.task-row.selected, .task-row.selected-delete');
         for (var i = 0; i < selectedRows.length; i++) {
             selectedRows[i].classList.remove('selected');
+            selectedRows[i].classList.remove('selected-delete');
         }
         
         // Limpar handlers de clique
@@ -123,9 +126,13 @@ document.addEventListener('DOMContentLoaded', function() {
         selectedTasksIds = [];
         var taskRows = document.querySelectorAll('.task-row.selectable:not([style*="display: none"])');
         
-        // Primeiro remover a classe selected de todas as tarefas
-        document.querySelectorAll('.task-row.selected').forEach(function(row) {
+        // Definir a classe de seleção com base no modo atual
+        var selectedClass = selectionMode === 'delete' ? 'selected-delete' : 'selected';
+        
+        // Primeiro remover as classes de seleção de todas as tarefas
+        document.querySelectorAll('.task-row.selected, .task-row.selected-delete').forEach(function(row) {
             row.classList.remove('selected');
+            row.classList.remove('selected-delete');
         });
         
         // Depois selecionar todas as tarefas visíveis (considerando os filtros aplicados)
@@ -133,7 +140,7 @@ document.addEventListener('DOMContentLoaded', function() {
             // Verificar se a tarefa está visível na interface (considerando os filtros)
             if (window.getComputedStyle(row).display !== 'none') {
                 var taskId = row.getAttribute('data-task-id');
-                row.classList.add('selected');
+                row.classList.add(selectedClass);
                 
                 // Adicionar à lista de IDs selecionados
                 if (selectedTasksIds.indexOf(taskId) === -1) {
@@ -1052,6 +1059,556 @@ document.addEventListener('DOMContentLoaded', function() {
                     });
                 });
 
+            });
+
+            // ==== NOVA FUNCIONALIDADE: MODAL DE AÇÕES UNIFICADO ====
+            
+            // Abrir modal de ações ao clicar no botão de ações
+            $(document).on('click', '.task-actions-btn', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                
+                const taskId = $(this).data('task-id');
+                currentTaskId = taskId;
+                
+                // Buscar informações da tarefa para o modal de ações
+                $.ajax({
+                    url: `/tasks/${taskId}/edit`,
+                    method: 'GET',
+                    success: function(response) {
+                        // Preencher o formulário com os dados da tarefa
+                        $('#actions-task-id').val(response.task.id);
+                        $('#actions-title').val(response.task.title);
+                        $('#actions-description').val(response.task.description);
+                        
+                        // Converter a data para o formato compatível com datetime-local
+                        const dueDate = new Date(response.task.due_date);
+                        const formattedDate = dueDate.toISOString().slice(0, 16);
+                        $('#actions-due-date').val(formattedDate);
+                        
+                        // Selecionar a urgência
+                        $('#actions-urgency').val(response.task.urgency);
+                        
+                        // Limpar e reselecionar as categorias
+                        const taskCategoryIds = response.task_categories;
+                        $('input[name="action-categories[]"]').prop('checked', false);
+                        
+                        taskCategoryIds.forEach(function(categoryId) {
+                            $(`#action-category${categoryId}`).prop('checked', true);
+                        });
+                        
+                        // Carregar subtarefas
+                        loadSubtasksForActionsModal(taskId);
+                        
+                        // Mostrar o modal
+                        $('#taskActionsModal').modal('show');
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Erro ao carregar dados para o modal de ações:', error);
+                        Swal.fire({
+                            title: 'Erro!',
+                            text: 'Não foi possível carregar os dados da tarefa.',
+                            icon: 'error',
+                            confirmButtonText: 'Ok',
+                            background: getComputedStyle(document.documentElement).getPropertyValue('--surface-color'),
+                            color: getComputedStyle(document.documentElement).getPropertyValue('--text-primary')
+                        });
+                    }
+                });
+            });
+            
+            // Função para carregar subtarefas no modal de ações
+            function loadSubtasksForActionsModal(taskId) {
+                $.ajax({
+                    url: `/tasks/${taskId}/subtasks`,
+                    method: 'GET',
+                    success: function(response) {
+                        const subtasksContainer = $('#actions-subtasks-container');
+                        subtasksContainer.empty();
+                        
+                        if (response.subtasks.length === 0) {
+                            subtasksContainer.append('<p class="text-muted">Esta tarefa não possui subtarefas.</p>');
+                        } else {
+                            response.subtasks.forEach(function(subtask) {
+                                const hasDescription = subtask.description && subtask.description.trim() !== '';
+                                
+                                subtasksContainer.append(`
+                                    <div class="subtask-item">
+                                        <input class="subtask-checkbox" 
+                                            type="checkbox" 
+                                            ${subtask.completed ? 'checked' : ''}
+                                            id="actions-subtask-${subtask.id}"
+                                            data-id="${subtask.id}">
+                                        <div class="subtask-content">
+                                            <div class="subtask-title ${subtask.completed ? 'text-muted text-decoration-line-through' : ''}">
+                                                ${subtask.title}
+                                            </div>
+                                            ${hasDescription ? `<div class="subtask-description text-muted">${subtask.description}</div>` : ''}
+                                        </div>
+                                        <button type="button" class="actions-delete-subtask" data-id="${subtask.id}">
+                                            <i class="fas fa-times"></i>
+                                        </button>
+                                    </div>
+                                `);
+                            });
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Erro ao carregar subtarefas:', error);
+                        subtasksContainer.append('<p class="text-danger">Erro ao carregar subtarefas.</p>');
+                    }
+                });
+            }
+            
+            // Função para validar a seleção de categorias no modal de ações
+            window.validateCategorySelection = function(checkbox) {
+                const maxCategories = 3;
+                const checkedBoxes = document.querySelectorAll('input[name="action-categories[]"]:checked');
+                
+                if (checkedBoxes.length > maxCategories) {
+                    checkbox.checked = false;
+                    Swal.fire({
+                        title: 'Limite de categorias',
+                        text: 'Você pode selecionar no máximo 3 categorias.',
+                        icon: 'warning',
+                        confirmButtonText: 'Ok',
+                        background: getComputedStyle(document.documentElement).getPropertyValue('--surface-color'),
+                        color: getComputedStyle(document.documentElement).getPropertyValue('--text-primary')
+                    });
+                }
+            };
+            
+            // Função para adicionar nova subtarefa
+            window.addNewSubtask = function() {
+                const title = $('#actions-new-subtask').val().trim();
+                if (!title) return;
+                
+                $.ajax({
+                    url: `/tasks/${currentTaskId}/subtasks`,
+                    method: 'POST',
+                    data: {
+                        _token: $('meta[name="csrf-token"]').attr('content'),
+                        title: title
+                    },
+                    success: function(response) {
+                        // Limpar o campo
+                        $('#actions-new-subtask').val('');
+                        
+                        // Recarregar as subtarefas
+                        loadSubtasksForActionsModal(currentTaskId);
+                    }
+                });
+            }
+            
+            // Função para alternar status de subtarefa
+            window.toggleSubtaskStatus = function(subtaskId, isChecked) {
+                $.ajax({
+                    url: `/subtasks/${subtaskId}/toggle`,
+                    method: 'POST',
+                    data: {
+                        _token: $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function(response) {
+                        const label = $(`label[for="actions-subtask-${subtaskId}"]`);
+                        if (response.completed) {
+                            label.addClass('text-muted text-decoration-line-through');
+                        } else {
+                            label.removeClass('text-muted text-decoration-line-through');
+                        }
+                    }
+                });
+            };
+            
+            // Função para excluir subtarefa
+            window.deleteSubtask = function(subtaskId) {
+                Swal.fire({
+                    title: 'Excluir subtarefa',
+                    text: 'Tem certeza que deseja excluir esta subtarefa?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#3085d6',
+                    confirmButtonText: 'Sim, excluir',
+                    cancelButtonText: 'Cancelar',
+                    background: getComputedStyle(document.documentElement).getPropertyValue('--surface-color'),
+                    color: getComputedStyle(document.documentElement).getPropertyValue('--text-primary')
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: `/subtasks/${subtaskId}`,
+                            method: 'DELETE',
+                            data: {
+                                _token: $('meta[name="csrf-token"]').attr('content')
+                            },
+                            success: function() {
+                                // Recarregar subtarefas
+                                loadSubtasksForActionsModal(currentTaskId);
+                            }
+                        });
+                    }
+                });
+            };
+            
+            // Alternar estado de subtarefa no modal de ações
+            $(document).on('change', '.subtask-checkbox', function() {
+                const subtaskId = $(this).data('id');
+                const isChecked = $(this).is(':checked');
+                const label = $(this).siblings('label');
+                
+                // Atualizar visual do label
+                if (isChecked) {
+                    label.addClass('text-muted text-decoration-line-through');
+                } else {
+                    label.removeClass('text-muted text-decoration-line-through');
+                }
+                
+                // Enviar requisição para alterar o estado da subtarefa
+                $.ajax({
+                    url: `/subtasks/${subtaskId}/toggle`,
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function(response) {
+                        console.log('Subtarefa atualizada:', response);
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Erro ao atualizar subtarefa:', error);
+                        // Reverter alteração visual em caso de erro
+                        $(this).prop('checked', !isChecked);
+                        if (isChecked) {
+                            label.removeClass('text-muted text-decoration-line-through');
+                        } else {
+                            label.addClass('text-muted text-decoration-line-through');
+                        }
+                    }
+                });
+            });
+            
+            // Excluir subtarefa no modal de ações
+            $(document).on('click', '.actions-delete-subtask', function() {
+                const subtaskId = $(this).data('id');
+                const subtaskItem = $(this).closest('.subtask-item');
+                
+                Swal.fire({
+                    title: 'Excluir subtarefa?',
+                    text: 'Esta ação não pode ser desfeita.',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Sim, excluir',
+                    cancelButtonText: 'Cancelar',
+                    background: getComputedStyle(document.documentElement).getPropertyValue('--surface-color'),
+                    color: getComputedStyle(document.documentElement).getPropertyValue('--text-primary')
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Enviar requisição para excluir a subtarefa
+                        $.ajax({
+                            url: `/subtasks/${subtaskId}`,
+                            method: 'DELETE',
+                            headers: {
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                            },
+                            success: function(response) {
+                                // Remover visualmente a subtarefa
+                                subtaskItem.fadeOut(300, function() {
+                                    $(this).remove();
+                                    
+                                    // Se não houver mais subtarefas, adicionar mensagem
+                                    if ($('#actions-subtasks-container .subtask-item').length === 0) {
+                                        $('#actions-subtasks-container').append('<p class="text-muted">Esta tarefa não possui subtarefas.</p>');
+                                    }
+                                });
+                                
+                                Swal.fire({
+                                    title: 'Excluída!',
+                                    text: 'Subtarefa excluída com sucesso.',
+                                    icon: 'success',
+                                    confirmButtonText: 'Ok',
+                                    background: getComputedStyle(document.documentElement).getPropertyValue('--surface-color'),
+                                    color: getComputedStyle(document.documentElement).getPropertyValue('--text-primary')
+                                });
+                            },
+                            error: function(xhr, status, error) {
+                                console.error('Erro ao excluir subtarefa:', error);
+                                Swal.fire({
+                                    title: 'Erro!',
+                                    text: 'Não foi possível excluir a subtarefa.',
+                                    icon: 'error',
+                                    confirmButtonText: 'Ok',
+                                    background: getComputedStyle(document.documentElement).getPropertyValue('--surface-color'),
+                                    color: getComputedStyle(document.documentElement).getPropertyValue('--text-primary')
+                                });
+                            }
+                        });
+                    }
+                });
+            });
+            
+            // Adicionar subtarefa no modal de ações
+            $(document).on('click', '#actions-add-subtask-btn', function() {
+                $('#new-actions-subtask-form').slideDown();
+                $('#new-actions-subtask-title').focus();
+            });
+            
+            // Cancelar adição de nova subtarefa
+            $(document).on('click', '#cancel-actions-subtask-btn', function() {
+                $('#new-actions-subtask-form').slideUp();
+                $('#new-actions-subtask-title').val('');
+                $('#new-actions-subtask-description').val('');
+            });
+            
+            // Salvar nova subtarefa
+            $(document).on('click', '#save-actions-subtask-btn', function() {
+                const taskId = $('#actions-task-id').val();
+                const title = $('#new-actions-subtask-title').val().trim();
+                const description = $('#new-actions-subtask-description').val().trim();
+                
+                if (!title) {
+                    Swal.fire({
+                        title: 'Campo obrigatório',
+                        text: 'Por favor, informe o título da subtarefa.',
+                        icon: 'warning',
+                        confirmButtonText: 'Ok',
+                        background: getComputedStyle(document.documentElement).getPropertyValue('--surface-color'),
+                        color: getComputedStyle(document.documentElement).getPropertyValue('--text-primary')
+                    });
+                    return;
+                }
+                
+                $.ajax({
+                    url: `/tasks/${taskId}/subtasks`,
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    data: {
+                        title: title,
+                        description: description
+                    },
+                    success: function(response) {
+                        // Limpar form e esconder
+                        $('#new-actions-subtask-form').slideUp();
+                        $('#new-actions-subtask-title').val('');
+                        $('#new-actions-subtask-description').val('');
+                        
+                        // Recarregar a lista de subtarefas
+                        loadSubtasksForActionsModal(taskId);
+                        
+                        // Notificar o usuário
+                        Swal.fire({
+                            title: 'Sucesso!',
+                            text: 'Subtarefa adicionada com sucesso.',
+                            icon: 'success',
+                            confirmButtonText: 'Ok',
+                            background: getComputedStyle(document.documentElement).getPropertyValue('--surface-color'),
+                            color: getComputedStyle(document.documentElement).getPropertyValue('--text-primary')
+                        });
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Erro ao adicionar subtarefa:', error);
+                        Swal.fire({
+                            title: 'Erro!',
+                            text: 'Não foi possível adicionar a subtarefa.',
+                            icon: 'error',
+                            confirmButtonText: 'Ok',
+                            background: getComputedStyle(document.documentElement).getPropertyValue('--surface-color'),
+                            color: getComputedStyle(document.documentElement).getPropertyValue('--text-primary')
+                        });
+                    }
+                });
+            });
+            
+            // Evento para salvar alterações da tarefa no modal de ações
+            $('#save-actions-task-btn').on('click', function() {
+                const taskId = $('#actions-task-id').val();
+                
+                // Obter os valores do formulário
+                const title = $('#actions-title').val();
+                const description = $('#actions-description').val();
+                const dueDate = $('#actions-due-date').val();
+                const urgency = $('#actions-urgency').val();
+                
+                // Obter categorias selecionadas
+                const categories = [];
+                $('input[name="action-categories[]"]:checked').each(function() {
+                    categories.push($(this).val());
+                });
+                
+                // Validar título
+                if (!title.trim()) {
+                    Swal.fire({
+                        title: 'Atenção',
+                        text: 'O título não pode estar vazio!',
+                        icon: 'warning',
+                        confirmButtonText: 'Ok',
+                        background: getComputedStyle(document.documentElement).getPropertyValue('--surface-color'),
+                        color: getComputedStyle(document.documentElement).getPropertyValue('--text-primary')
+                    });
+                    return;
+                }
+                
+                // Enviar dados para o servidor
+                $.ajax({
+                    url: `/tasks/${taskId}`,
+                    method: 'POST',
+                    data: {
+                        _token: $('meta[name="csrf-token"]').attr('content'),
+                        _method: 'PUT',
+                        title: title,
+                        description: description,
+                        due_date: dueDate,
+                        urgency: urgency,
+                        categories: categories
+                    },
+                    success: function(response) {
+                        // Fechar o modal
+                        $('#taskActionsModal').modal('hide');
+                        
+                        // Exibir mensagem de sucesso
+                        Swal.fire({
+                            title: 'Sucesso!',
+                            text: 'Tarefa atualizada com sucesso!',
+                            icon: 'success',
+                            confirmButtonText: 'Ok',
+                            background: getComputedStyle(document.documentElement).getPropertyValue('--surface-color'),
+                            color: getComputedStyle(document.documentElement).getPropertyValue('--text-primary')
+                        }).then(() => {
+                            // Recarregar a página para mostrar as alterações
+                            window.location.reload();
+                        });
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Erro ao atualizar tarefa:', error);
+                        
+                        let errorMessage = 'Erro ao atualizar a tarefa.';
+                        if (xhr.responseJSON && xhr.responseJSON.errors) {
+                            errorMessage = Object.values(xhr.responseJSON.errors).flat().join('<br>');
+                        }
+                        
+                        Swal.fire({
+                            title: 'Erro!',
+                            html: errorMessage,
+                            icon: 'error',
+                            confirmButtonText: 'Ok',
+                            background: getComputedStyle(document.documentElement).getPropertyValue('--surface-color'),
+                            color: getComputedStyle(document.documentElement).getPropertyValue('--text-primary')
+                        });
+                    }
+                });
+            });
+            
+            // Evento para concluir tarefa no modal de ações
+            $('#complete-actions-task-btn').on('click', function() {
+                const taskId = $('#actions-task-id').val();
+                
+                $.ajax({
+                    url: `/tasks/${taskId}/can-complete`,
+                    method: 'GET',
+                    success: function(response) {
+                        if (response.can_complete) {
+                            // Confirmar conclusão da tarefa
+                            Swal.fire({
+                                title: 'Concluir tarefa',
+                                text: 'Tem certeza que deseja marcar esta tarefa como concluída?',
+                                icon: 'question',
+                                showCancelButton: true,
+                                confirmButtonColor: 'var(--link-color)',
+                                cancelButtonColor: '#6c757d',
+                                confirmButtonText: 'Sim, concluir',
+                                cancelButtonText: 'Cancelar',
+                                background: getComputedStyle(document.documentElement).getPropertyValue('--surface-color'),
+                                color: getComputedStyle(document.documentElement).getPropertyValue('--text-primary')
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    // Usar AJAX com método PATCH
+                                    $.ajax({
+                                        url: `/tasks/${taskId}/complete`,
+                                        method: 'POST',
+                                        data: {
+                                            _token: $('meta[name="csrf-token"]').attr('content'),
+                                            _method: 'PATCH'
+                                        },
+                                        success: function(response) {
+                                            // Fechar modal
+                                            $('#taskActionsModal').modal('hide');
+                                            
+                                            Swal.fire({
+                                                title: 'Sucesso!',
+                                                text: 'Tarefa concluída com sucesso!',
+                                                icon: 'success',
+                                                confirmButtonText: 'Ok',
+                                                background: getComputedStyle(document.documentElement).getPropertyValue('--surface-color'),
+                                                color: getComputedStyle(document.documentElement).getPropertyValue('--text-primary')
+                                            }).then(() => {
+                                                // Recarregar a página após conclusão
+                                                window.location.reload();
+                                            });
+                                        }
+                                    });
+                                }
+                            });
+                        } else {
+                            Swal.fire({
+                                title: 'Não é possível concluir',
+                                text: 'Esta tarefa possui subtarefas pendentes!',
+                                icon: 'warning',
+                                confirmButtonText: 'Ok',
+                                background: getComputedStyle(document.documentElement).getPropertyValue('--surface-color'),
+                                color: getComputedStyle(document.documentElement).getPropertyValue('--text-primary')
+                            });
+                        }
+                    }
+                });
+            });
+            
+            // Evento para excluir tarefa no modal de ações
+            $('#delete-actions-task-btn').on('click', function() {
+                const taskId = $('#actions-task-id').val();
+                
+                // Obter o título da tarefa atual
+                const taskTitle = $('#actions-title').val();
+                
+                Swal.fire({
+                    title: 'Tem certeza?',
+                    html: `Você deseja excluir a tarefa <strong>"${taskTitle}"</strong>?<br><small class="text-danger">Esta ação não pode ser desfeita.</small>`,
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#3085d6',
+                    confirmButtonText: 'Sim, excluir',
+                    cancelButtonText: 'Cancelar',
+                    background: getComputedStyle(document.documentElement).getPropertyValue('--surface-color'),
+                    color: getComputedStyle(document.documentElement).getPropertyValue('--text-primary')
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Criar formulário de exclusão programaticamente
+                        const form = document.createElement('form');
+                        form.method = 'POST';
+                        form.action = `/tasks/${taskId}`;
+                        form.style.display = 'none';
+                        
+                        // CSRF token
+                        const csrfToken = document.createElement('input');
+                        csrfToken.type = 'hidden';
+                        csrfToken.name = '_token';
+                        csrfToken.value = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+                        form.appendChild(csrfToken);
+                        
+                        // Método DELETE
+                        const methodField = document.createElement('input');
+                        methodField.type = 'hidden';
+                        methodField.name = '_method';
+                        methodField.value = 'DELETE';
+                        form.appendChild(methodField);
+                        
+                        // Fechar o modal
+                        $('#taskActionsModal').modal('hide');
+                        
+                        // Adicionar ao documento e enviar
+                        document.body.appendChild(form);
+                        form.submit();
+                    }
+                });
             });
         }, 100);
     });

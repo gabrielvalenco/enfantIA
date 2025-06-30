@@ -45,8 +45,8 @@
                     <div class="form-group">
                         <h3>Descrição</h3>
                         <div class="input-wrapper">
-                            <textarea name="description" id="description" class="form-control" style="width: 100%;" placeholder="Descrição" maxlength="200" required></textarea>
-                            <div class="char-count-inside"><span id="description-count">0</span>/200</div>
+                            <textarea name="description" id="description" class="form-control" style="width: 100%;" placeholder="Descrição" maxlength="600" required></textarea>
+                            <div class="char-count-inside"><span id="description-count">0</span>/600</div>
                         </div>
                     </div>
 

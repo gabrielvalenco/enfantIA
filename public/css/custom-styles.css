@@ -183,11 +183,11 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .badge-danger {
-    background-color: var(--danger-color);
+    background-color: var(--delete-color);
 }
 
 .badge-warning {
-    background-color: var(--warning-color);
+    background-color: var(--edit-color);
 }
 
 .badge-success {
@@ -265,8 +265,8 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .alert-warning {
-    color: var(--warning-color);
-    border-left: 4px solid var(--warning-color);
+    color: var(--edit-color);
+    border-left: 4px solid var(--edit-color);
 }
 
 .alert-warning .alert-heading {
@@ -285,7 +285,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .alert-danger {
-    color: var(--danger-color);
+    color: var(--delete-color);
 }
 
 .text-secondary {
@@ -313,7 +313,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .category-limit-warning {
-    color: var(--danger-color);
+    color: var(--delete-color);
     margin-top: 5px;
     display: block;
 }
@@ -358,15 +358,15 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .alert-warning {
-    background-color: var(--warning-color);
-    border-left: 4px solid var(--warning-color);
+    background-color: var(--edit-color);
+    border-left: 4px solid var(--edit-color);
     color: var(--text-secondary);
 }
 
 .alert i {
     font-size: 1.2rem;
     margin-right: 0.5rem;
-    color: var(--warning-color);
+    color: var(--edit-color);
     padding-right: 1rem;
 }
 
@@ -409,24 +409,24 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .btn-warning {
-    background-color:   var(--warning-color);
+    background-color:   var(--edit-color);
     color: #000;
     box-shadow: 0 2px 4px rgba(255, 193, 7, 0.2);
 }
 
 .btn-warning:hover {
-    background-color: var(--warning-color);
+    background-color: var(--edit-color);
     box-shadow: 0 4px 6px rgba(255, 193, 7, 0.3);
 }
 
 .btn-danger {
-    background-color: var(--danger-color);
+    background-color: var(--delete-color);
     box-shadow: 0 2px 4px rgba(220, 53, 69, 0.2);
     color: white;
 }
 
 .btn-danger:hover {
-    background-color: var(--danger-color);
+    background-color: var(--delete-color-hover);
     box-shadow: 0 4px 6px rgba(220, 53, 69, 0.3);
     color: white;
 }
@@ -723,7 +723,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .user-dropdown .dropdown-item.text-danger:hover {
-    background-color: var(--danger-color);
+    background-color: var(--delete-color);
     color: #ffffff !important;
 }
 

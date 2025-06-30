@@ -6,10 +6,12 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ $title ?? 'Lista de Tarefas' }}</title>
 
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
     <link rel="icon" href="{{ asset('favicon.svg') }}" type="image/svg+xml">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="stylesheet" href="{{ asset('css/task/index.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/task/actions-modal.css') }}">
 
     <!-- Dados das tarefas para uso nos filtros -->
     <script>
@@ -225,19 +227,16 @@
                                     </td>
                                     <td class="actions-column">
                                         <div class="action-buttons">
-                                            <button type="button" class="btn btn-sm btn-info action-btn view-task-btn" data-task-id="{{ $task->id }}" title="Detalhes">
-                                                <i class="fas fa-eye"></i>
+                                            <button type="button" class="btn btn-sm btn-primary action-btn task-actions-btn" 
+                                                data-task-id="{{ $task->id }}" 
+                                                data-task-title="{{ $task->title }}"
+                                                data-task-description="{{ $task->description }}"
+                                                data-task-due-date="{{ $task->due_date }}"
+                                                data-task-urgency="{{ $task->urgency }}"
+                                                data-task-categories="{{ $task->categories->pluck('id')->join(',') }}"
+                                                title="Ações">
+                                                <i class="fas fa-cog"></i> Ações
                                             </button>
-                                            <button type="button" class="btn btn-sm btn-warning action-btn edit-task-btn" data-task-id="{{ $task->id }}" title="Editar">
-                                                <i class="fas fa-edit"></i>
-                                            </button>
-                                            <form action="{{ route('tasks.destroy', $task) }}" method="POST" style="display: inline;" class="delete-task-form">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="button" class="btn btn-sm btn-danger action-btn delete-task-btn" data-task-id="{{ $task->id }}" data-task-title="{{ $task->title }}" title="Excluir">
-                                                    <i class="fas fa-trash"></i>
-                                                </button>
-                                            </form>
                                         </div>
                                     </td>
                                 </tr>
@@ -387,6 +386,123 @@
         </div>
     </div>
 
+    <!-- Modal para Ações da Tarefa -->
+    <div class="modal fade" id="taskActionsModal" tabindex="-1" aria-labelledby="taskActionsModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="taskActionsModalLabel">Ações da Tarefa</h5>
+                </div>
+                <div class="modal-body">
+                    <!-- Form content wrapper for responsive layout -->
+                    <div class="form-container">
+                        <!-- Left Content -->
+                        <div class="left-content">
+                            <div class="form-group">
+                                <h3>Título</h3>
+                                <div class="input-wrapper">
+                                    <input type="text" id="actions-title" class="form-control" style="width: 100%;" maxlength="90" required>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <h3>Descrição</h3>
+                                <div class="input-wrapper">
+                                    <textarea id="actions-description" class="form-control" style="width: 100%;" maxlength="600" required></textarea>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="category-container">
+                                    <h3>Categorias</h3>
+                                    <small>Selecione até 3 categorias</small>
+                                </div>
+                                <div id="actions-categories-container" class="category-grid">
+                                    @foreach($categories = \App\Models\Category::where('user_id', auth()->id())->get() as $category)
+                                        <div class="category-item">
+                                            <input 
+                                                type="checkbox"
+                                                class="category-checkbox"
+                                                id="action-category{{ $category->id }}"
+                                                name="action-categories[]"
+                                                value="{{ $category->id }}"
+                                                onchange="validateCategorySelection(this)"
+                                                hidden>
+                                            <label class="category-label" for="action-category{{ $category->id }}">
+                                                <span class="color-preview" style="background-color: {{ $category->color }};"></span>
+                                                <span class="category-name">{{ $category->name }}</span>
+                                            </label>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Right Content -->
+                        <div class="right-content">
+                            <div class="sub-itens">
+                                <div class="form-group">
+                                    <h3>Data</h3>
+                                    <input type="datetime-local" id="actions-due-date" class="form-control" style="width: 100%;" required>
+                                </div>
+
+                                <div class="form-group">
+                                    <h3>Urgência</h3>
+                                    <select class="form-control custom-select" id="actions-urgency" required>
+                                        <option value="low">Baixa</option>
+                                        <option value="medium">Média</option>
+                                        <option value="high">Alta</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="subtasks-header">
+                                    <h3>Subtarefas</h3>
+                                    <button type="button" id="actions-add-subtask-btn" class="add-subtask-btn">
+                                        <i class="fas fa-plus"></i> Adicionar Subtarefa
+                                    </button>
+                                </div>
+                                <div id="actions-subtasks-container" class="subtasks-container">
+                                    <!-- Subtasks will be loaded dynamically -->
+                                </div>
+                                <div id="new-actions-subtask-form" style="display: none;" class="mb-3 mt-3">
+                                    <div class="input-group mb-2">
+                                        <input type="text" class="form-control" id="new-actions-subtask-title" placeholder="Título da subtarefa" maxlength="90">
+                                    </div>
+                                    <div class="input-group">
+                                        <textarea class="form-control" id="new-actions-subtask-description" placeholder="Descrição (opcional)" rows="2"></textarea>
+                                    </div>
+                                    <div class="d-flex justify-content-end mt-2">
+                                        <button type="button" class="btn btn-sm btn-secondary mr-2" id="cancel-actions-subtask-btn">Cancelar</button>
+                                        <button type="button" class="btn btn-sm btn-success" id="save-actions-subtask-btn">Adicionar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <input type="hidden" id="actions-task-id">
+                </div>
+                <div class="modal-footer">
+                    <div class="action-buttons-container">
+                        <button type="button" class="btn btn-outline-danger" id="delete-actions-task-btn">
+                            <i class="fas fa-trash"></i> Excluir Tarefa
+                        </button>
+                        <button type="button" class="btn btn-primary" id="save-actions-task-btn">
+                            <i class="fas fa-save"></i> Salvar Alterações
+                        </button>
+                        <button type="button" class="btn btn-success" id="complete-actions-task-btn">
+                            <i class="fas fa-check-circle"></i> Concluir Tarefa
+                        </button>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ asset('js/script.js') }}"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js"></script>
@@ -403,6 +519,10 @@
 
     @stack('scripts')
 </body>
+
+<button id="theme-toggle" class="theme-toggle" aria-label="Toggle dark/light mode">
+    <i class="fas fa-moon"></i>
+</button>
 </html>
 
 

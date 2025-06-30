@@ -112,7 +112,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     if (descriptionInput && descriptionCount) {
         descriptionInput.addEventListener('input', function() {
-            updateCharCount(this, descriptionCount, 200);
+            updateCharCount(this, descriptionCount, 600);
         });
     }
     

@@ -99,7 +99,7 @@ body {
 .alert-warning {
     background-color: rgba(255, 193, 7, 0.15);
     color: #ffe066;
-    border-left: 4px solid var(--warning-color);
+    border-left: 4px solid var(--edit-color);
 }
 
 .alert-info {
@@ -215,25 +215,25 @@ body {
 
 .btn-warning {
     background-color: rgba(255, 193, 7, 0.2);
-    border-color: var(--warning-color);
+    border-color: var(--edit-color);
     color: #ffe066;
 }
 
 .btn-warning:hover {
     background-color: rgba(255, 193, 7, 0.3);
-    border-color: var(--warning-color);
+    border-color: var(--edit-color);
     color: #fff;
 }
 
 .btn-danger {
     background-color: rgba(220, 53, 69, 0.2);
-    border-color: var(--danger-color);
+    border-color: var(--delete-color);
     color: #ff8c96;
 }
 
 .btn-danger:hover {
     background-color: rgba(220, 53, 69, 0.3);
-    border-color: var(--danger-color);
+    border-color: var(--delete-color);
     color: #fff;
 }
 
@@ -522,11 +522,11 @@ body {
     border-radius: 10px;
     font-size: 1.15rem;
     color: var(--text-color);
-    border-left: 4px solid var(--warning-color);
+    border-left: 4px solid var(--edit-color);
 }
 
 .task-info-text i {
-color: var(--warning-color);
+color: var(--edit-color);
 margin-right: 5px;
 font-size: 1.2rem;
 }
@@ -642,7 +642,7 @@ font-size: 1.2rem;
 
 .filter-tag i:hover {
     opacity: 1;
-    color: var(--danger-color);
+    color: var(--delete-color);
 }
 
 /* Estilo para os botões de filtro */
@@ -658,7 +658,7 @@ font-size: 1.2rem;
 }
 
 #clear-all-filters {
-    color: var(--danger-color);
+    color: var(--delete-color);
     cursor: pointer;
     transition: color 0.2s;
 }
@@ -749,15 +749,15 @@ font-size: 1.2rem;
 }
 
 .swal2-icon {
-    border-color: var(--warning-color) !important;
-    color: var(--warning-color) !important;
+    border-color: var(--edit-color) !important;
+    color: var(--edit-color) !important;
 }
 
 /* Delete task button */
 .delete-task-button {
     background: none;
     border: none;
-    color: var(--danger-color);
+    color: var(--delete-color);
     text-decoration: none;
     transition: all 0.3s ease;
     font-weight: 500;

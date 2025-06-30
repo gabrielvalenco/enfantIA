@@ -76,6 +76,41 @@ document.addEventListener('DOMContentLoaded', function() {
                 document.getElementById('taskDate').textContent = new Date(event.start).toLocaleDateString('pt-BR');
                 document.getElementById('taskDescription').textContent = props.description;
                 
+                // Exibir subtarefas se existirem
+                const subtasksList = document.getElementById('subtasksList');
+                const noSubtasks = document.getElementById('noSubtasks');
+                const subtasksContainer = document.getElementById('subtasksContainer');
+                
+                // Limpar lista de subtarefas
+                subtasksList.innerHTML = '';
+                
+                // Verificar se existem subtarefas
+                if (props.subtasks && props.subtasks.length > 0) {
+                    subtasksContainer.classList.remove('d-none');
+                    noSubtasks.classList.add('d-none');
+                    
+                    // Adicionar cada subtarefa à lista
+                    props.subtasks.forEach((subtask, index) => {
+                        const subtaskItem = document.createElement('div');
+                        subtaskItem.className = 'subtask-item';
+                        
+                        const subtaskTitle = document.createElement('div');
+                        subtaskTitle.className = 'subtask-title';
+                        subtaskTitle.textContent = `Subtarefa #${index + 1}`;
+                        
+                        const subtaskDescription = document.createElement('p');
+                        subtaskDescription.className = 'subtask-description';
+                        subtaskDescription.textContent = subtask.description || 'Sem descrição';
+                        
+                        subtaskItem.appendChild(subtaskTitle);
+                        subtaskItem.appendChild(subtaskDescription);
+                        subtasksList.appendChild(subtaskItem);
+                    });
+                } else {
+                    subtasksContainer.classList.remove('d-none');
+                    noSubtasks.classList.remove('d-none');
+                }
+                
                 // Exibir urgência com cor correspondente
                 const urgencyElement = document.getElementById('taskUrgency');
                 urgencyElement.textContent = props.urgency;

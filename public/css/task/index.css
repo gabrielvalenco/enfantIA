@@ -1,69 +1,6 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
 
-:root {
-    /* General Colors */
-    --background-color: #121212;
-    --surface-color: #1E1E1E;
-    --card-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    --border-color: #333333;
-    --button-color: #121212;
-    
-    /* General Colors Hover */
-    --background-color-hover: #202020;
-    --border-hover: #4d4d4d;
-    --button-hover: #121212;
-
-    /* Text Colors */
-    --text-color: #b9b9b9;
-    --text-primary: #ebebeb;
-    --text-secondary: #6C757D;
-    --link-color: rgb(32, 172, 130);
-
-    /* Text Colors Hover */
-    --text-color-hover: #d3d3d3;
-    --text-primary-hover: #ffffff;
-    --text-secondary-hover: #838b93;
-    --link-color-hover: rgb(29, 248, 182);
-
-    /* Action Colors */
-    --edit-color: #F0C05A;
-    --delete-color: #DB3A34;
-    --complete-color: #00A86B;
-
-    /* Action Colors Hover */
-    --edit-color-hover: #FFD700;
-    --delete-color-hover: #FF4C4C;
-    --complete-color-hover: #4CAF50;
-    
-    /* Transition for theme changes */
-    --transition-speed: 0.3s;
-}
-
-/* Light theme colors */
-[data-theme="light"] {
-    /* General Colors */
-    --background-color: #f5f5f5;
-    --surface-color: #ffffff;
-    --card-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    --border-color: #e0e0e0;
-    --button-color: #f5f5f5;
-    
-    /* General Colors Hover */
-    --background-color-hover: #e8e8e8;
-    --border-hover: #c0c0c0;
-    --button-hover: #e8e8e8;
-
-    /* Text Colors */
-    --text-color: #555555;
-    --text-primary: #333333;
-    --text-secondary: #6C757D;
-    --link-color: rgb(32, 172, 130);
-
-    /* Text Colors Hover */
-    --text-color-hover: #333333;
-    --text-primary-hover: #000000;
-    --text-secondary-hover: #495057;
-    --link-color-hover: rgb(29, 248, 182);
+* {
+    font-family: 'Poppins', sans-serif;
 }
 
 body {
@@ -99,7 +36,7 @@ body {
 .alert-warning {
     background-color: rgba(255, 193, 7, 0.15);
     color: #ffe066;
-    border-left: 4px solid var(--warning-color);
+    border-left: 4px solid var(--edit-color);
 }
 
 .alert-info {
@@ -215,25 +152,25 @@ body {
 
 .btn-warning {
     background-color: rgba(255, 193, 7, 0.2);
-    border-color: var(--warning-color);
+    border-color: var(--edit-color);
     color: #ffe066;
 }
 
 .btn-warning:hover {
     background-color: rgba(255, 193, 7, 0.3);
-    border-color: var(--warning-color);
+    border-color: var(--edit-color);
     color: #fff;
 }
 
 .btn-danger {
     background-color: rgba(220, 53, 69, 0.2);
-    border-color: var(--danger-color);
+    border-color: var(--delete-color);
     color: #ff8c96;
 }
 
 .btn-danger:hover {
     background-color: rgba(220, 53, 69, 0.3);
-    border-color: var(--danger-color);
+    border-color: var(--delete-color);
     color: #fff;
 }
 
@@ -470,13 +407,13 @@ body {
 .bg-danger {
     background-color: rgba(220, 53, 69, 0.2) !important;
     color: #ff8c96;
-    border: 2px solid var(--danger-color);
+    border: 2px solid var(--delete-color);
 }
 
 .bg-warning {
     background-color: rgba(255, 193, 7, 0.2) !important;
     color: #ffe066;
-    border: 2px solid var(--warning-color);
+    border: 2px solid var(--edit-color);
 }
 
 .bg-info {
@@ -488,7 +425,7 @@ body {
 .badge-urgent {
     background-color: rgba(220, 53, 69, 0.3) !important;
     color: #ff8c96;
-    border: 1px solid var(--danger-color);
+    border: 1px solid var(--delete-color);
     border-radius: 10px;
     animation: pulse 1.5s infinite;
     display: inline-flex;
@@ -779,7 +716,7 @@ select:focus,
     margin-left: auto;
     background-color: transparent;
     border: none;
-    color: var(--danger-color);
+    color: var(--delete-color);
     opacity: 0.7;
     transition: all 0.3s ease;
     padding: 0.2rem 0.5rem;
@@ -982,13 +919,13 @@ select:focus,
 }
 
 #clear-all-filters {
-    color: var(--danger-color);
+    color: var(--delete-color);
     cursor: pointer;
     transition: color 0.2s;
 }
 
 #clear-all-filters:hover {
-    color: var(--danger-color-hover);
+    color: var(--delete-color-hover);
 }
 
 /* Estilos personalizados para o SweetAlert2 */
@@ -1029,8 +966,8 @@ select:focus,
 }
 
 .swal2-icon {
-    border-color: var(--warning-color) !important;
-    color: var(--warning-color) !important;
+    border-color: var(--edit-color) !important;
+    color: var(--edit-color) !important;
 }
 
 @media (min-width: 992px) {
@@ -1159,7 +1096,7 @@ select:focus,
 }
 
 .filter-tag i:hover {
-    color: var(--danger-color);
+    color: var(--delete-color);
 }
 
 /* Remover estilos antigos da search-container que foram substituídos */
@@ -1218,6 +1155,10 @@ select:focus,
         
         .task-row.selected {
             background-color: rgba(32, 172, 130, 0.2) !important;
+        }
+        
+        .task-row.selected-delete {
+            background-color: rgba(196, 30, 58, 0.2) !important;
         }
         
         /* Estilo para o modo de seleção */
