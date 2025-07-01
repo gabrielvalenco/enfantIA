@@ -2,6 +2,7 @@
 
 @section('content')
 
+<link rel="stylesheet" href="{{ asset('css/style.css') }}">
 <link rel="icon" href="{{ asset('favicon.svg') }}" type="image/svg+xml">
 <link rel="stylesheet" href="{{ asset('css/dashboard-style.css') }}">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css">
@@ -309,11 +310,12 @@
         </div>
     </div>
 
+    <script src="{{ asset('js/script.js') }}"></script>
     <script>
         // Define category colors for the external script
         var categoryColors = {
             @foreach(\App\Models\Category::where('user_id', Auth::id())->get() as $category)
-                '{{ $category->name }}': '{{ $category->color }}',
+                '{{ addslashes($category->name) }}': '{{ $category->color }}',
             @endforeach
             'default': '#20ac82'
         };
@@ -323,7 +325,7 @@
             @foreach ($upcomingTasks as $task)
             {
                 id: {{ $task->id }},
-                title: '{{ $task->title }}',
+                title: "{{ addslashes($task->title) }}",
                 start: '{{ $task->due_date }}',
                 color: '{{ $task->urgency === 'high' ? '#dc3545' : ($task->urgency === 'medium' ? '#ffc107' : '#20ac82') }}',
                 display: 'block',
@@ -331,10 +333,10 @@
                 extendedProps: {
                     categories: [
                         @foreach($task->categories as $category)
-                            '{{ $category->name }}',
+                            "{{ addslashes($category->name) }}",
                         @endforeach
                     ],
-                    description: '{{ $task->description ?? "Sem descrição" }}',
+                    description: "{{ addslashes($task->description ?? 'Sem descrição') }}",
                     urgency: '{{ $task->urgency === "high" ? "Alta" : ($task->urgency === "medium" ? "Média" : "Baixa") }}',
                     editUrl: '{{ route('tasks.edit', $task->id) }}',
                     deleteUrl: '{{ route('tasks.destroy', $task->id) }}',
@@ -343,7 +345,7 @@
                         @foreach($task->subtasks as $subtask)
                             {
                                 id: {{ $subtask->id }},
-                                description: '{{ addslashes($subtask->description) }}'
+                                description: "{{ addslashes($subtask->description) }}"
                             },
                         @endforeach
                     ]
@@ -353,7 +355,6 @@
         ];
     </script>
     <script src="{{ asset('js/dashboard/script.js') }}"></script>
-    <script src="{{ asset('js/script.js') }}"></script>
 </div>
 
 @include('layouts.footer')

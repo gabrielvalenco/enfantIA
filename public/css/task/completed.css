@@ -453,7 +453,6 @@ body {
 /* Estilo para a barra de pesquisa e filtros */
 .filters-container {
     margin-bottom: 1.5rem;
-    box-shadow: var(--card-shadow);
     margin-top: 10px;
 }
 

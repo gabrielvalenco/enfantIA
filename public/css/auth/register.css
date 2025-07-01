@@ -205,17 +205,18 @@ p {
 
 .password-container {
     position: relative;
+    margin-bottom: 1rem;
 }
 
 .password-strength-container {
-    margin-top: 10px;
+    margin-top: 1rem;
 }
 
 .password-strength-bar {
     height: 8px;
     background-color: #e0e0e0;
     border-radius: 4px;
-    margin-bottom: 10px;
+    margin-bottom: 1rem;
     overflow: hidden;
 }
 

@@ -301,6 +301,7 @@
     border: none !important;
 }
 
+
 .pendingSubtasksMessage {
     color: var(--text-primary);
     font-size: 0.875rem;
@@ -350,8 +351,8 @@
 }
 
 .complete-button {
-    background-color: var(--complete-color);
-    border: 2px solid var(--complete-color);
+    background-color: var(--link-color);
+    border: 2px solid var(--link-color);
     border-radius: 100%;
     width: 20px;
     height: 20px;
@@ -365,12 +366,43 @@
 }
 
 .complete-button:hover {
-    background-color: var(--complete-color-hover);
-    border-color: var(--complete-color-hover);
+    background-color: var(--link-color-hover);
+    border-color: var(--link-color-hover);
 }
 
 table tr {
-    border-bottom: 2px solid var(--border-color);
+    border-bottom: 1px solid var(--border-color);
+}
+
+/* Estilos para as badges de urgência */
+.badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-weight: 500;
+    font-size: 0.8rem;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.bg-danger {
+    background-color: rgba(220, 53, 69, 0.2) !important;
+    color: #ff8c96;
+    border: 2px solid var(--delete-color);
+}
+
+.bg-warning {
+    background-color: rgba(255, 193, 7, 0.2) !important;
+    color: #ffe066;
+    border: 2px solid var(--edit-color);
+}
+
+.bg-info {
+    background-color: rgba(23, 162, 184, 0.2) !important;
+    color: #a8e4f0;
+    border: 2px solid var(--link-color);
 }
 
 table td {
@@ -390,8 +422,9 @@ table tr:hover td {
     border: 2px solid var(--border-color);
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    padding: 1rem;
+    padding: 1.5rem;
     margin: 2rem auto;
+    min-height: 600px;
 }
 
 #calendar a {
@@ -400,6 +433,157 @@ table tr:hover td {
     cursor: pointer;
     color: var(--text-primary);
     padding-right: 0.5rem;
+}
+
+/* Estilos para os eventos do calendário */
+.fc-event {
+    border-radius: 6px !important;
+    padding: 4px 8px !important;
+    margin: 2px 0 !important;
+    cursor: pointer !important;
+    transition: transform 0.2s ease !important;
+}
+
+.fc-event:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15) !important;
+    z-index: 10 !important;
+}
+
+.fc-daygrid-event-dot {
+    border-color: var(--link-color) !important;
+}
+
+.fc-daygrid-day.fc-day-today {
+    background-color: rgba(32, 172, 130, 0.1) !important;
+}
+
+.fc-daygrid-day-number {
+    font-weight: bold;
+    padding: 8px !important;
+}
+
+.fc-daygrid-more-link {
+    color: var(--link-color) !important;
+    font-weight: bold;
+    background-color: rgba(32, 172, 130, 0.1);
+    border-radius: 4px;
+    padding: 2px 4px;
+}
+
+/* Centralizar o botão na célula do calendário */
+.fc-daygrid-day-bottom {
+    display: flex !important;
+    justify-content: center !important;
+    padding-top: 4px !important;
+    padding-bottom: 4px !important;
+}
+
+/* Ocultar a palavra "mais" nos links e mostrar apenas o número */
+.fc-daygrid-more-link {
+    font-size: 0 !important;
+    position: relative !important;
+}
+
+/* Estilizar o botão de "mais" como uma esfera */
+.fc-daygrid-more-link {
+    background-color: var(--link-color) !important;
+    border-radius: 50% !important;
+    width: 28px !important;
+    height: 28px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 0 !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2) !important;
+    transition: transform 0.2s, box-shadow 0.2s !important;
+    margin: 0 auto !important;
+    cursor: pointer !important;
+    z-index: 5 !important;
+}
+
+/* Efeito hover na esfera */
+.fc-daygrid-more-link:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* Conteúdo do botão */
+.fc-daygrid-more-link::before {
+    content: "+" !important;
+    font-size: 1.2rem !important;
+    color: white !important;
+    font-weight: bold !important;
+    line-height: 1 !important;
+}
+
+/* Estilo para o contador de tarefas */
+.task-count {
+    position: absolute !important;
+    top: -6px !important;
+    right: -6px !important;
+    background-color: #dc3545 !important;
+    color: white !important;
+    border-radius: 50% !important;
+    width: 18px !important;
+    height: 18px !important;
+    font-size: 0.7rem !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-weight: bold !important;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.3) !important;
+    border: 1px solid white !important;
+}
+
+/* Corrigir o z-index do popover para ficar abaixo do modal */
+.fc-popover.fc-more-popover {
+    z-index: 1040 !important; /* Menor que o modal (1050) */
+    border: 2px solid var(--border-color) !important;
+    border-radius: 8px !important;
+    background-color: var(--surface-color) !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+}
+
+.fc-popover-title {
+    background-color: var(--background-color) !important;
+    color: var(--text-primary) !important;
+    font-weight: bold !important;
+    padding: 8px 10px !important;
+    border-bottom: 1px solid var(--border-color) !important;
+}
+
+/* Ocultar a palavra "mais" no título do popover */
+.fc-popover-title:not(:empty)::before {
+    content: "";
+    display: inline;
+}
+
+.fc-popover-title:not(:empty) {
+    visibility: hidden;
+    position: relative;
+}
+
+.fc-popover-title:not(:empty)::after {
+    visibility: visible;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    padding: 8px 10px;
+    content: attr(data-date);
+    box-sizing: border-box;
+}
+
+.fc-popover-close {
+    color: var(--delete-color) !important;
+    opacity: 0.8 !important;
+}
+
+.fc-popover-close:hover {
+    color: var(--delete-color-hover) !important;
+    opacity: 1 !important;
 }
 
 /* Calendar table lines styling */

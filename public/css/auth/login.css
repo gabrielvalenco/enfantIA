@@ -95,7 +95,6 @@ body {
     border-radius: 12px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
     overflow: hidden;
-    padding: 20px;
 }
 
 .auth-header {
@@ -324,7 +323,7 @@ p {
 /* Media Queries */
 @media (max-width: 768px) {
    .auth-wrapper {
-        max-width: 350px;
+        max-width: 380px;
         width: 100%;
         margin: 0 auto;
         padding: 0;

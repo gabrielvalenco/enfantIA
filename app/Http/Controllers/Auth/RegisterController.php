@@ -31,18 +31,9 @@ class RegisterController extends Controller
                 'string', 
                 'min:8', 
                 'confirmed',
-                Password::min(8)
-                    ->mixedCase()
-                    ->numbers()
-                    ->symbols()
-                    ->uncompromised(),
             ],
         ], [
             'password.min' => 'A senha deve ter pelo menos 8 caracteres.',
-            'password.mixed_case' => 'A senha deve conter pelo menos uma letra maiúscula e uma minúscula.',
-            'password.numbers' => 'A senha deve conter pelo menos um número.',
-            'password.symbols' => 'A senha deve conter pelo menos um símbolo.',
-            'password.uncompromised' => 'A senha fornecida apareceu em um vazamento de dados. Por favor, escolha uma senha diferente.',
         ]);
 
         $user = User::create([

@@ -6,6 +6,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Tarefas Concluídas</title>
 
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
     <link rel="icon" href="{{ asset('favicon.svg') }}" type="image/svg+xml">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
@@ -153,6 +154,7 @@
         </div>
     </div>
 
+    <script src="{{ asset('js/script.js') }}"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js"></script>
@@ -165,4 +167,9 @@
     </script>
     <script src="{{ asset('js/tasks/completed.js') }}"></script>
 </body>
+
+<button id="theme-toggle" class="theme-toggle" aria-label="Toggle dark/light mode">
+    <i class="fas fa-moon"></i>
+</button>
+
 </html>

@@ -4,7 +4,7 @@
     /* General Colors */
     --background-color: #121212;
     --surface-color: #1E1E1E;
-    --card-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    --card-shadow: 0 2px 8px #0000001a;
     --border-color: #333333;
     --button-color: #121212;
     
@@ -17,23 +17,21 @@
     --text-color: #b9b9b9;
     --text-primary: #ebebeb;
     --text-secondary: #6C757D;
-    --link-color: rgb(32, 172, 130);
+    --link-color: #20ac82;
 
     /* Text Colors Hover */
     --text-color-hover: #d3d3d3;
     --text-primary-hover: #ffffff;
     --text-secondary-hover: #838b93;
-    --link-color-hover: rgb(29, 248, 182);
+    --link-color-hover: #17c893;
 
     /* Action Colors */
     --edit-color: #F0C05A;
     --delete-color: #DB3A34;
-    --complete-color: #00A86B;
 
     /* Action Colors Hover */
     --edit-color-hover: #FFD700;
     --delete-color-hover: #FF4C4C;
-    --complete-color-hover: #4CAF50;
     
     /* Transition for theme changes */
     --transition-speed: 0.3s;
@@ -44,7 +42,7 @@
     /* General Colors */
     --background-color: #f5f5f5;
     --surface-color: #ffffff;
-    --card-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    --card-shadow: 0 2px 8px #0000001a;
     --border-color: #e0e0e0;
     --button-color: #f5f5f5;
     
@@ -57,23 +55,21 @@
     --text-color: #555555;
     --text-primary: #333333;
     --text-secondary: #6C757D;
-    --link-color: rgb(32, 172, 130);
+    --link-color: #20ac82;
 
     /* Text Colors Hover */
     --text-color-hover: #333333;
     --text-primary-hover: #000000;
     --text-secondary-hover: #495057;
-    --link-color-hover: rgb(29, 248, 182);
+    --link-color-hover: #17c893;
     
     /* Action Colors */
     --edit-color: #D4A017;
     --delete-color: #C41E3A;
-    --complete-color: #008744;
     
     /* Action Colors Hover */
     --edit-color-hover: #B8860B;
     --delete-color-hover: #A91B0D;
-    --complete-color-hover: #006400;
 }
 
 /* Theme Toggle Button */

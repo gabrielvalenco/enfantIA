@@ -6,6 +6,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Categorias</title>
 
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
     <link rel="icon" href="{{ asset('favicon.svg') }}" type="image/svg+xml">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
@@ -161,5 +162,13 @@
             </div>
         </div>
     </div>
+
+    <script src="{{ asset('js/script.js') }}"></script>
+    
 </body>
+
+<button id="theme-toggle" class="theme-toggle" aria-label="Toggle dark/light mode">
+    <i class="fas fa-moon"></i>
+</button>
+
 </html>
