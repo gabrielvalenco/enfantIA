@@ -75,6 +75,7 @@ function initializeTagInput() {
     
     // Initialize with existing values if any
     if (hiddenInput.value) {
+        console.log('Existing languages:', hiddenInput.value);
         const existingLanguages = hiddenInput.value.split(',').map(lang => lang.trim()).filter(lang => lang);
         existingLanguages.forEach(language => {
             if (language) addTag(language);

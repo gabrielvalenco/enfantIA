@@ -32,7 +32,9 @@ class User extends Authenticatable
         'position',
         'bio',
         'timezone',
-        'preferences'
+        'preferences',
+        'locale',
+        'languages'
     ];
 
     /**

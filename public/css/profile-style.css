@@ -210,6 +210,46 @@
     color: #e74c3c;
 }
 
+/* Form Actions Styles */
+.form-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.action-button {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.btn-primary {
+    background-color: var(--link-color);
+    border: 1px solid var(--link-color);
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: rgba(32, 172, 130, 0.85);
+    transform: translateX(3px);
+}
+
+.btn-secondary {
+    background-color: var(--surface-color);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+}
+
+.btn-secondary:hover {
+    background-color: var(--border-color);
+    color: var(--text-primary);
+}
+
 /* Metrics Section */
 .metrics-container {
     background-color: var(--surface-color);

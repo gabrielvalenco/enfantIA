@@ -66,6 +66,9 @@ class ProfileController extends Controller
             $languages = implode(', ', $languageArray);
         }
         
+        // Ensure locale is properly handled
+        $locale = $request->filled('locale') ? trim($request->locale) : '';
+        
         $updateData = [
             'name' => $request->name,
             'email' => $request->email,

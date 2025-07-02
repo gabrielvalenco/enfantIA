@@ -23,7 +23,7 @@
         @method('PUT')
         
         <div class="left-content">
-            <div class="form-section">
+            <div class="form-section profile-content">
                 <h2>Informações Pessoais</h2>
                 
                 <div class="form-group">
@@ -75,7 +75,7 @@
                 </div>
             </div>
             
-            <div class="form-section">
+            <div class="form-section social-media-section">
                 <h2>Redes Sociais</h2>
                 <p class="social-media-hint">Adicione até 3 links de redes sociais</p>
                 
@@ -121,8 +121,14 @@
             </div>
             
             <div class="form-actions">
-                <button type="submit" class="btn btn-primary">Salvar Alterações</button>
-                <a href="{{ route('profile.index') }}" class="btn btn-secondary">Cancelar</a>
+                <button type="submit" class="btn btn-primary action-button">
+                    <i class="fas fa-save"></i>
+                    <span>Salvar Alterações</span>
+                </button>
+                <a href="{{ route('profile.index') }}" class="btn btn-secondary action-button">
+                    <i class="fas fa-times"></i>
+                    <span>Cancelar</span>
+                </a>
             </div>
         </div>
     </form>

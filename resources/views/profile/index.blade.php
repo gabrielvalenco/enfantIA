@@ -38,16 +38,39 @@
                         </div>
                         <div class="profile-details">
                             <div class="profile-item">
-                                <h3>{{ Auth::user()->name }}</h3>
-                                <p class="profile-text">{{ Auth::user()->email }}</p>
+                                <h3>{{ $user->name }}</h3>
+                                <p class="profile-text">{{ $user->email }}</p>
                             </div>
+                            
+                            @if($user->phone)
+                            <div class="profile-item">
+                                <h3>Telefone</h3>
+                                <p class="profile-text">{{ $user->phone }}</p>
+                            </div>
+                            @endif
+                            
+                            @if($user->position)
+                            <div class="profile-item">
+                                <h3>Cargo</h3>
+                                <p class="profile-text">{{ $user->position }}</p>
+                            </div>
+                            @endif
+                            
+                            @if($user->bio)
+                            <div class="profile-item">
+                                <h3>Biografia</h3>
+                                <p class="profile-text">{{ $user->bio }}</p>
+                            </div>
+                            @endif
+                            
                             <div class="profile-item">
                                 <h3>Localidade</h3>
-                                <p class="profile-text">{{ Auth::user()->locale }}</p>
+                                <p class="profile-text">{{ $user->locale ?: 'Não informado' }}</p>
                             </div>
+                            
                             <div class="profile-item">
                                 <h3>Idiomas</h3>
-                                <p class="profile-text">{{ Auth::user()->languages }}</p>
+                                <p class="profile-text">{{ $user->languages ?: 'Não informado' }}</p>
                             </div>
                         </div>
                     </div>
