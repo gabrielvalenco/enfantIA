@@ -127,6 +127,89 @@
     margin-bottom: 1rem;
 }
 
+/* Select Styles */
+.form-select {
+    background-color: var(--background-color);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    padding: 0.5rem 0.75rem;
+    color: var(--text-primary);
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+    width: 100%;
+}
+
+.form-select:focus {
+    outline: none;
+    border-color: var(--link-color);
+    box-shadow: 0 0 0 2px rgba(32, 172, 130, 0.2);
+}
+
+.form-select[multiple] {
+    min-height: 120px;
+}
+
+.form-select option {
+    padding: 8px 12px;
+    background-color: var(--background-color);
+    color: var(--text-primary);
+}
+
+.form-select option:checked {
+    background-color: rgba(32, 172, 130, 0.2);
+    color: var(--link-color);
+}
+
+.form-text {
+    color: var(--text-secondary);
+    font-size: 0.8rem;
+    margin-top: 0.25rem;
+}
+
+/* Language Tags Styles */
+.languages-container {
+    margin-bottom: 10px;
+}
+
+.language-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 10px;
+}
+
+.language-tag {
+    display: inline-flex;
+    align-items: center;
+    background-color: rgba(32, 172, 130, 0.15);
+    border: 1px solid var(--link-color);
+    border-radius: 16px;
+    padding: 4px 10px;
+    font-size: 0.9rem;
+    color: var(--link-color);
+    transition: all 0.2s ease;
+}
+
+.language-tag:hover {
+    background-color: rgba(32, 172, 130, 0.25);
+}
+
+.tag-text {
+    margin-right: 6px;
+}
+
+.tag-remove {
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 1.1rem;
+    line-height: 1;
+    padding: 0 2px;
+}
+
+.tag-remove:hover {
+    color: #e74c3c;
+}
+
 /* Metrics Section */
 .metrics-container {
     background-color: var(--surface-color);

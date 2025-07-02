@@ -11,6 +11,9 @@ document.addEventListener('DOMContentLoaded', function() {
             detectSocialMedia(input, iconId);
         }
     });
+    
+    // Initialize tag input for languages
+    initializeTagInput();
 });
 
 /**
@@ -57,4 +60,81 @@ function detectSocialMedia(inputElement, iconElementId) {
     
     // Default icon for unrecognized URLs
     iconElement.innerHTML = '<i class="fas fa-link" title="Link"></i>';
+}
+
+/**
+ * Initializes the tag input functionality for the languages field
+ */
+function initializeTagInput() {
+    const container = document.getElementById('languages-container');
+    if (!container) return;
+    
+    const input = document.getElementById('language-input');
+    const tagsContainer = document.getElementById('language-tags');
+    const hiddenInput = document.getElementById('languages-hidden');
+    
+    // Initialize with existing values if any
+    if (hiddenInput.value) {
+        const existingLanguages = hiddenInput.value.split(',').map(lang => lang.trim()).filter(lang => lang);
+        existingLanguages.forEach(language => {
+            if (language) addTag(language);
+        });
+    }
+    
+    // Add event listener for the Enter key
+    input.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' || e.key === ',') {
+            e.preventDefault();
+            const value = input.value.trim();
+            
+            if (value && getTagsCount() < 3) {
+                addTag(value);
+                input.value = '';
+            }
+        }
+    });
+    
+    // Function to add a new tag
+    function addTag(text) {
+        // Check if we already have 3 tags
+        if (getTagsCount() >= 3) return;
+        
+        const tag = document.createElement('div');
+        tag.className = 'language-tag';
+        tag.innerHTML = `
+            <span class="tag-text">${text}</span>
+            <span class="tag-remove" title="Remover">×</span>
+        `;
+        
+        // Add event listener to remove tag
+        tag.querySelector('.tag-remove').addEventListener('click', function() {
+            tagsContainer.removeChild(tag);
+            updateHiddenInput();
+            
+            // Show the input if we have less than 3 tags
+            if (getTagsCount() < 3) {
+                input.style.display = 'block';
+            }
+        });
+        
+        tagsContainer.appendChild(tag);
+        updateHiddenInput();
+        
+        // Hide the input if we have 3 tags
+        if (getTagsCount() >= 3) {
+            input.style.display = 'none';
+        }
+    }
+    
+    // Function to update the hidden input with all tags
+    function updateHiddenInput() {
+        const tags = Array.from(tagsContainer.querySelectorAll('.language-tag .tag-text'))
+            .map(tag => tag.textContent.trim());
+        hiddenInput.value = tags.join(',');
+    }
+    
+    // Function to get the current number of tags
+    function getTagsCount() {
+        return tagsContainer.querySelectorAll('.language-tag').length;
+    }
 }

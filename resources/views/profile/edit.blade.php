@@ -105,13 +105,18 @@
                 <h2>Preferências</h2>
                 
                 <div class="form-group">
-                    <label for="locale">Localidade</label>
-                    <input type="text" name="locale" id="locale" value="{{ old('locale', $user->locale) }}">
+                    <label for="locale">País</label>
+                    <input type="text" name="locale" id="locale" class="form-control" value="{{ old('locale', $user->locale) }}" placeholder="Digite seu país">
                 </div>
                 
                 <div class="form-group">
-                    <label for="languages">Idiomas</label>
-                    <input type="text" name="languages" id="languages" value="{{ old('languages', $user->languages) }}">
+                    <label for="language-input">Idiomas (até 3)</label>
+                    <div id="languages-container" class="languages-container">
+                        <div id="language-tags" class="language-tags"></div>
+                        <input type="text" id="language-input" class="form-control" placeholder="Digite um idioma e pressione Enter">
+                        <input type="hidden" name="languages" id="languages-hidden" value="{{ old('languages', $user->languages) }}">
+                    </div>
+                    <small class="form-text text-muted">Digite um idioma, pressione Enter para adicionar, até 3 idiomas</small>
                 </div>
             </div>
             

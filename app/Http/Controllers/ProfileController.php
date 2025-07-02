@@ -55,12 +55,25 @@ class ProfileController extends Controller
             $position = $request->custom_position;
         }
         
+        // Process languages - ensure it's properly formatted
+        $languages = '';
+        if ($request->filled('languages')) {
+            // The languages field is already a comma-separated string from the hidden input
+            // Just need to clean it up and limit to 3 items
+            $languageArray = array_map('trim', explode(',', $request->languages));
+            $languageArray = array_filter($languageArray); // Remove empty items
+            $languageArray = array_slice($languageArray, 0, 3);
+            $languages = implode(', ', $languageArray);
+        }
+        
         $updateData = [
             'name' => $request->name,
             'email' => $request->email,
             'phone' => $request->phone,
             'position' => $position,
             'bio' => $request->bio,
+            'locale' => $request->locale,
+            'languages' => $languages,
             'preferences' => $user->preferences ?? []
         ];
         
