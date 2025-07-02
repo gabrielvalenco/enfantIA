@@ -12,6 +12,7 @@ use App\Models\Task;
 use App\Models\Note;
 use App\Models\Group;
 use App\Models\GroupInvitation;
+use App\Models\SocialLink;
 
 class User extends Authenticatable
 {
@@ -95,5 +96,13 @@ class User extends Authenticatable
     public function completedTasks()
     {
         return $this->hasMany(Task::class)->where('status', true);
+    }
+    
+    /**
+     * Get the social links for the user.
+     */
+    public function socialLinks()
+    {
+        return $this->hasMany(SocialLink::class)->orderBy('order');
     }
 }

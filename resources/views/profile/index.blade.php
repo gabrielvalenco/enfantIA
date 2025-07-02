@@ -21,7 +21,7 @@
                     <span class="back-text">Voltar ao Dashboard</span>
                     <i class="fas fa-sign-out-alt mobile-icon"></i>
                 </a>
-                <a href="#" class="edit-button">
+                <a href="{{ route('profile.edit') }}" class="edit-button">
                     <span class="edit-text">Editar Perfil</span>
                     <!-- <i class="fas fa-edit mobile-icon"></i> -->
                 </a>
@@ -59,9 +59,9 @@
                                 @foreach($socialLinks as $link)
                                     <div class="social-media-item">
                                         <div class="social-icon">
-                                            <i class="{{ getSocialIcon($link) }}"></i>
+                                            <i class="@getSocialIcon($link)"></i>
                                         </div>
-                                        <a href="{{ $link }}" class="social-link" target="_blank">{{ getSocialName($link) }}</a>
+                                        <a href="{{ $link }}" class="social-link" target="_blank">@getSocialName($link)</a>
                                     </div>
                                 @endforeach
                             @else

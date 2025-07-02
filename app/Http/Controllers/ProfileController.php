@@ -3,15 +3,34 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\SocialLink;
 
 class ProfileController extends Controller
 {
     public function index()
     {
         $user = auth()->user();
-        return view('profile.index', compact('user'));
+        $socialLinks = $user->socialLinks()->pluck('url')->toArray();
+        
+        // Get metrics data
+        $metrics = [
+            'tasks_completed' => $user->completedTasks()->count(),
+            'best_streak' => 5, // Placeholder for now
+            'on_time_percent' => 85, // Placeholder for now
+            'projects_finished' => 12 // Placeholder for now
+        ];
+        
+        return view('profile.index', compact('user', 'socialLinks', 'metrics'));
     }
 
+    public function edit()
+    {
+        $user = auth()->user();
+        $socialLinks = $user->socialLinks()->pluck('url')->toArray();
+        
+        return view('profile.edit', compact('user', 'socialLinks'));
+    }
+    
     public function update(Request $request)
     {
         $user = auth()->user();
@@ -50,6 +69,23 @@ class ProfileController extends Controller
         }
         
         $user->update($updateData);
+        
+        // Handle social links
+        if ($request->has('social_links')) {
+            // Delete existing links
+            $user->socialLinks()->delete();
+            
+            // Add new links
+            $order = 0;
+            foreach ($request->social_links as $url) {
+                if (!empty($url)) {
+                    $user->socialLinks()->create([
+                        'url' => $url,
+                        'order' => $order++
+                    ]);
+                }
+            }
+        }
 
         return redirect()->route('profile.index')
             ->with('success', 'Perfil atualizado com sucesso!');
