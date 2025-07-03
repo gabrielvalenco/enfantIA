@@ -42,7 +42,7 @@ $(document).ready(function() {
         
         activeFilters.category = category;
         
-        $('#categoryFilterBtn').html(`<i class="fas fa-tag mr-1"></i> ${$(this).text()}`);
+        $('#categoryFilterBtn').html(`<i class="fas fa-tag"></i> ${$(this).text()}`);
         applyFilters();
         updateActiveFiltersDisplay();
     });
@@ -53,7 +53,7 @@ $(document).ready(function() {
         const sort = $(this).data('sort');
         activeFilters.sort = sort;
         
-        $('#dateFilterBtn').html(`<i class="fas fa-sort mr-1"></i> ${$(this).text()}`);
+        $('#dateFilterBtn').html(`<i class="fas fa-sort"></i> ${$(this).text()}`);
         applyFiltersSorting();
         updateActiveFiltersDisplay();
     });
@@ -71,8 +71,8 @@ $(document).ready(function() {
         
         // Resetar inputs e botões
         $('#task-search').val('');
-        $('#categoryFilterBtn').html('<i class="fas fa-tag mr-1"></i> Categorias');
-        $('#dateFilterBtn').html('<i class="fas fa-sort mr-1"></i> Ordenar');
+        $('#categoryFilterBtn').html('<i class="fas fa-tag"></i> Categorias');
+        $('#dateFilterBtn').html('<i class="fas fa-sort"></i> Ordenar');
         
         // Mostrar todas as tarefas
         $('.task-row').show();
@@ -118,11 +118,11 @@ $(document).ready(function() {
         switch (filterType) {
             case 'category':
                 activeFilters.category = 'all';
-                $('#categoryFilterBtn').html('<i class="fas fa-tag mr-1"></i> Categorias');
+                $('#categoryFilterBtn').html('<i class="fas fa-tag"></i> Categorias');
                 break;
             case 'sort':
                 activeFilters.sort = 'none';
-                $('#dateFilterBtn').html('<i class="fas fa-sort mr-1"></i> Ordenar');
+                $('#dateFilterBtn').html('<i class="fas fa-sort"></i> Ordenar');
                 break;
             case 'search':
                 activeFilters.search = '';
@@ -222,7 +222,7 @@ $(document).ready(function() {
                     <tr class="no-results-row">
                         <td colspan="${colspan}" class="text-center">
                             <div class="alert alert-info mb-0">
-                                <i class="fas fa-info-circle mr-2"></i>
+                                <i class="fas fa-info-circle" style="margin-right: 0.5rem;"></i>
                                 Nenhuma tarefa encontrada com os filtros aplicados.
                             </div>
                         </td>
@@ -248,10 +248,14 @@ $(document).ready(function() {
             cancelButtonText: 'Cancelar',
             background: getComputedStyle(document.documentElement).getPropertyValue('--surface-color'),
             color: getComputedStyle(document.documentElement).getPropertyValue('--text-primary'),
+            allowOutsideClick: false,
+            allowEscapeKey: false
         }).then((result) => {
             if (result.isConfirmed) {
                 window.location.href = uncompleteRoutes.clearAll;
             }
+        }).catch(error => {
+            console.error('SweetAlert error:', error);
         });
     });
     
@@ -275,10 +279,14 @@ $(document).ready(function() {
             cancelButtonText: 'Cancelar',
             background: getComputedStyle(document.documentElement).getPropertyValue('--surface-color'),
             color: getComputedStyle(document.documentElement).getPropertyValue('--text-primary'),
+            allowOutsideClick: false,
+            allowEscapeKey: false
         }).then((result) => {
             if (result.isConfirmed) {
                 $form.submit();
             }
+        }).catch(error => {
+            console.error('SweetAlert error:', error);
         });
     });
     
@@ -301,10 +309,14 @@ $(document).ready(function() {
             cancelButtonText: 'Cancelar',
             background: getComputedStyle(document.documentElement).getPropertyValue('--surface-color'),
             color: getComputedStyle(document.documentElement).getPropertyValue('--text-primary'),
+            allowOutsideClick: false,
+            allowEscapeKey: false
         }).then((result) => {
             if (result.isConfirmed) {
                 $form.submit();
             }
+        }).catch(error => {
+            console.error('SweetAlert error:', error);
         });
     });
 });

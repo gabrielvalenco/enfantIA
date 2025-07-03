@@ -8,7 +8,6 @@
 
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
     <link rel="icon" href="{{ asset('favicon.svg') }}" type="image/svg+xml">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="stylesheet" href="{{ asset('css/task/completed.css') }}">
 </head>
@@ -24,35 +23,36 @@
             <h1>Tarefas Concluídas</h1>
             <div class="table-actions">
                 <a class="back-button" href="{{ route('dashboard') }}">
-                    Voltar ao Dashboard
+                   <span class="back-text">Voltar ao Dashboard</span>
+                    <i class="fas fa-sign-out-alt mobile-icon"></i>
                 </a>
                 <button class="delete-task-button" id="clear-tasks-btn">
-                    <i class="fas fa-trash"></i> Limpar Tarefas
+                    <i class="fas fa-trash delete-mobile-icon"></i> 
+                    <span class="back-text">Limpar Tarefas</span>
                 </button>
             </div>
         </div>
 
-        <!-- Filtros e pesquisa -->
-        <div class="filters-container mb-4">
+        <div class="filters-container">
             <div class="row">
-                <div class="col-lg-6 col-md-12 mb-3">
-                    <div class="input-group search-box">
+                <div class="col-lg-6">
+                    <div class="search-box">
                         <div class="input-group-prepend">
                             <span class="input-group-text"><i class="fas fa-search"></i></span>
                         </div>
                         <input type="text" id="task-search" class="form-control" placeholder="Pesquisar tarefa concluída por título...">
                         <div class="input-group-append">
-                            <button class="btn btn-outline-secondary" type="button" id="clear-search">
+                            <button class="btn-outline-secondary" type="button" id="clear-search">
                                 <i class="fas fa-times"></i>
                             </button>
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-6 col-md-12">
-                    <div class="filter-buttons d-flex flex-wrap">
-                        <div class="dropdown filter-dropdown mr-2 mb-2">
-                            <button class="btn dropdown-toggle filter-button" type="button" id="categoryFilterBtn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="fas fa-tag mr-1"></i> Categorias
+                <div class="col-lg-6">
+                    <div class="filter-buttons">
+                        <div class="filter-dropdown">
+                            <button class="filter-button dropdown-toggle" type="button" id="categoryFilterBtn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fas fa-tag"></i> Categorias
                             </button>
                             <div class="dropdown-menu" aria-labelledby="categoryFilterBtn">
                                 <a class="dropdown-item" href="#" data-category="all">Todas</a>
@@ -64,24 +64,24 @@
                                 <a class="dropdown-item" href="#" data-category="none">Sem categoria</a>
                             </div>
                         </div>
-                        <div class="dropdown filter-dropdown mb-2">
-                            <button class="btn dropdown-toggle filter-button" type="button" id="dateFilterBtn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="fas fa-sort mr-1"></i> Ordenar
+                        <div class="filter-dropdown">
+                            <button class="filter-button dropdown-toggle" type="button" id="dateFilterBtn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fas fa-sort"></i> Ordenar
                             </button>
                             <div class="dropdown-menu" aria-labelledby="dateFilterBtn">
                                 <a class="dropdown-item" href="#" data-sort="none">Padrão</a>
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item text-truncate" href="#" data-sort="date-asc">Antiga → Recente</a>
-                                <a class="dropdown-item text-truncate" href="#" data-sort="date-desc">Recente → Antiga</a>
+                                <a class="dropdown-item" href="#" data-sort="date-asc">Antiga → Recente</a>
+                                <a class="dropdown-item" href="#" data-sort="date-desc">Recente → Antiga</a>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="task-info-text mt-2">
+            <div class="task-info-text">
                 <small><i class="fas fa-info-circle"></i> As tarefas concluídas são automaticamente excluídas após 1 semana, mas permanecem registradas no seu perfil para estatísticas.</small>
             </div>
-            <div id="active-filters" class="mt-2 d-none">
+            <div id="active-filters" class="d-none">
                 <small class="text-muted">Filtros ativos: <span id="filter-tags"></span> <a href="#" id="clear-all-filters" class="ml-2"><i class="fas fa-times-circle"></i> Limpar todos</a></small>
             </div>
         </div>
@@ -154,16 +154,21 @@
         </div>
     </div>
 
-    <script src="{{ asset('js/script.js') }}"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="{{ asset('js/script.js') }}"></script>
     <script>
         // Define routes for the external script
         var uncompleteRoutes = {
             clearAll: "{{ route('tasks.clear-all') }}"
         };
+        
+        // Inicializar tooltips do Bootstrap
+        $(document).ready(function() {
+            $('[data-toggle="tooltip"]').tooltip();
+        });
     </script>
     <script src="{{ asset('js/tasks/completed.js') }}"></script>
 </body>

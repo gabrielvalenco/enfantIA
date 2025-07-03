@@ -129,14 +129,14 @@ h1, h2, h3, h4, h5, h6 {
     align-items: center;
     margin-bottom: 1rem;
     border-bottom: 2px solid var(--border-color);
+    margin-bottom: 2rem;
     padding-top: 1rem;
-    padding-bottom:1rem;
 }
 
 .table-actions {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 1rem;
 }
 
 .container {
@@ -419,7 +419,7 @@ tr:hover {
     .table-header {
         position: relative;
         z-index: 10;
-        margin-bottom: 1.5rem;
+        margin-bottom: 2rem;
         display: flex;
         flex-direction: row;
         justify-content: space-between;
