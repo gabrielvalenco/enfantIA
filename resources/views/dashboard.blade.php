@@ -30,7 +30,7 @@
                 <li>
                     <a href="{{ route('profile.index') }}" class="dropdown-item">
                         <i class="fas fa-user-edit me-2"></i>
-                        Editar Perfil
+                        Perfil
                     </a>
                 </li>
                 <li><hr class="dropdown-divider"></li>

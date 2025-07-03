@@ -390,20 +390,6 @@ body {
     display: inline-block;
 }
 
-/* Status Badges */
-.badge {
-    width: 75px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 2px 6px;
-    border-radius: 4px;
-    font-weight: 500;
-    font-size: 0.8rem;
-    margin: 0 auto;
-    text-align: center;
-}
-
 .bg-danger {
     background-color: rgba(220, 53, 69, 0.2) !important;
     color: #ff8c96;

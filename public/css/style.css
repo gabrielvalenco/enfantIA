@@ -26,8 +26,8 @@
     --link-color-hover: #17c893;
 
     /* Action Colors */
-    --edit-color: #F0C05A;
-    --delete-color: #DB3A34;
+    --edit-color: #cda141;
+    --delete-color: #b52e29;
 
     /* Action Colors Hover */
     --edit-color-hover: #FFD700;
@@ -100,6 +100,10 @@
     border-color: var(--border-hover);
 }
 
+* {
+    font-family: 'Poppins', sans-serif;
+}
+
 html, body {
     height: auto;
     margin: 0;
@@ -118,13 +122,6 @@ h1, h2, h3, h4, h5, h6 {
     font-weight: 700;
 }
 
-.container {
-    max-width: 1400px;
-    width: 100%;
-    margin: 0 auto;
-    padding: 0 1rem;
-    box-sizing: border-box;
-}
 
 .table-header {
     display: flex;
@@ -139,13 +136,22 @@ h1, h2, h3, h4, h5, h6 {
 .table-actions {
     display: flex;
     align-items: center;
-    gap: 1.5rem;
+    gap: 0.5rem;
+}
+
+.container {
+    max-width: 1400px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 0 1rem;
+    box-sizing: border-box;
 }
 
 .back-button {
-    color: var(--link-color);
+    color: var(--text-secondary);
     text-decoration: none;
     transition: all 0.3s ease;
+    font-size: 1rem;
     font-weight: 500;
     display: inline-flex;
     align-items: center;
@@ -157,9 +163,8 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .back-button:hover {
-    color: var(--link-color-hover);
-    transform: translateX(-5px);
-    text-decoration: none;
+    color: var(--text-secondary-hover);
+    transform: translateX(-2px);
 }
 
 .back-button::before {
@@ -167,4 +172,308 @@ h1, h2, h3, h4, h5, h6 {
     font-size: 1.2rem;
 }
 
+.add-button {
+    color: var(--link-color);
+    background: transparent;
+    border: 2px solid var(--link-color);
+    border-radius: 2rem;
+    padding: 7px 15px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+}
 
+.add-button:hover {
+    color: var(--link-color-hover);
+    transform: translateX(-2px);
+    text-decoration: none;
+}
+
+.cancel-button {
+    background-color: transparent;
+    border: 2px solid var(--text-secondary);
+    color: var(--text-secondary);
+    border-radius: 2rem;
+    padding: 5px 10px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    font-size: 1rem;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.cancel-button:hover {
+    color: var(--text-secondary-hover);
+    transform: translateX(-2px);
+}
+
+.badge {
+    font-family: 'Poppins', sans-serif;
+    width: 75px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5px 12px;
+    border-radius: 4px;
+    letter-spacing: 1px;
+    font-weight: 500;
+    font-size: 0.8rem;
+    text-align: center;
+}
+
+.edit-badge {
+    background-color: #ffe06633 !important;
+    color: var(--edit-color);
+    border: 2px solid var(--edit-color);
+}
+
+.edit-badge:hover {
+    color: var(--edit-color-hover);
+    text-decoration: none;
+}
+
+.delete-badge {
+    background-color: #dc354533 !important;
+    color: var(--delete-color);
+    border: 2px solid var(--delete-color);
+}
+
+.delete-badge:hover {
+    color: var(--delete-color-hover);
+    text-decoration: none;
+}
+
+table {
+    width: 100%;
+    margin-top: 2rem;
+    border: 2px solid var(--border-color);
+    border-collapse: separate;
+    border-spacing: 0;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: var(--card-shadow);
+}
+
+th, td {
+    padding: 1rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+}
+
+th {
+    background-color: var(--background-color);
+    font-weight: 600;
+    color: var(--text-primary);
+    border-bottom: 2px solid var(--border-color);
+}
+
+/* Striped rows */
+tr:nth-child(even) {
+    background-color: var(--background-color-hover);
+}
+
+tr:nth-child(odd) {
+    background-color: var(--surface-color);
+}
+
+tr:hover {
+    background-color: var(--background-color);
+}
+
+/* Custom SweetAlert2 Styling */
+.swal2-popup {
+    background-color: var(--surface-color) !important;
+    border: 1px solid var(--border-color) !important;
+    border-radius: 10px !important;
+    box-shadow: var(--card-shadow) !important;
+    color: var(--text-primary) !important;
+    font-family: 'Poppins', sans-serif !important;
+}
+
+.swal2-title {
+    color: var(--text-primary) !important;
+    font-family: 'Poppins', sans-serif !important;
+    font-weight: 600 !important;
+}
+
+.swal2-html-container {
+    color: var(--text-color) !important;
+    font-family: 'Poppins', sans-serif !important;
+}
+
+.swal2-html-container strong {
+    font-weight: 600;
+    color: var(--link-color) !important;
+}
+
+/* Confirm button styling */
+.swal2-confirm {
+    background-color: var(--link-color) !important;
+    color: white !important;
+    border: none !important;
+    box-shadow: none !important;
+    font-family: 'Poppins', sans-serif !important;
+    font-weight: 500 !important;
+    border-radius: 2rem !important;
+    padding: 0.5rem 1.5rem !important;
+    transition: all 0.3s ease !important;
+}
+
+.swal2-confirm:hover {
+    background-color: var(--link-color-hover) !important;
+    transform: translateY(-2px) !important;
+}
+
+/* Cancel button styling */
+.swal2-cancel {
+    background-color: transparent !important;
+    color: var(--text-secondary) !important;
+    border: 2px solid var(--text-secondary) !important;
+    box-shadow: none !important;
+    font-family: 'Poppins', sans-serif !important;
+    font-weight: 500 !important;
+    border-radius: 2rem !important;
+    padding: 0.5rem 1.5rem !important;
+    transition: all 0.3s ease !important;
+}
+
+.swal2-cancel:hover {
+    color: var(--text-secondary-hover) !important;
+    border-color: var(--text-secondary-hover) !important;
+    transform: translateY(-2px) !important;
+}
+
+/* Icon styling */
+.swal2-icon {
+    border-color: var(--border-color) !important;
+}
+
+.swal2-icon.swal2-success {
+    border-color: var(--link-color) !important;
+}
+
+.swal2-icon.swal2-success [class^=swal2-success-line] {
+    background-color: var(--link-color) !important;
+}
+
+.swal2-icon.swal2-success .swal2-success-ring {
+    border-color: var(--link-color) !important;
+}
+
+.swal2-icon.swal2-error {
+    border-color: var(--delete-color) !important;
+}
+
+.swal2-icon.swal2-error [class^=swal2-x-mark-line] {
+    background-color: var(--delete-color) !important;
+}
+
+.swal2-icon.swal2-warning {
+    border-color: var(--edit-color) !important;
+    color: var(--edit-color) !important;
+}
+
+.swal2-icon.swal2-info {
+    border-color: var(--link-color) !important;
+    color: var(--link-color) !important;
+}
+
+.swal2-icon.swal2-question {
+    border-color: var(--text-secondary) !important;
+    color: var(--text-secondary) !important;
+}
+
+/* Timer progress bar */
+.swal2-timer-progress-bar {
+    background-color: var(--link-color) !important;
+}
+
+/* Custom classes for specific use cases */
+.swal-danger .swal2-confirm {
+    background-color: var(--delete-color) !important;
+}
+
+.swal-danger .swal2-confirm:hover {
+    background-color: var(--delete-color-hover) !important;
+}
+
+.swal-warning .swal2-confirm {
+    background-color: var(--edit-color) !important;
+}
+
+.swal-warning .swal2-confirm:hover {
+    background-color: var(--edit-color-hover) !important;
+}
+
+@media (max-width: 768px) {
+    .container {
+        display: flex;
+        flex-direction: column;
+        padding: 1.25rem;
+    }
+    
+    /* Ensure table header is always at the top */
+    .table-header {
+        position: relative;
+        z-index: 10;
+        margin-bottom: 1.5rem;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    .table-header .table-actions {
+        display: flex;
+        justify-content: flex-end;
+    }
+    
+    /* Show icon and hide text on mobile */
+    .back-button .mobile-icon {
+        display: inline-block;
+        font-size: 1.2rem;
+        border: 3px solid var(--border-color);
+        border-radius: 50%;
+        padding: 0.65rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+    
+    .back-button .back-text {
+        display: none;
+    }
+    
+    /* Remove the arrow before the back button on mobile */
+    .back-button::before {
+        content: '';
+    }
+
+    .table {
+        display: block;
+        width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        max-width: 100%;
+    }
+    
+    .container {
+        overflow-x: hidden;
+    }
+    
+    /* Mobile SweetAlert adjustments */
+    .swal2-popup {
+        width: 90% !important;
+        padding: 1rem !important;
+    }
+    
+    .swal2-title {
+        font-size: 1.3rem !important;
+    }
+    
+    .swal2-html-container {
+        font-size: 0.9rem !important;
+    }
+}

@@ -278,27 +278,6 @@ body {
     transform: translateY(-2px);
 }
 
-/* Back Button */
-.back-button {
-    text-align: center;
-    border: 1px solid var(--border-color);
-    border-radius: 8px;
-    background-color: transparent;
-    color: var(--text-color);
-    font-size: 1rem;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    padding: 12px 20px;
-    text-decoration: none;
-    display: block;
-}
-
-.back-button:hover {
-    color: var(--text-color-hover);
-    border-color: var(--border-hover);
-    transform: translateY(-2px);
-}
-
 /* Responsive Styles */
 @media (max-width: 768px) {
     .card-body {

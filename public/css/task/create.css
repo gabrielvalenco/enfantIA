@@ -48,42 +48,6 @@
 
 /* Responsive styles */
 @media (max-width: 768px) {
-    .container {
-        display: flex;
-        flex-direction: column;
-        padding: 12px;
-    }
-    
-    /* Ensure table header is always at the top */
-    .table-header {
-        position: relative;
-        z-index: 10;
-        margin-bottom: 1.5rem;
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-        align-items: center;
-    }
-    
-    .table-header .table-actions {
-        display: flex;
-        justify-content: flex-end;
-    }
-    
-    /* Show icon and hide text on mobile */
-    .back-button .mobile-icon {
-        display: inline-block;
-        font-size: 1.2rem;
-    }
-    
-    .back-button .back-text {
-        display: none;
-    }
-    
-    /* Remove the arrow before the back button on mobile */
-    .back-button::before {
-        content: '';
-    }
     
     form#task-form {
         display: flex;

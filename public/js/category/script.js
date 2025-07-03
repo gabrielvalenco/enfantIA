@@ -5,105 +5,71 @@ $.ajaxSetup({
     }
 });
 
+// Helper function to convert RGB to HEX
+function rgbToHex(rgb) {
+    // If it's already in hex format, return as is
+    if (rgb.startsWith('#')) return rgb;
+    
+    // Extract the r, g, b values from rgb() string
+    const result = /^rgba?\s*\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)/.exec(rgb);
+    if (!result) return '#000000';
+    
+    // Convert each component to hex and pad with leading zero if needed
+    const r = parseInt(result[1]).toString(16).padStart(2, '0');
+    const g = parseInt(result[2]).toString(16).padStart(2, '0');
+    const b = parseInt(result[3]).toString(16).padStart(2, '0');
+    
+    return `#${r}${g}${b}`.toUpperCase();
+}
+
+// Modal functionality
+function openModal(modalId) {
+    document.getElementById(modalId).style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+}
+
+function closeModal(modalId) {
+    document.getElementById(modalId).style.display = 'none';
+    document.body.style.overflow = 'auto';
+}
+
+// Close modal when clicking outside content
+window.onclick = function(event) {
+    if (event.target.classList.contains('modal')) {
+        // Fechar apenas o modal específico que foi clicado, não todos os modais
+        event.target.style.display = 'none';
+        document.body.style.overflow = 'auto';
+    }
+};
+
 $(document).ready(function() {
-    // Abrir modal de edição quando o botão for clicado
-    $('.edit-category-btn').on('click', function() {
+    // Handle edit buttons
+    $('.edit-badge').on('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation(); // Prevent row selection when clicking edit
+        
         const categoryId = $(this).data('category-id');
+        const row = $(this).closest('tr');
         
-        // Buscar dados da categoria via AJAX
-        $.ajax({
-            url: `/categories/${categoryId}/edit`,
-            type: 'GET',
-            success: function(data) {
-                // Preencher o formulário com os dados recebidos
-                $('#edit-category-id').val(data.id);
-                $('#edit-name').val(data.name);
-                $('#edit-description').val(data.description);
-                $('#edit-color').val(data.color);
-                
-                // Abrir o modal
-                $('#editCategoryModal').modal('show');
-            },
-            error: function() {
-                Swal.fire({
-                    title: 'Erro!',
-                    text: 'Não foi possível carregar os dados da categoria.',
-                    icon: 'error',
-                    confirmButtonText: 'OK',
-                    background: getComputedStyle(document.documentElement).getPropertyValue('--surface-color'),
-                    color: getComputedStyle(document.documentElement).getPropertyValue('--text-primary'),
-                    customClass: {
-                        confirmButton: 'swal-confirm-button',
-                        title: 'swal-title',
-                        htmlContainer: 'swal-html-container'
-                    }
-                });
-            }
-        });
-    });
-    
-    // Salvar alterações da categoria
-    $('#save-edit-category-btn').on('click', function() {
-        const categoryId = $('#edit-category-id').val();
-        const formData = {
-            name: $('#edit-name').val(),
-            description: $('#edit-description').val(),
-            color: $('#edit-color').val(),
-            _token: $('meta[name="csrf-token"]').attr('content'),
-            _method: 'PUT'
-        };
+        // Get category data from the row
+        const name = row.find('td:first-child').text().trim();
+        // Use data attribute for full description instead of truncated text
+        const description = $(this).data('category-description') || row.find('td:nth-child(2)').text().trim();
+        const color = row.find('.color-preview').css('background-color');
         
-        $.ajax({
-            url: `/categories/${categoryId}`,
-            type: 'POST',
-            data: formData,
-            success: function(response) {
-                $('#editCategoryModal').modal('hide');
-                
-                Swal.fire({
-                    title: 'Sucesso!',
-                    text: 'Categoria atualizada com sucesso!',
-                    icon: 'success',
-                    confirmButtonText: 'OK',
-                    background: getComputedStyle(document.documentElement).getPropertyValue('--surface-color'),
-                    color: getComputedStyle(document.documentElement).getPropertyValue('--text-primary'),
-                    customClass: {
-                        confirmButton: 'swal-confirm-button',
-                        title: 'swal-title',
-                        htmlContainer: 'swal-html-container'
-                    }
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        window.location.reload();
-                    }
-                });
-            },
-            error: function(xhr) {
-                let errorMessage = 'Ocorreu um erro ao atualizar a categoria.';
-                
-                if (xhr.responseJSON && xhr.responseJSON.errors) {
-                    errorMessage = Object.values(xhr.responseJSON.errors).flat().join('\n');
-                }
-                
-                Swal.fire({
-                    title: 'Erro!',
-                    text: errorMessage,
-                    icon: 'error',
-                    confirmButtonText: 'OK',
-                    background: getComputedStyle(document.documentElement).getPropertyValue('--surface-color'),
-                    color: getComputedStyle(document.documentElement).getPropertyValue('--text-primary'),
-                    customClass: {
-                        confirmButton: 'swal-confirm-button',
-                        title: 'swal-title',
-                        htmlContainer: 'swal-html-container'
-                    }
-                });
-            }
-        });
+        // Fill the edit form
+        $('#edit-category-id').val(categoryId);
+        $('#edit-name').val(name);
+        $('#edit-description').val(description);
+        $('#edit-color').val(rgbToHex(color));
+        
+        // Update color preview
+        $('#edit-color-preview').css('background-color', rgbToHex(color));
+        
+        openModal('editCategoryModal');
     });
-    
     // Confirmação para excluir categoria
-    $('.delete-category-btn').on('click', function(e) {
+    $('.delete-badge').on('click', function(e) {
         e.preventDefault();
         e.stopPropagation(); // Impedir que o clique se propague
         
@@ -136,9 +102,9 @@ $(document).ready(function() {
     });
     
     // Abrir modal de criação quando o botão for clicado
-    $('.add-category-button').on('click', function(e) {
+    $('.add-button').on('click', function(e) {
         e.preventDefault();
-        $('#createCategoryModal').modal('show');
+        openModal('createCategoryModal');
     });
     
     // Criar nova categoria
@@ -157,7 +123,7 @@ $(document).ready(function() {
             type: 'POST',
             data: formData,
             success: function(response) {
-                $('#createCategoryModal').modal('hide');
+                closeModal('createCategoryModal');
                 
                 Swal.fire({
                     title: 'Sucesso!',
@@ -197,6 +163,91 @@ $(document).ready(function() {
                         htmlContainer: 'swal-html-container'
                     }
                 });
+            }
+        });
+    });
+    
+    // Editar categoria
+    $('#save-edit-category-btn').on('click', function(e) {
+        e.preventDefault();
+        const categoryId = $('#edit-category-id').val();
+        const formData = {
+            name: $('#edit-name').val(),
+            description: $('#edit-description').val(),
+            color: $('#edit-color').val(),
+            _token: $('meta[name="csrf-token"]').attr('content'),
+            _method: 'PUT'
+        };
+        
+        // Mostrar indicador de carregamento
+        const $button = $(this);
+        const originalButtonText = $button.html();
+        $button.prop('disabled', true).html('<i class="fas fa-spinner fa-spin"></i> Salvando...');
+        
+        $.ajax({
+            url: `/categories/${categoryId}`,
+            type: 'POST',
+            data: formData,
+            success: function(response) {
+                // Ensure we close the modal properly
+                closeModal('editCategoryModal');
+                
+                // Garantir que o modal de criação não seja exibido
+                if (document.getElementById('createCategoryModal').style.display === 'flex') {
+                    closeModal('createCategoryModal');
+                }
+                
+                Swal.fire({
+                    title: 'Sucesso!',
+                    text: 'Categoria atualizada com sucesso!',
+                    icon: 'success',
+                    confirmButtonText: 'OK',
+                    background: getComputedStyle(document.documentElement).getPropertyValue('--surface-color'),
+                    color: getComputedStyle(document.documentElement).getPropertyValue('--text-primary'),
+                    customClass: {
+                        confirmButton: 'swal-confirm-button',
+                        title: 'swal-title',
+                        htmlContainer: 'swal-html-container'
+                    }
+                }).then((result) => {
+                    // Reload the page after success message
+                    window.location.reload();
+                });
+            },
+            error: function(xhr) {
+                let errorMessage = 'Ocorreu um erro ao atualizar a categoria.';
+                
+                if (xhr.responseJSON && xhr.responseJSON.errors) {
+                    errorMessage = Object.values(xhr.responseJSON.errors).flat().join('\n');
+                }
+                
+                Swal.fire({
+                    title: 'Erro!',
+                    text: errorMessage,
+                    icon: 'error',
+                    confirmButtonText: 'OK',
+                    background: getComputedStyle(document.documentElement).getPropertyValue('--surface-color'),
+                    color: getComputedStyle(document.documentElement).getPropertyValue('--text-primary'),
+                    customClass: {
+                        confirmButton: 'swal-confirm-button',
+                        title: 'swal-title',
+                        htmlContainer: 'swal-html-container'
+                    }
+                });
+            },
+            complete: function() {
+                // Restaurar o estado original do botão
+                $button.prop('disabled', false).html(originalButtonText);
+                
+                // Make sure modal is closed in case of error
+                if ($('#editCategoryModal').is(':visible')) {
+                    closeModal('editCategoryModal');
+                }
+                
+                // Garantir que o modal de criação não seja exibido
+                if ($('#createCategoryModal').is(':visible')) {
+                    closeModal('createCategoryModal');
+                }
             }
         });
     });

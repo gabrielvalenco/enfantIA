@@ -31,8 +31,7 @@
         <div class="form-container">
             <!-- Left Content - Profile Info -->
             <div class="left-content">
-                <div class="profile-content">
-                    <div class="profile-info">
+                <div class="profile-info">
                         <div class="profile-image">
                             <!-- <img src="#" alt="Avatar"> -->
                         </div>
@@ -72,37 +71,36 @@
                                 <h3>Idiomas</h3>
                                 <p class="profile-text">{{ $user->languages ?: 'Não informado' }}</p>
                             </div>
-                        </div>
-                    </div>
-                    
-                    <div class="social-media-section">
-                        <h3>Redes Sociais</h3>
-                        <div class="social-media-links">
-                            @if(isset($socialLinks) && count($socialLinks) > 0)
-                                @foreach($socialLinks as $link)
-                                    <div class="social-media-item">
-                                        <div class="social-icon">
-                                            <i class="@getSocialIcon($link)"></i>
+                            
+                            <div class="social-media-section">
+                                <h3>Redes Sociais</h3>
+                                <div class="social-media-links">
+                                    @if(isset($socialLinks) && count($socialLinks) > 0)
+                                        @foreach($socialLinks as $link)
+                                            <div class="social-media-item">
+                                                <div class="social-icon">
+                                                    <i class="@getSocialIcon($link)"></i>
+                                                </div>
+                                                <a href="{{ $link }}" class="social-link" target="_blank">@getSocialName($link)</a>
+                                            </div>
+                                        @endforeach
+                                    @else
+                                        <div class="social-media-item">
+                                            <div class="social-icon">
+                                                <i class="fab fa-linkedin"></i>
+                                            </div>
+                                            <a href="https://linkedin.com/in/username" class="social-link" target="_blank">LinkedIn</a>
                                         </div>
-                                        <a href="{{ $link }}" class="social-link" target="_blank">@getSocialName($link)</a>
-                                    </div>
-                                @endforeach
-                            @else
-                                <div class="social-media-item">
-                                    <div class="social-icon">
-                                        <i class="fab fa-linkedin"></i>
-                                    </div>
-                                    <a href="https://linkedin.com/in/username" class="social-link" target="_blank">LinkedIn</a>
+                                        <div class="social-media-item">
+                                            <div class="social-icon">
+                                                <i class="fab fa-github"></i>
+                                            </div>
+                                            <a href="https://github.com/username" class="social-link" target="_blank">GitHub</a>
+                                        </div>
+                                    @endif
                                 </div>
-                                <div class="social-media-item">
-                                    <div class="social-icon">
-                                        <i class="fab fa-github"></i>
-                                    </div>
-                                    <a href="https://github.com/username" class="social-link" target="_blank">GitHub</a>
-                                </div>
-                            @endif
+                            </div>
                         </div>
-                    </div>
                 </div>
             </div>
             

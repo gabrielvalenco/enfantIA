@@ -1,84 +1,187 @@
-document.getElementById("avatar").addEventListener("change", function (e) {
-    if (e.target.files && e.target.files[0]) {
-        const file = e.target.files[0];
-
-        // Verificar tamanho do arquivo (máximo 2MB)
-        if (file.size > 2 * 1024 * 1024) {
-            alert("A imagem deve ter no máximo 2MB");
-            this.value = "";
-            return;
-        }
-
-        const reader = new FileReader();
-        reader.onload = function (e) {
-            document.querySelector(".avatar-wrapper img").src = e.target.result;
-        };
-        reader.readAsDataURL(file);
+// Função para detectar rede social pelo URL
+function detectSocialMedia(input, iconId) {
+    const url = input.value.toLowerCase();
+    const icon = document.getElementById(iconId);
+    
+    // Remover todas as classes existentes exceto 'fab'
+    icon.className = 'fab';
+    
+    if (url.includes('facebook.com')) {
+        icon.classList.add('fa-facebook');
+    } else if (url.includes('twitter.com') || url.includes('x.com')) {
+        icon.classList.add('fa-twitter');
+    } else if (url.includes('instagram.com')) {
+        icon.classList.add('fa-instagram');
+    } else if (url.includes('linkedin.com')) {
+        icon.classList.add('fa-linkedin');
+    } else if (url.includes('github.com')) {
+        icon.classList.add('fa-github');
+    } else if (url.includes('youtube.com')) {
+        icon.classList.add('fa-youtube');
+    } else if (url.includes('tiktok.com')) {
+        icon.classList.add('fa-tiktok');
+    } else if (url.includes('medium.com')) {
+        icon.classList.add('fa-medium');
+    } else if (url.includes('pinterest.com')) {
+        icon.classList.add('fa-pinterest');
+    } else if (url.includes('whatsapp.com')) {
+        icon.classList.add('fa-whatsapp');
+    } else if (url.includes('telegram.org') || url.includes('t.me')) {
+        icon.classList.add('fa-telegram');
+    } else if (url.includes('discord.com') || url.includes('discord.gg')) {
+        icon.classList.add('fa-discord');
+    } else {
+        icon.classList.add('fa-link');
     }
-});
+}
 
-// Handle the position dropdown "Other" option
+// Inicialização de componentes do perfil
 document.addEventListener("DOMContentLoaded", function () {
-    const positionSelect = document.getElementById("position");
-    const customPositionInput = document.getElementById("custom_position");
-
-    if (positionSelect && customPositionInput) {
-        positionSelect.addEventListener("change", function () {
-            if (this.value === "Outro") {
-                customPositionInput.style.display = "block";
-                customPositionInput.focus();
-            } else {
-                customPositionInput.style.display = "none";
-                customPositionInput.value = "";
+    // Avatar preview
+    const avatarInput = document.getElementById('avatar');
+    if (avatarInput) {
+        avatarInput.addEventListener('change', function() {
+            const file = this.files[0];
+            if (file) {
+                // Verificar tamanho do arquivo (máximo 2MB)
+                if (file.size > 2 * 1024 * 1024) {
+                    alert("A imagem deve ter no máximo 2MB");
+                    this.value = "";
+                    return;
+                }
+                
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const avatarImg = document.querySelector('.avatar-img');
+                    if (avatarImg) {
+                        avatarImg.src = e.target.result;
+                    }
+                };
+                reader.readAsDataURL(file);
             }
         });
     }
-});
-
-// Task Completion Heatmap
-document.addEventListener("DOMContentLoaded", function () {
-    // Sample data - in a real app, this would come from the backend
-    // Format: { 'YYYY-MM-DD': count }
-    const taskCompletionData = {
-        // This is sample data - in a real implementation, you would fetch this from your backend
-        "2025-01-01": 2,
-        "2025-01-02": 0,
-        "2025-01-03": 1,
-        "2025-01-15": 3,
-        "2025-01-23": 5,
-        "2025-02-05": 4,
-        "2025-02-10": 2,
-        "2025-02-15": 1,
-        "2025-02-28": 3,
-        "2025-03-01": 2,
-        "2025-03-10": 7,
-        "2025-03-15": 4,
-        "2025-03-25": 3,
-        "2025-04-01": 1,
-        "2025-04-05": 6,
-        "2025-04-08": 2,
-        "2025-04-09": 3,
-        "2025-04-10": 1,
-    };
-
-    // Generate the heatmap
-    generateHeatmap(taskCompletionData);
-
-    // Handle filter buttons
-    const filterButtons = document.querySelectorAll(".filter-btn");
-    filterButtons.forEach((button) => {
-        button.addEventListener("click", function () {
-            // Remove active class from all buttons
-            filterButtons.forEach((btn) => btn.classList.remove("active"));
-
-            // Add active class to clicked button
-            this.classList.add("active");
-
-            // Apply filter
-            const filter = this.getAttribute("data-filter");
-            applyFilter(filter, taskCompletionData);
-        });
+    
+    // Detecção de ícones para links de redes sociais
+    const socialLinks = document.querySelectorAll('input[name="social_links[]"]');
+    socialLinks.forEach(function(link, index) {
+        if (link.value) {
+            detectSocialMedia(link, 'social-icon-' + index);
+        }
     });
+    
+    // Configuração do sistema de tags para idiomas
+    const languageInput = document.getElementById('language-input');
+    const languageTags = document.getElementById('language-tags');
+    const languagesHidden = document.getElementById('languages-hidden');
+    
+    if (languageInput && languageTags && languagesHidden) {
+        // Função para atualizar o input hidden com os valores das tags
+        function updateHiddenInput() {
+            const tags = document.querySelectorAll('#language-tags .tag');
+            const values = Array.from(tags).map(tag => tag.textContent.trim().replace('×', '').trim());
+            languagesHidden.value = values.join(',');
+        }
+        
+        // Adicionar tag quando pressionar Enter
+        languageInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                
+                const value = this.value.trim();
+                if (!value) return;
+                
+                // Verificar se já existem 3 tags
+                const existingTags = document.querySelectorAll('#language-tags .tag');
+                if (existingTags.length >= 3) {
+                    alert('Você já adicionou o máximo de 3 idiomas.');
+                    return;
+                }
+                
+                // Verificar se a tag já existe
+                const existingValues = Array.from(existingTags).map(tag => 
+                    tag.textContent.trim().replace('×', '').trim().toLowerCase()
+                );
+                if (existingValues.includes(value.toLowerCase())) {
+                    alert('Este idioma já foi adicionado.');
+                    return;
+                }
+                
+                // Criar nova tag
+                const tag = document.createElement('span');
+                tag.className = 'tag';
+                tag.innerHTML = value + ' <span class="remove-tag">×</span>';
+                
+                // Adicionar evento para remover tag
+                tag.querySelector('.remove-tag').addEventListener('click', function() {
+                    tag.remove();
+                    updateHiddenInput();
+                });
+                
+                languageTags.appendChild(tag);
+                this.value = '';
+                updateHiddenInput();
+            }
+        });
+        
+        // Configurar eventos para remover tags existentes
+        document.querySelectorAll('#language-tags .tag .remove-tag').forEach(function(removeBtn) {
+            removeBtn.addEventListener('click', function() {
+                this.parentNode.remove();
+                updateHiddenInput();
+            });
+        });
+        
+        // Inicializar o valor do input hidden
+        updateHiddenInput();
+    }
+    
+    // Task Completion Heatmap - mantido do código original
+    const heatmapContainer = document.getElementById('heatmap-container');
+    if (heatmapContainer) {
+        // Sample data - in a real app, this would come from the backend
+        // Format: { 'YYYY-MM-DD': count }
+        const taskCompletionData = {
+            // This is sample data - in a real implementation, you would fetch this from your backend
+            "2025-01-01": 2,
+            "2025-01-02": 0,
+            "2025-01-03": 1,
+            "2025-01-15": 3,
+            "2025-01-23": 5,
+            "2025-02-05": 4,
+            "2025-02-10": 2,
+            "2025-02-15": 1,
+            "2025-02-28": 3,
+            "2025-03-01": 2,
+            "2025-03-10": 7,
+            "2025-03-15": 4,
+            "2025-03-25": 3,
+            "2025-04-01": 1,
+            "2025-04-05": 6,
+            "2025-04-08": 2,
+            "2025-04-09": 3,
+            "2025-04-10": 1,
+        };
+
+        // Generate the heatmap
+        generateHeatmap(taskCompletionData);
+
+        // Handle filter buttons
+        const filterButtons = document.querySelectorAll(".filter-btn");
+        filterButtons.forEach((button) => {
+            button.addEventListener("click", function () {
+                // Remove active class from all buttons
+                filterButtons.forEach((btn) => btn.classList.remove("active"));
+
+                // Add active class to clicked button
+                this.classList.add("active");
+
+                // Apply filter
+                const filter = this.getAttribute("data-filter");
+                applyFilter(filter, taskCompletionData);
+            });
+        });
+    }
 });
 
 function generateHeatmap(data) {
