@@ -163,406 +163,45 @@
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    
     <script>
-        // Configuração das cores do tema para os gráficos
-        const primaryColor = getComputedStyle(document.documentElement).getPropertyValue('--link-color').trim();
-        const primaryColorLight = 'rgba(32, 172, 130, 0.2)';
-        const warningColor = getComputedStyle(document.documentElement).getPropertyValue('--edit-color').trim();
-        const warningColorLight = 'rgba(205, 161, 65, 0.2)';
-        const dangerColor = getComputedStyle(document.documentElement).getPropertyValue('--delete-color').trim();
-        const dangerColorLight = 'rgba(181, 46, 41, 0.2)';
-        const textColor = getComputedStyle(document.documentElement).getPropertyValue('--text-primary').trim();
+        // Dados do controller para o JavaScript
+        window.periods = {!! json_encode(array_values($periods)) !!};
+        window.createdByPeriod = {!! json_encode(array_values($createdByPeriod)) !!};
+        window.completedByPeriod = {!! json_encode(array_values($completedByPeriod)) !!};
+        window.completionRate = {!! json_encode(array_values($completionRate)) !!};
+        window.reportRoute = '{{ route("reports.index") }}';
         
-        // Dados simulados para os gráficos
-        const weekLabels = ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'];
-        const monthLabels = ['Semana 1', 'Semana 2', 'Semana 3', 'Semana 4'];
-        const quarterLabels = ['Jan', 'Fev', 'Mar'];
-        const yearLabels = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
-        
-        // Dados simulados para tarefas criadas e concluídas
-        const weekData = {
-            created: [5, 7, 3, 8, 6, 2, 4],
-            completed: [3, 5, 2, 7, 4, 2, 3],
-            rate: [60, 71, 67, 88, 67, 100, 75],
-            time: [24, 18, 36, 12, 24, 8, 16]
-        };
-        
-        const monthData = {
-            created: [18, 22, 15, 25],
-            completed: [12, 18, 10, 20],
-            rate: [67, 82, 67, 80],
-            time: [24, 18, 30, 16]
-        };
-        
-        const quarterData = {
-            created: [45, 60, 55],
-            completed: [35, 48, 45],
-            rate: [78, 80, 82],
-            time: [22, 20, 18]
-        };
-        
-        const yearData = {
-            created: [30, 35, 45, 50, 55, 60, 65, 60, 55, 50, 45, 40],
-            completed: [25, 28, 35, 40, 45, 50, 55, 50, 45, 40, 35, 30],
-            rate: [83, 80, 78, 80, 82, 83, 85, 83, 82, 80, 78, 75],
-            time: [20, 22, 24, 22, 20, 18, 16, 18, 20, 22, 24, 26]
-        };
+        // Processar dados de tempo de conclusão
+        window.avgTimeData = [];
+        @foreach($periods as $key => $label)
+            @if(isset($avgCompletionTimes[$key]))
+                window.avgTimeData.push({{ round($avgCompletionTimes[$key]['total_hours'] / $avgCompletionTimes[$key]['count']) }});
+            @else
+                window.avgTimeData.push(0);
+            @endif
+        @endforeach
         
         // Dados de categorias
-        const categories = {
-            labels: ['Trabalho', 'Pessoal', 'Estudo', 'Saúde', 'Outros'],
-            data: [40, 25, 20, 10, 5],
-            colors: [primaryColor, warningColor, dangerColor, '#6c757d', '#17a2b8']
-        };
+        window.categoriesLabels = [];
+        window.categoriesData = [];
+        window.categoriesColors = [];
         
-        // Configuração inicial dos gráficos
-        let tasksChart, completionRateChart, categoriesChart, completionTimeChart;
-        let currentPeriod = 'week';
-        let currentData = weekData;
-        let currentLabels = weekLabels;
-        
-        // Função para atualizar os dados dos cards
-        function updateCardData(data) {
-            const totalTasks = data.created.reduce((a, b) => a + b, 0);
-            const completedTasks = data.completed.reduce((a, b) => a + b, 0);
-            const completionRate = totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0;
-            const avgTime = data.time.reduce((a, b) => a + b, 0) / data.time.length;
-            
-            $('#total-tasks').text(totalTasks);
-            $('#completed-tasks').text(completedTasks);
-            $('#completion-rate').text(completionRate + '%');
-            $('#avg-completion-time').text(Math.round(avgTime) + 'h');
-        }
-        
-        // Função para inicializar os gráficos
-        function initCharts() {
-            // Gráfico de tarefas criadas vs concluídas
-            const tasksCtx = document.getElementById('tasks-chart').getContext('2d');
-            tasksChart = new Chart(tasksCtx, {
-                type: 'bar',
-                data: {
-                    labels: currentLabels,
-                    datasets: [
-                        {
-                            label: 'Tarefas Criadas',
-                            data: currentData.created,
-                            backgroundColor: primaryColorLight,
-                            borderColor: primaryColor,
-                            borderWidth: 1
-                        },
-                        {
-                            label: 'Tarefas Concluídas',
-                            data: currentData.completed,
-                            backgroundColor: warningColorLight,
-                            borderColor: warningColor,
-                            borderWidth: 1
-                        }
-                    ]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        title: {
-                            display: true,
-                            text: 'Tarefas Criadas vs Concluídas',
-                            color: textColor
-                        },
-                        legend: {
-                            labels: {
-                                color: textColor
-                            }
-                        }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            ticks: {
-                                color: textColor
-                            },
-                            grid: {
-                                color: 'rgba(255, 255, 255, 0.1)'
-                            }
-                        },
-                        x: {
-                            ticks: {
-                                color: textColor
-                            },
-                            grid: {
-                                color: 'rgba(255, 255, 255, 0.1)'
-                            }
-                        }
-                    }
-                }
-            });
-            
-            // Gráfico de taxa de conclusão
-            const rateCtx = document.getElementById('completion-rate-chart').getContext('2d');
-            completionRateChart = new Chart(rateCtx, {
-                type: 'line',
-                data: {
-                    labels: currentLabels,
-                    datasets: [{
-                        label: 'Taxa de Conclusão (%)',
-                        data: currentData.rate,
-                        backgroundColor: 'rgba(32, 172, 130, 0.2)',
-                        borderColor: primaryColor,
-                        borderWidth: 2,
-                        tension: 0.3,
-                        fill: true
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        title: {
-                            display: true,
-                            text: 'Taxa de Conclusão de Tarefas (%)',
-                            color: textColor
-                        },
-                        legend: {
-                            labels: {
-                                color: textColor
-                            }
-                        }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            max: 100,
-                            ticks: {
-                                callback: function(value) {
-                                    return value + '%';
-                                },
-                                color: textColor
-                            },
-                            grid: {
-                                color: 'rgba(255, 255, 255, 0.1)'
-                            }
-                        },
-                        x: {
-                            ticks: {
-                                color: textColor
-                            },
-                            grid: {
-                                color: 'rgba(255, 255, 255, 0.1)'
-                            }
-                        }
-                    }
-                }
-            });
-            
-            // Gráfico de categorias
-            const categoriesCtx = document.getElementById('categories-chart').getContext('2d');
-            categoriesChart = new Chart(categoriesCtx, {
-                type: 'pie',
-                data: {
-                    labels: categories.labels,
-                    datasets: [{
-                        data: categories.data,
-                        backgroundColor: categories.colors,
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        title: {
-                            display: true,
-                            text: 'Distribuição por Categoria',
-                            color: textColor
-                        },
-                        legend: {
-                            position: 'right',
-                            labels: {
-                                color: textColor
-                            }
-                        }
-                    }
-                }
-            });
-            
-            // Gráfico de tempo médio de conclusão
-            const timeCtx = document.getElementById('completion-time-chart').getContext('2d');
-            completionTimeChart = new Chart(timeCtx, {
-                type: 'line',
-                data: {
-                    labels: currentLabels,
-                    datasets: [{
-                        label: 'Tempo Médio (horas)',
-                        data: currentData.time,
-                        backgroundColor: dangerColorLight,
-                        borderColor: dangerColor,
-                        borderWidth: 2,
-                        tension: 0.3
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        title: {
-                            display: true,
-                            text: 'Tempo Médio de Conclusão (horas)',
-                            color: textColor
-                        },
-                        legend: {
-                            labels: {
-                                color: textColor
-                            }
-                        }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            ticks: {
-                                callback: function(value) {
-                                    return value + 'h';
-                                },
-                                color: textColor
-                            },
-                            grid: {
-                                color: 'rgba(255, 255, 255, 0.1)'
-                            }
-                        },
-                        x: {
-                            ticks: {
-                                color: textColor
-                            },
-                            grid: {
-                                color: 'rgba(255, 255, 255, 0.1)'
-                            }
-                        }
-                    }
-                }
-            });
-        }
-        
-        // Função para atualizar os gráficos com novos dados
-        function updateCharts(period) {
-            // Atualizar período atual
-            currentPeriod = period;
-            
-            // Definir dados e labels com base no período
-            switch(period) {
-                case 'week':
-                    currentData = weekData;
-                    currentLabels = weekLabels;
-                    break;
-                case 'month':
-                    currentData = monthData;
-                    currentLabels = monthLabels;
-                    break;
-                case 'quarter':
-                    currentData = quarterData;
-                    currentLabels = quarterLabels;
-                    break;
-                case 'year':
-                    currentData = yearData;
-                    currentLabels = yearLabels;
-                    break;
-            }
-            
-            // Atualizar dados dos cards
-            updateCardData(currentData);
-            
-            // Atualizar dados dos gráficos
-            tasksChart.data.labels = currentLabels;
-            tasksChart.data.datasets[0].data = currentData.created;
-            tasksChart.data.datasets[1].data = currentData.completed;
-            tasksChart.update();
-            
-            completionRateChart.data.labels = currentLabels;
-            completionRateChart.data.datasets[0].data = currentData.rate;
-            completionRateChart.update();
-            
-            completionTimeChart.data.labels = currentLabels;
-            completionTimeChart.data.datasets[0].data = currentData.time;
-            completionTimeChart.update();
-        }
-        
-        // Inicializar quando o documento estiver pronto
-        $(document).ready(function() {
-            // Inicializar gráficos
-            initCharts();
-            
-            // Atualizar dados dos cards
-            updateCardData(currentData);
-            
-            // Manipular cliques nos botões de filtro
-            $('.filter-button').click(function() {
-                $('.filter-button').removeClass('active');
-                $(this).addClass('active');
-                
-                const period = $(this).data('period');
-                updateCharts(period);
-            });
-            
-            // Botão de exportar relatório
-            $('#export-report-btn').click(function() {
-                alert('Funcionalidade de exportação será implementada em breve!');
-            });
-        });
-        
-        // Garantir que os gráficos se ajustem quando o tema mudar
-        document.getElementById('theme-toggle').addEventListener('click', function() {
-            setTimeout(function() {
-                const textColor = getComputedStyle(document.documentElement).getPropertyValue('--text-primary').trim();
-                
-                // Atualizar cores de texto nos gráficos
-                const updateOptions = {
-                    plugins: {
-                        title: {
-                            color: textColor
-                        },
-                        legend: {
-                            labels: {
-                                color: textColor
-                            }
-                        }
-                    },
-                    scales: {
-                        y: {
-                            ticks: {
-                                color: textColor
-                            }
-                        },
-                        x: {
-                            ticks: {
-                                color: textColor
-                            }
-                        }
-                    }
-                };
-                
-                tasksChart.options.plugins.title.color = textColor;
-                tasksChart.options.plugins.legend.labels.color = textColor;
-                tasksChart.options.scales.y.ticks.color = textColor;
-                tasksChart.options.scales.x.ticks.color = textColor;
-                tasksChart.update();
-                
-                completionRateChart.options.plugins.title.color = textColor;
-                completionRateChart.options.plugins.legend.labels.color = textColor;
-                completionRateChart.options.scales.y.ticks.color = textColor;
-                completionRateChart.options.scales.x.ticks.color = textColor;
-                completionRateChart.update();
-                
-                categoriesChart.options.plugins.title.color = textColor;
-                categoriesChart.options.plugins.legend.labels.color = textColor;
-                categoriesChart.update();
-                
-                completionTimeChart.options.plugins.title.color = textColor;
-                completionTimeChart.options.plugins.legend.labels.color = textColor;
-                completionTimeChart.options.scales.y.ticks.color = textColor;
-                completionTimeChart.options.scales.x.ticks.color = textColor;
-                completionTimeChart.update();
-            }, 300);
-        });
+        @foreach($categoriesData as $category)
+            window.categoriesLabels.push('{{ $category["name"] }}');
+            window.categoriesData.push({{ $category["count"] }});
+            window.categoriesColors.push('{{ $category["color"] }}');
+        @endforeach
     </script>
     
     <script src="{{ asset('js/script.js') }}"></script>
+    <script src="{{ asset('js/report/script.js') }}"></script>
+    
+    <button id="theme-toggle" class="theme-toggle" aria-label="Toggle dark/light mode">
+        <i class="fas fa-moon"></i>
+    </button>
 </body>
 
 <button id="theme-toggle" class="theme-toggle" aria-label="Toggle dark/light mode">
