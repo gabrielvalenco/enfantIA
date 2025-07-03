@@ -29,10 +29,9 @@
         </div>
 
         <div class="filter-container">
-            <button class="filter-button active" data-period="week">Última Semana</button>
-            <button class="filter-button" data-period="month">Último Mês</button>
-            <button class="filter-button" data-period="quarter">Último Trimestre</button>
-            <button class="filter-button" data-period="year">Último Ano</button>
+            <button class="filter-button {{ $period == 'day' ? 'active' : '' }}" data-period="day">Últimos 7 dias</button>
+            <button class="filter-button {{ $period == 'week' ? 'active' : '' }}" data-period="week">Últimas 5 semanas</button>
+            <button class="filter-button {{ $period == 'month' ? 'active' : '' }}" data-period="month">Últimos 6 meses</button>
         </div>
 
         <div class="report-content">
@@ -203,9 +202,4 @@
         <i class="fas fa-moon"></i>
     </button>
 </body>
-
-<button id="theme-toggle" class="theme-toggle" aria-label="Toggle dark/light mode">
-    <i class="fas fa-moon"></i>
-</button>
-
 </html>
