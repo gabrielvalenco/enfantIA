@@ -29,10 +29,9 @@
         </div>
 
         <div class="filter-container">
-            <button class="filter-button active" data-period="week">Última Semana</button>
-            <button class="filter-button" data-period="month">Último Mês</button>
-            <button class="filter-button" data-period="quarter">Último Trimestre</button>
-            <button class="filter-button" data-period="year">Último Ano</button>
+            <button class="filter-button {{ $period == 'day' ? 'active' : '' }}" data-period="day">Últimos 7 dias</button>
+            <button class="filter-button {{ $period == 'week' ? 'active' : '' }}" data-period="week">Últimas 5 semanas</button>
+            <button class="filter-button {{ $period == 'month' ? 'active' : '' }}" data-period="month">Últimos 6 meses</button>
         </div>
 
         <div class="report-content">
@@ -173,53 +172,45 @@
         const dangerColorLight = 'rgba(181, 46, 41, 0.2)';
         const textColor = getComputedStyle(document.documentElement).getPropertyValue('--text-primary').trim();
         
-        // Dados simulados para os gráficos
-        const weekLabels = ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'];
-        const monthLabels = ['Semana 1', 'Semana 2', 'Semana 3', 'Semana 4'];
-        const quarterLabels = ['Jan', 'Fev', 'Mar'];
-        const yearLabels = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
+        // Dados do controller
+        const periods = {!! json_encode(array_values($periods)) !!};
+        const createdByPeriod = {!! json_encode(array_values($createdByPeriod)) !!};
+        const completedByPeriod = {!! json_encode(array_values($completedByPeriod)) !!};
+        const completionRate = {!! json_encode(array_values($completionRate)) !!};
         
-        // Dados simulados para tarefas criadas e concluídas
-        const weekData = {
-            created: [5, 7, 3, 8, 6, 2, 4],
-            completed: [3, 5, 2, 7, 4, 2, 3],
-            rate: [60, 71, 67, 88, 67, 100, 75],
-            time: [24, 18, 36, 12, 24, 8, 16]
-        };
-        
-        const monthData = {
-            created: [18, 22, 15, 25],
-            completed: [12, 18, 10, 20],
-            rate: [67, 82, 67, 80],
-            time: [24, 18, 30, 16]
-        };
-        
-        const quarterData = {
-            created: [45, 60, 55],
-            completed: [35, 48, 45],
-            rate: [78, 80, 82],
-            time: [22, 20, 18]
-        };
-        
-        const yearData = {
-            created: [30, 35, 45, 50, 55, 60, 65, 60, 55, 50, 45, 40],
-            completed: [25, 28, 35, 40, 45, 50, 55, 50, 45, 40, 35, 30],
-            rate: [83, 80, 78, 80, 82, 83, 85, 83, 82, 80, 78, 75],
-            time: [20, 22, 24, 22, 20, 18, 16, 18, 20, 22, 24, 26]
-        };
+        // Processar dados de tempo de conclusão
+        const avgTimeData = [];
+        @foreach($periods as $key => $label)
+            @if(isset($avgCompletionTimes[$key]))
+                avgTimeData.push({{ round($avgCompletionTimes[$key]['total_hours'] / $avgCompletionTimes[$key]['count']) }});
+            @else
+                avgTimeData.push(0);
+            @endif
+        @endforeach
         
         // Dados de categorias
-        const categories = {
-            labels: ['Trabalho', 'Pessoal', 'Estudo', 'Saúde', 'Outros'],
-            data: [40, 25, 20, 10, 5],
-            colors: [primaryColor, warningColor, dangerColor, '#6c757d', '#17a2b8']
-        };
+        let categoriesLabels = [];
+        let categoriesData = [];
+        let categoriesColors = [];
+        
+        @foreach($categoriesData as $category)
+            categoriesLabels.push('{{ $category["name"] }}');
+            categoriesData.push({{ $category["count"] }});
+            categoriesColors.push('{{ $category["color"] }}');
+        @endforeach
         
         // Configuração inicial dos gráficos
         let tasksChart, completionRateChart, categoriesChart, completionTimeChart;
-        let currentPeriod = 'week';
-        let currentData = weekData;
-        let currentLabels = weekLabels;
+        let currentPeriod = '{{ $period }}';
+        let currentLabels = periods;
+        
+        // Dados atuais
+        let currentData = {
+            created: createdByPeriod,
+            completed: completedByPeriod,
+            rate: completionRate,
+            time: avgTimeData
+        };
         
         // Função para atualizar os dados dos cards
         function updateCardData(data) {
@@ -358,10 +349,10 @@
             categoriesChart = new Chart(categoriesCtx, {
                 type: 'pie',
                 data: {
-                    labels: categories.labels,
+                    labels: categoriesLabels,
                     datasets: [{
-                        data: categories.data,
-                        backgroundColor: categories.colors,
+                        data: categoriesData,
+                        backgroundColor: categoriesColors.length > 0 ? categoriesColors : [primaryColor, warningColor, dangerColor, '#6c757d', '#17a2b8'],
                         borderWidth: 1
                     }]
                 },
@@ -442,45 +433,69 @@
         
         // Função para atualizar os gráficos com novos dados
         function updateCharts(period) {
+            // Mostrar indicador de carregamento
+            $('#total-tasks, #completed-tasks, #completion-rate, #avg-completion-time').html('<i class="fas fa-spinner fa-spin"></i>');
+            
             // Atualizar período atual
             currentPeriod = period;
             
-            // Definir dados e labels com base no período
-            switch(period) {
-                case 'week':
-                    currentData = weekData;
-                    currentLabels = weekLabels;
-                    break;
-                case 'month':
-                    currentData = monthData;
-                    currentLabels = monthLabels;
-                    break;
-                case 'quarter':
-                    currentData = quarterData;
-                    currentLabels = quarterLabels;
-                    break;
-                case 'year':
-                    currentData = yearData;
-                    currentLabels = yearLabels;
-                    break;
-            }
-            
-            // Atualizar dados dos cards
-            updateCardData(currentData);
-            
-            // Atualizar dados dos gráficos
-            tasksChart.data.labels = currentLabels;
-            tasksChart.data.datasets[0].data = currentData.created;
-            tasksChart.data.datasets[1].data = currentData.completed;
-            tasksChart.update();
-            
-            completionRateChart.data.labels = currentLabels;
-            completionRateChart.data.datasets[0].data = currentData.rate;
-            completionRateChart.update();
-            
-            completionTimeChart.data.labels = currentLabels;
-            completionTimeChart.data.datasets[0].data = currentData.time;
-            completionTimeChart.update();
+            // Fazer requisição AJAX para buscar novos dados
+            $.ajax({
+                url: '{{ route("reports.index") }}',
+                type: 'GET',
+                data: { period: period },
+                dataType: 'json',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function(response) {
+                    // Atualizar dados com a resposta
+                    currentLabels = response.periods;
+                    currentData = {
+                        created: response.created,
+                        completed: response.completed,
+                        rate: response.rates || [],
+                        time: response.times || []
+                    };
+                    
+                    // Atualizar dados de categorias
+                    if (response.categories) {
+                        categoriesLabels = response.categories.labels || [];
+                        categoriesData = response.categories.data || [];
+                        categoriesColors = response.categories.colors || [];
+                    }
+                    
+                    // Atualizar dados dos cards
+                    updateCardData(currentData);
+                    
+                    // Atualizar gráficos
+                    tasksChart.data.labels = currentLabels;
+                    tasksChart.data.datasets[0].data = currentData.created;
+                    tasksChart.data.datasets[1].data = currentData.completed;
+                    tasksChart.update();
+                    
+                    completionRateChart.data.labels = currentLabels;
+                    completionRateChart.data.datasets[0].data = currentData.rate;
+                    completionRateChart.update();
+                    
+                    completionTimeChart.data.labels = currentLabels;
+                    completionTimeChart.data.datasets[0].data = currentData.time;
+                    completionTimeChart.update();
+                    
+                    // Atualizar gráfico de categorias
+                    categoriesChart.data.labels = categoriesLabels;
+                    categoriesChart.data.datasets[0].data = categoriesData;
+                    if (categoriesColors.length > 0) {
+                        categoriesChart.data.datasets[0].backgroundColor = categoriesColors;
+                    }
+                    categoriesChart.update();
+                },
+                error: function(error) {
+                    console.error('Erro ao buscar dados:', error);
+                    // Mostrar mensagem de erro
+                    $('#total-tasks, #completed-tasks, #completion-rate, #avg-completion-time').text('Erro');
+                }
+            });
         }
         
         // Inicializar quando o documento estiver pronto
@@ -504,10 +519,11 @@
             $('#export-report-btn').click(function() {
                 alert('Funcionalidade de exportação será implementada em breve!');
             });
-        });
-        
-        // Garantir que os gráficos se ajustem quando o tema mudar
-        document.getElementById('theme-toggle').addEventListener('click', function() {
+            
+            // Garantir que os gráficos se ajustem quando o tema mudar
+            const themeToggle = document.getElementById('theme-toggle');
+            if (themeToggle) {
+                themeToggle.addEventListener('click', function() {
             setTimeout(function() {
                 const textColor = getComputedStyle(document.documentElement).getPropertyValue('--text-primary').trim();
                 
@@ -559,14 +575,15 @@
                 completionTimeChart.options.scales.x.ticks.color = textColor;
                 completionTimeChart.update();
             }, 300);
+                });
+            }
         });
     </script>
     
     <script src="{{ asset('js/script.js') }}"></script>
+    
+    <button id="theme-toggle" class="theme-toggle" aria-label="Toggle dark/light mode">
+        <i class="fas fa-moon"></i>
+    </button>
 </body>
-
-<button id="theme-toggle" class="theme-toggle" aria-label="Toggle dark/light mode">
-    <i class="fas fa-moon"></i>
-</button>
-
 </html>

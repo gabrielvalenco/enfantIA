@@ -19,6 +19,7 @@ class ReportController extends Controller
         $endDate = null;
         $dateFormat = '';
         $groupByFormat = '';
+        $isAjaxRequest = $request->ajax();
         
         // Configurar datas e formatos de acordo com o período selecionado
         switch ($period) {
@@ -161,6 +162,47 @@ class ReportController extends Controller
             $completionRate[$key] = $rate;
         }
         
+        // Preparar dados para os gráficos
+        $avgTimeData = [];
+        foreach ($periods as $key => $label) {
+            if (isset($avgCompletionTimes[$key]) && $avgCompletionTimes[$key]['count'] > 0) {
+                $avgTimeData[$key] = round($avgCompletionTimes[$key]['total_hours'] / $avgCompletionTimes[$key]['count']);
+            } else {
+                $avgTimeData[$key] = 0;
+            }
+        }
+        
+        // Preparar dados de categorias
+        $preparedCategoriesData = [
+            'labels' => [],
+            'data' => [],
+            'colors' => []
+        ];
+        
+        foreach ($categoriesData as $category) {
+            $preparedCategoriesData['labels'][] = $category['name'];
+            $preparedCategoriesData['data'][] = $category['count'];
+            $preparedCategoriesData['colors'][] = $category['color'];
+        }
+        
+        // Formatar saída conforme o tipo de requisição
+        if ($isAjaxRequest) {
+            // Converter arrays associativos para arrays indexados para melhor manipulação no JavaScript
+            return response()->json([
+                'periods' => array_values($periods),
+                'created' => array_values($createdByPeriod),
+                'completed' => array_values($completedByPeriod),
+                'rates' => array_values($completionRate),
+                'times' => array_values($avgTimeData),
+                'categories' => $preparedCategoriesData,
+                'totalTasks' => array_sum($createdByPeriod),
+                'totalCompleted' => array_sum($completedByPeriod),
+                'avgCompletionRate' => array_sum($createdByPeriod) > 0 ? round((array_sum($completedByPeriod) / array_sum($createdByPeriod)) * 100) : 0,
+                'avgTime' => count($avgTimeData) > 0 ? round(array_sum($avgTimeData) / count(array_filter($avgTimeData))) : 0
+            ]);
+        }
+        
+        // Para requisições normais, retornar a view
         return view('reports.index', compact(
             'period',
             'chartLabel',
