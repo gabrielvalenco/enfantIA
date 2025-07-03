@@ -3,15 +3,34 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\SocialLink;
 
 class ProfileController extends Controller
 {
+    public function index()
+    {
+        $user = auth()->user();
+        $socialLinks = $user->socialLinks()->pluck('url')->toArray();
+        
+        // Get metrics data
+        $metrics = [
+            'tasks_completed' => $user->completedTasks()->count(),
+            'best_streak' => 5, // Placeholder for now
+            'on_time_percent' => 85, // Placeholder for now
+            'projects_finished' => 12 // Placeholder for now
+        ];
+        
+        return view('profile.index', compact('user', 'socialLinks', 'metrics'));
+    }
+
     public function edit()
     {
         $user = auth()->user();
-        return view('profile.edit', compact('user'));
+        $socialLinks = $user->socialLinks()->pluck('url')->toArray();
+        
+        return view('profile.edit', compact('user', 'socialLinks'));
     }
-
+    
     public function update(Request $request)
     {
         $user = auth()->user();
@@ -22,7 +41,6 @@ class ProfileController extends Controller
             'phone' => 'nullable|string|max:20',
             'position' => 'nullable|string|max:100',
             'bio' => 'nullable|string|max:500',
-            'timezone' => 'required|string|timezone',
             'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
         ]);
 
@@ -31,21 +49,61 @@ class ProfileController extends Controller
             $user->avatar = $avatarPath;
         }
 
-        $user->update([
+        // Handle position field - if 'Outro' is selected, use the custom_position value
+        $position = $request->position;
+        if ($position === 'Outro' && $request->filled('custom_position')) {
+            $position = $request->custom_position;
+        }
+        
+        // Process languages - ensure it's properly formatted
+        $languages = '';
+        if ($request->filled('languages')) {
+            // The languages field is already a comma-separated string from the hidden input
+            // Just need to clean it up and limit to 3 items
+            $languageArray = array_map('trim', explode(',', $request->languages));
+            $languageArray = array_filter($languageArray); // Remove empty items
+            $languageArray = array_slice($languageArray, 0, 3);
+            $languages = implode(', ', $languageArray);
+        }
+        
+        // Ensure locale is properly handled
+        $locale = $request->filled('locale') ? trim($request->locale) : '';
+        
+        $updateData = [
             'name' => $request->name,
             'email' => $request->email,
             'phone' => $request->phone,
-            'position' => $request->position,
+            'position' => $position,
             'bio' => $request->bio,
-            'timezone' => $request->timezone,
-            'preferences' => [
-                'task_notifications' => $request->boolean('task_notifications'),
-                'deadline_reminders' => $request->boolean('deadline_reminders'),
-                'weekly_summary' => $request->boolean('weekly_summary')
-            ]
-        ]);
+            'locale' => $request->locale,
+            'languages' => $languages,
+            'preferences' => $user->preferences ?? []
+        ];
+        
+        if ($request->hasFile('avatar')) {
+            $updateData['avatar'] = $user->avatar;
+        }
+        
+        $user->update($updateData);
+        
+        // Handle social links
+        if ($request->has('social_links')) {
+            // Delete existing links
+            $user->socialLinks()->delete();
+            
+            // Add new links
+            $order = 0;
+            foreach ($request->social_links as $url) {
+                if (!empty($url)) {
+                    $user->socialLinks()->create([
+                        'url' => $url,
+                        'order' => $order++
+                    ]);
+                }
+            }
+        }
 
-        return redirect()->route('profile.edit')
+        return redirect()->route('profile.index')
             ->with('success', 'Perfil atualizado com sucesso!');
     }
 }

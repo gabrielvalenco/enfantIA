@@ -1,38 +1,6 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
-
-:root {
-    --background: #f8f9fa ;
-    --primary: #2C3E50;
-    --primary-hover: rgb(38, 91, 145);
-    --secondary: #6c757d;
-    --success: #28a745;
-    --danger: #dc3545;
-    --warning: #ffc107;
-    --info: #17a2b8;
-    --info-hover: #1ccde9;
-}
-
-html, body {
-    height: 100%;
-    margin: 0;
-    padding: 0;
-    scroll-behavior: smooth;
-}
-
-body {
-    font-family: 'Poppins', sans-serif;
-    background-color: var(--background);
-    color: var(--primary);
-}
-
-h1, h2, h3, h4, h5, h6 {
-    color: var(--primary);
-    font-weight: 700;
-}
-
 .dashboard-header {
-    background-color: #2C3E50;
-    padding: 1rem 2rem;
+    background-color: var(--surface-color);
+    padding: 2rem 2rem;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     margin-bottom: 2rem;
 }
@@ -46,7 +14,89 @@ h1, h2, h3, h4, h5, h6 {
 .dashboard-title {
     font-size: 1.5rem;
     margin: 0;
-    color: #ffffff;
+    color: var(--text-primary);
+}
+
+
+.dropdown-menu {
+    background-color: var(--surface-color);
+    border: 2px solid var(--border-color);
+    border-radius: 12px;
+    min-width: 200px;
+    padding: 0.5rem 0;
+    margin: 0;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+}
+
+.dropdown-menu form {
+    width: 100%;
+}
+
+.dropdown-header .fw-bold {
+    color: var(--text-primary);
+    font-weight: 600;
+}
+
+.dropdown-menu a {
+    color: var(--text-primary);
+    transition: all 0.2s ease;
+    padding-left: 1rem;
+}
+
+.dropdown-menu a:hover {
+    color: var(--link-color-hover) !important;   
+    padding-left: 1.5rem;
+    transition: all 0.2s ease;
+}
+
+.dropdown-menu .text-muted {
+    color: var(--text-secondary) !important;
+}
+
+.dropdown-item button {
+    color: var(--delete-color) !important;
+    background: transparent;
+    border: none;
+    width: 100%;
+    text-align: left;
+    padding: 0.5rem 1rem;
+    transition: all 0.2s ease;
+}
+
+.dropdown-item button:hover {
+    color: var(--delete-color-hover) !important;
+    background-color: rgba(219, 58, 52, 0.1);
+    padding-left: 1.5rem;
+    transition: all 0.2s ease;
+}
+
+.dropdown-item .text-danger:hover {
+    color: var(--delete-color-hover) !important;
+    padding-left: 1.5rem;
+    transition: all 0.2s ease;
+}
+
+.dropdown-item.text-danger {
+    color: var(--delete-color) !important;
+    background: transparent;
+    width: 100%;
+    text-align: left;
+    padding: 0.5rem 1rem;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+}
+
+.dropdown-item.text-danger:hover {
+    color: var(--delete-color-hover) !important;
+    background-color: rgba(219, 58, 52, 0.1);
+    padding-left: 1.5rem;
+    transition: all 0.2s ease;
+}
+
+.dropdown-divider {
+    border: 1px solid;
+    border-color: var(--border-color);
 }
 
 .dashboard-header-content {
@@ -81,7 +131,8 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .status-card {
-    background: white;
+    background: var(--surface-color);
+    border: 2px solid var(--border-color);
     border-radius: 12px;
     padding: 1.5rem;
     display: flex;
@@ -93,6 +144,8 @@ h1, h2, h3, h4, h5, h6 {
 
 .status-card:hover {
     transform: translateY(-2px);
+    border: 2px solid var(--border-hover);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .status-card-icon {
@@ -103,13 +156,32 @@ h1, h2, h3, h4, h5, h6 {
     align-items: center;
     justify-content: center;
     font-size: 1.5rem;
+    color: white; /* Default icon color */
+    transition: all 0.3s ease;
+}
+
+/* Background and icon colors for different status cards */
+.status-card-icon.pending { 
+    background-color: #4e73df; /* Blue for pending tasks */
     color: white;
 }
 
-.status-card-icon.pending { background-color: #3498db; }
-.status-card-icon.completed { background-color: #2ecc71; }
-.status-card-icon.urgent { background-color: #e74c3c; }
-.status-card-icon.categories { background-color: #9b59b6; }
+.status-card-icon.completed { 
+    background-color: #1cc88a; /* Green for completed tasks */
+    color: white;
+}
+
+.status-card-icon.urgent { 
+    background-color: #e74a3b; /* Red for urgent tasks */
+    color: white;
+}
+
+.status-card-icon.categories { 
+    background-color: #f6c23e; /* Yellow for categories */
+    color: white;
+}
+
+
 
 .status-card-info h3 {
     font-size: 1.5rem;
@@ -124,7 +196,8 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .dashboard-menu {
-    background-color: #2c3e50;
+    background-color: var(--surface-color);
+    border: 2px solid var(--border-color);
     margin: 5rem auto;
     max-width: 800px;
     border-radius: 8px;
@@ -136,14 +209,20 @@ h1, h2, h3, h4, h5, h6 {
     font-size: 1.25rem;
     font-weight: 600;
     margin-bottom: 1.5rem;
-    color: #ffffff;
+    color: var(--text-primary);
     display: flex;
     align-items: center;
     gap: 0.5rem;
 }
 
-.dashboard-menu .dashboard-section-title i {
-    color: #ffffff;
+.dashboard-section-group-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
 }
 
 .menu-grid {
@@ -153,13 +232,14 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .menu-item {
-    background: white;
+    background: var(--background-color);
+    border: 2px solid var(--border-color);
     border-radius: 12px;
     padding: 1.5rem;
     display: flex;
     align-items: center;
     gap: 1.25rem;
-    color: #2c3e50;
+    color: var(--text-primary);
     text-decoration: none;
     transition: all 0.2s ease;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
@@ -169,10 +249,11 @@ h1, h2, h3, h4, h5, h6 {
     transform: translateY(-2px);
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     text-decoration: none;
-    color: var(--primary-color);
+    color: var(--text-primary);
+    border: 2px solid var(--border-hover);
 }
 
-.menu-item-icon {
+.menu-item-icon i {
     width: 48px;
     height: 48px;
     border-radius: 12px;
@@ -180,12 +261,12 @@ h1, h2, h3, h4, h5, h6 {
     align-items: center;
     justify-content: center;
     font-size: 1.5rem;
-    color: var(--primary-color);
+    color: var(--text-primary);
     transition: all 0.2s ease;
 }
 
 .menu-item:hover .menu-item-icon {
-    color: white;
+    color: var(--text-primary);
     background: var(--primary-color);
 }
 
@@ -202,51 +283,609 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .upcoming-tasks {
+    background-color: var(--surface-color);
+    border: 2px solid var(--border-color);
     max-width: 800px;
     margin: 5rem auto;
-    background-color: #2C3E50;
     border-radius: 8px;
     padding: 20px;
 }
 
 .upcoming-tasks .table {
+    border: 2px solid var(--border-color);
+    border-radius: 12px;
     margin: 0;
 }
 
-.upcoming-tasks .table th {
+.upcoming-tasks .table>:not(caption)>*>* {
+    border: none !important;
+}
+
+
+.pendingSubtasksMessage {
+    color: var(--text-primary);
+    font-size: 0.875rem;
+    margin-top: 1.35rem;
+    background-color: var(--background-color);
+    border: 2px solid var(--border-color);
+    border-radius: 12px;
+    padding: 1rem;
+}
+
+.allCompletedMessage {
+    color: var(--text-primary);
+    font-size: 0.875rem;
+    margin-top: 1.35rem;
+    background-color: var(--background-color);
+    border: 2px solid var(--link-color);
+    border-radius: 12px;
+    padding: 1rem;
+}
+
+.modal-footer {
     border-top: none;
-    font-weight: 600;
-    color: #2c3e50 !important;
-    background-color: #ffffff;
 }
 
-.upcoming-tasks .table td {
-    vertical-align: middle;
+.modal-footer #closeModalBtn {
+    background-color: var(--delete-color);
+    border-radius: 12px;
+    padding: 0.5rem 1rem;
+    transition: all 0.2s ease;
 }
 
-.upcoming-tasks .table tr:last-child td {
-    border-bottom: none;
+.modal-footer #closeModalBtn:hover {
+    background-color: var(--delete-color-hover);
+    border-color: var(--delete-color-hover);
+}   
+
+.modal-footer #completeTaskBtn {
+    background-color: var(--complete-color);
+    border-radius: 12px;
+    padding: 0.5rem 1rem;
+    transition: all 0.2s ease;
 }
 
-.calendar {
+.modal-footer #completeTaskBtn:hover {
+    background-color: var(--complete-color-hover);
+    border-color: var(--complete-color-hover);
+}
+
+.complete-button {
+    background-color: var(--link-color);
+    border: 2px solid var(--link-color);
+    border-radius: 100%;
+    width: 20px;
+    height: 20px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-primary);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    padding: 1rem;
+}
+
+.complete-button:hover {
+    background-color: var(--link-color-hover);
+    border-color: var(--link-color-hover);
+}
+
+table tr {
+    border-bottom: 1px solid var(--border-color);
+}
+
+/* Estilos para as badges de urgência */
+.badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-weight: 500;
+    font-size: 0.8rem;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.bg-danger {
+    background-color: rgba(220, 53, 69, 0.2) !important;
+    color: #ff8c96;
+    border: 2px solid var(--delete-color);
+}
+
+.bg-warning {
+    background-color: rgba(255, 193, 7, 0.2) !important;
+    color: #ffe066;
+    border: 2px solid var(--edit-color);
+}
+
+.bg-info {
+    background-color: rgba(23, 162, 184, 0.2) !important;
+    color: #a8e4f0;
+    border: 2px solid var(--link-color);
+}
+
+table td {
+    background-color: var(--background-color) !important;
+    color: var(--text-secondary) !important;
+    cursor: pointer;
+}
+
+table tr:hover td {
+    background-color: var(--background-color-hover) !important;
+    color: var(--text-primary) !important;
+}
+
+#calendar {
     max-width: 800px;
+    background-color: var(--surface-color);
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 1.5rem;
     margin: 2rem auto;
-    background-color: #2C3E50;
+    min-height: 600px;
+}
+
+#calendar a {
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
+    color: var(--text-primary);
+    padding-right: 0.5rem;
+}
+
+/* Estilos para os eventos do calendário */
+.fc-event {
+    border-radius: 6px !important;
+    padding: 4px 8px !important;
+    margin: 2px 0 !important;
+    cursor: pointer !important;
+    transition: transform 0.2s ease !important;
+}
+
+.fc-event:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15) !important;
+    z-index: 10 !important;
+}
+
+.fc-daygrid-event-dot {
+    border-color: var(--link-color) !important;
+}
+
+.fc-daygrid-day.fc-day-today {
+    background-color: rgba(32, 172, 130, 0.1) !important;
+}
+
+.fc-daygrid-day-number {
+    font-weight: bold;
+    padding: 8px !important;
+}
+
+.fc-daygrid-more-link {
+    color: var(--link-color) !important;
+    font-weight: bold;
+    background-color: rgba(32, 172, 130, 0.1);
+    border-radius: 4px;
+    padding: 2px 4px;
+}
+
+/* Centralizar o botão na célula do calendário */
+.fc-daygrid-day-bottom {
+    display: flex !important;
+    justify-content: center !important;
+    padding-top: 4px !important;
+    padding-bottom: 4px !important;
+}
+
+/* Ocultar a palavra "mais" nos links e mostrar apenas o número */
+.fc-daygrid-more-link {
+    font-size: 0 !important;
+    position: relative !important;
+}
+
+/* Estilizar o botão de "mais" como uma esfera */
+.fc-daygrid-more-link {
+    background-color: var(--link-color) !important;
+    border-radius: 50% !important;
+    width: 28px !important;
+    height: 28px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 0 !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2) !important;
+    transition: transform 0.2s, box-shadow 0.2s !important;
+    margin: 0 auto !important;
+    cursor: pointer !important;
+    z-index: 5 !important;
+}
+
+/* Efeito hover na esfera */
+.fc-daygrid-more-link:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* Conteúdo do botão */
+.fc-daygrid-more-link::before {
+    content: "+" !important;
+    font-size: 1.2rem !important;
+    color: white !important;
+    font-weight: bold !important;
+    line-height: 1 !important;
+}
+
+/* Estilo para o contador de tarefas */
+.task-count {
+    position: absolute !important;
+    top: -6px !important;
+    right: -6px !important;
+    background-color: #dc3545 !important;
+    color: white !important;
+    border-radius: 50% !important;
+    width: 18px !important;
+    height: 18px !important;
+    font-size: 0.7rem !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-weight: bold !important;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.3) !important;
+    border: 1px solid white !important;
+}
+
+/* Corrigir o z-index do popover para ficar abaixo do modal */
+.fc-popover.fc-more-popover {
+    z-index: 1040 !important; /* Menor que o modal (1050) */
+    border: 2px solid var(--border-color) !important;
+    border-radius: 8px !important;
+    background-color: var(--surface-color) !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+}
+
+.fc-popover-title {
+    background-color: var(--background-color) !important;
+    color: var(--text-primary) !important;
+    font-weight: bold !important;
+    padding: 8px 10px !important;
+    border-bottom: 1px solid var(--border-color) !important;
+}
+
+/* Ocultar a palavra "mais" no título do popover */
+.fc-popover-title:not(:empty)::before {
+    content: "";
+    display: inline;
+}
+
+.fc-popover-title:not(:empty) {
+    visibility: hidden;
+    position: relative;
+}
+
+.fc-popover-title:not(:empty)::after {
+    visibility: visible;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    padding: 8px 10px;
+    content: attr(data-date);
+    box-sizing: border-box;
+}
+
+.fc-popover-close {
+    color: var(--delete-color) !important;
+    opacity: 0.8 !important;
+}
+
+.fc-popover-close:hover {
+    color: var(--delete-color-hover) !important;
+    opacity: 1 !important;
+}
+
+/* Calendar table lines styling */
+#calendar .fc-scrollgrid,
+#calendar .fc-scrollgrid-section,
+#calendar .fc-col-header,
+#calendar .fc-daygrid-body,
+#calendar .fc-scrollgrid-sync-table,
+#calendar .fc-timegrid-body,
+#calendar .fc-timegrid-slots,
+#calendar .fc-timegrid-cols,
+#calendar .fc-daygrid-day-frame,
+#calendar .fc-daygrid-day,
+#calendar .fc-col-header-cell,
+#calendar .fc-timegrid-slot,
+#calendar .fc-timegrid-col,
+#calendar .fc-scrollgrid-section-body,
+#calendar .fc-scrollgrid-section-header,
+#calendar table,
+#calendar th,
+#calendar td {
+    border-color: var(--border-color) !important;
+}
+
+.modal-header {
+    border-bottom: 2px solid var(--border-color);
+    margin-bottom: 1.5rem;
+    padding: 0 0 1rem;
+}
+
+.btn-close-modal {
+    font-size: 1rem;
+    font-weight: 300;
+    color: var(--delete-color) !important;
+    cursor: pointer;
+    border: 2px solid var(--delete-color);
+    border-radius: 100%;
+    width: 20px;
+    height: 20px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: transparent;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    padding: 1rem;
+}
+
+.btn-close-modal:hover {
+    background-color: var(--delete-color-hover);
+    color: var(--text-primary);
+}
+
+.modal-content {
+    background-color: var(--surface-color);
+    border-radius: 12px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    max-width: 500px;
+    width: 100%;
+    height: auto;
+    margin: 0 auto;
+    padding: 20px;
+    z-index: 1050;
+}
+
+.modal-body {
+    padding: 0;
+}
+
+.modal-actions .btn {
+    border-radius: 100%;
+    width: 40px;
+    height: 40px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-actions .btn-warning {
+    background-color: var(--edit-color);
+    border-color: var(--edit-color);
+}
+
+.modal-actions .btn-warning:hover {
+    background-color: var(--edit-color-hover);
+    border-color: var(--edit-color-hover);
+}
+
+.modal-actions .btn-success {
+    background-color: var(--complete-color);
+    border-color: var(--complete-color);
+}
+
+.modal-actions .btn-success:hover {
+    background-color: var(--complete-color-hover);
+    border-color: var(--complete-color-hover);
+}
+
+.modal-actions .btn-danger {
+    background-color: var(--delete-color);
+    border-color: var(--delete-color);
+}
+
+.modal-actions .btn-danger:hover {
+    background-color: var(--delete-color-hover);
+    border-color: var(--delete-color-hover);
+}
+
+.calendar-task-desc {
+    background-color: var(--background-color);
+    border: 2px solid var(--border-color);
+    padding: 1rem;
+    border-radius: 12px;
+}
+
+#taskDescription {
+    background-color: var(--background-color);
+    color: var(--text-secondary) !important;
+    margin-top: 1rem;
+    border: 2px solid var(--border-color);
+    padding: 1rem;
+    border-radius: 12px;
+}
+
+.view-task-btn {
+    color: var(--link-color);
+    border: 2px solid var(--link-color);
+    border-radius: 2rem;
+    padding: 0.5rem 3rem;
+    transition: all 0.2s ease;
+    margin: 1rem;
+    text-decoration: none;
+}
+
+.view-task-btn:hover {
+    color: var(--link-color-hover);
+    border-color: var(--link-color-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.noSubtasks {
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+    margin-top: 1.35rem;
+    background-color: var(--background-color);
+    border: 2px solid var(--border-color);
+    border-radius: 12px;
+    padding: 1rem;
+}
+
+/* Estilos para subtarefas no modal */
+.subtasks-section {
+    border-top: 1px solid var(--border-color);
+    padding-top: 1rem;
+}
+
+.subtasks-title {
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: var(--text-primary);
+}
+
+.subtasks-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.subtask-item {
+    background-color: var(--surface-color);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    padding: 0.75rem 1rem;
+    transition: all 0.2s ease;
+}
+
+.subtask-item:hover {
+    border-color: var(--border-hover);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.subtask-title {
+    font-weight: 500;
+    margin-bottom: 0.25rem;
+    color: var(--text-primary);
+}
+
+.subtask-description {
+    font-size: 0.9rem;
+    color: var(--text-color);
+    margin-bottom: 0;
+}
+
+.fc-today-button {
+    background-color: var(--button-color) !important;
+    border-color: var(--border-color) !important;
+    color: var(--text-primary) !important;
+    transition: all 0.2s ease;
+}
+
+.fc-today-button:hover {
+    background-color: var(--button-color-hover) !important;
+    border-color: var(--border-color-hover) !important;
+    color: var(--text-primary-hover) !important;
+}
+
+.fc-prev-button {
+    background-color: var(--button-color) !important;
+    border-color: var(--border-color) !important;
+    color: var(--text-primary) !important;
+    transition: all 0.2s ease;
+}
+
+.fc-next-button {
+    background-color: var(--button-color) !important;
+    border-color: var(--border-color) !important;
+    color: var(--text-primary) !important;
+    transition: all 0.2s ease;
+}
+
+.fc-next-button:hover {
+    background-color: var(--button-color-hover) !important;
+    border-color: var(--border-color-hover) !important;
+    color: var(--text-primary-hover) !important;
+}
+
+.fc-prev-button:hover {
+    background-color: var(--button-color-hover) !important;
+    border-color: var(--border-color-hover) !important;
+    color: var(--text-primary-hover) !important;
+}
+
+/* Notification Box Styles */
+.notification-box {
+    max-width: 800px;
+    margin: 0 auto;
+    border: 2px solid var(--border-color);
     border-radius: 8px;
     padding: 20px;
 }
 
-#calendar {
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    padding: 1rem;
+.notification-box .card {
+    border: none;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.calendar a {
-    text-decoration: none;
-    color: inherit;
+.notification-box .list-group-item {
+    transition: all 0.2s ease;
+    border-radius: 8px !important;
+}
+
+.notification-box .list-group-item:hover {
+    background-color: var(--surface-color);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.notification-box .badge {
+    padding: 0.35em 0.65em;
+    font-size: 0.75em;
+    vertical-align: middle;
+}
+
+.notification-box .btn {
+    transition: all 0.2s ease;
+}
+
+.notification-box .btn:hover {
+    transform: translateY(-2px);
+}
+
+.notification-box .btn-success {
+    background-color: var(--success);
+    border-color: var(--success);
+}
+
+.notification-box .btn-danger {
+    background-color: var(--danger);
+    border-color: var(--danger);
+}
+
+.logout-btn {
+    color: var(--delete-color) !important;
+    background: transparent;
+    border: none;
+    width: 100%;
+    text-align: left;
+    padding: 0.5rem 1rem;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    font-size: 1rem;
     cursor: pointer;
+}
+
+.logout-btn:hover {
+    color: var(--delete-color-hover) !important;
+    padding-left: 1.5rem;
+    transition: all 0.2s ease;
 }
 
 @media (max-width: 768px) {
@@ -293,6 +932,34 @@ h1, h2, h3, h4, h5, h6 {
 
 }
 
-.user-dropdown {
-    min-width: 200px;
+/* Theme Toggle Button */
+.theme-toggle {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background-color: var(--surface-color);
+    border: 2px solid var(--border-color);
+    color: var(--text-primary);
+    cursor: pointer;
+    font-size: 1.2rem;
+    padding: 0;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color var(--transition-speed) ease, 
+                color var(--transition-speed) ease,
+                transform 0.3s ease,
+                box-shadow 0.3s ease;
+    z-index: 1000;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.theme-toggle:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+    background-color: var(--background-color-hover);
+    border-color: var(--border-hover);
 }

@@ -21,7 +21,7 @@ class TaskPolicy
      */
     public function view(User $user, Task $task): bool
     {
-        //
+        return $user->id === $task->user_id || $user->id === $task->assigned_to;
     }
 
     /**

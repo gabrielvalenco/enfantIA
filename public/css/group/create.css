@@ -1,0 +1,417 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
+:root {
+    /* General Colors */
+    --background-color: #121212;
+    --surface-color: #1E1E1E;
+    --card-shadow: 0 15px 35px rgba(0, 0, 0, 0.4), 0 5px 15px rgba(0, 0, 0, 0.3);
+    --border-color: #333333;
+    --button-color: #121212;
+    
+    /* General Colors Hover */
+    --background-color-hover: #202020;
+    --border-hover: #4d4d4d;
+    --button-hover: #121212;
+
+    /* Text Colors */
+    --text-color: #b9b9b9;
+    --text-primary: #ebebeb;
+    --text-secondary: #6C757D;
+    --link-color: rgb(32, 172, 130);
+
+    /* Text Colors Hover */
+    --text-color-hover: #d3d3d3;
+    --text-primary-hover: #ffffff;
+    --text-secondary-hover: #838b93;
+    --link-color-hover: rgb(29, 248, 182);
+
+    /* Action Colors */
+    --edit-color: #F0C05A;
+    --delete-color: #DB3A34;
+    --complete-color: #00A86B;
+
+    /* Action Colors Hover */
+    --edit-color-hover: #FFD700;
+    --delete-color-hover: #FF4C4C;
+    --complete-color-hover: #4CAF50;
+    
+    /* Transition for theme changes */
+    --transition-speed: 0.3s;
+}
+
+body {
+    font-family: 'Poppins', sans-serif !important;
+    background-color: var(--background-color);
+    color: var(--text-primary);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px 0;
+}
+
+.container {
+    max-width: 1200px;
+    width: 100%;
+}
+
+/* Card Styles */
+.card {
+    background-color: var(--surface-color);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    box-shadow: var(--card-shadow);
+    transition: all 0.3s ease;
+    overflow: hidden;
+    position: relative;
+    padding: 1.5rem;
+}
+
+.card-body {
+    padding: 1rem;
+}
+
+/* Tab Navigation */
+.nav-tabs {
+    border-bottom: none;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    padding: 0;
+    margin-bottom: 2rem;
+}
+
+.nav-tabs .nav-item {
+    margin-bottom: -1px;
+    text-align: center;
+}
+
+.nav-tabs .nav-link {
+    color: var(--text-secondary);
+    border: none;
+    padding: 15px 30px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    background-color: transparent;
+    position: relative;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-size: 0.95rem;
+}
+
+.nav-tabs .nav-link:hover {
+    color: var(--text-primary);
+}
+
+.nav-tabs .nav-link.active {
+    color: var(--link-color);
+    background-color: transparent;
+    font-weight: 600;
+}
+
+.nav-tabs .nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: var(--link-color);
+    transition: all 0.3s ease;
+}
+
+.nav-tabs .nav-link.active::after {
+    width: 100%;
+    height: 3px;
+    box-shadow: 0 0 8px var(--link-color);
+}
+
+.tab-content {
+    padding: 30px 0;
+}
+
+/* Form Controls */
+.form-label {
+    color: var(--text-primary);
+    font-weight: 500;
+    margin-bottom: 0.8rem;
+    font-size: 1rem;
+}
+
+.form-control {
+    padding: 0.8rem 1.2rem !important;
+    background-color: var(--background-color) !important;
+    border: 1px solid var(--border-color);
+    color: var(--text-secondary) !important;
+    transition: all 0.3s ease;
+    border-radius: 8px;
+    font-size: 1rem;
+    box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.1);
+    height: auto;
+}
+
+.form-control:focus {
+    border-color: var(--link-color);
+    box-shadow: 0 0 0 3px rgba(32, 172, 130, 0.2), inset 0 2px 5px rgba(0, 0, 0, 0.1);
+    background-color: var(--background-color) !important;
+    transform: translateY(-1px);
+}
+
+.form-control::placeholder {
+    color: var(--text-secondary);
+    opacity: 0.8;
+}
+
+/* Email Tags Container */
+#email-tags-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.email-tag {
+    display: inline-flex;
+    align-items: center;
+    background-color: rgba(32, 172, 130, 0.15);
+    border: 1px solid var(--link-color);
+    border-radius: 30px;
+    padding: 8px 15px;
+    margin-right: 8px;
+    margin-bottom: 8px;
+    transition: all 0.2s ease;
+}
+
+.email-tag:hover {
+    background-color: rgba(32, 172, 130, 0.25);
+    transform: translateY(-2px);
+}
+
+.email-text {
+    color: var(--text-primary);
+    font-size: 0.95rem;
+    margin-right: 10px;
+}
+
+.email-remove-btn {
+    background: none;
+    border: none;
+    color: #ff6b6b;
+    font-size: 1.2rem;
+    line-height: 1;
+    padding: 0;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.email-remove-btn:hover {
+    color: var(--delete-color-hover);
+    transform: scale(1.2);
+}
+
+/* Input Group for Member Addition */
+.input-group {
+    position: relative;
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    width: 100%;
+}
+
+.btn-add-member {
+    background-color: var(--link-color);
+    border: none;
+    color: var(--text-primary);
+    padding: 0;
+    width: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.btn-add-member:hover {
+    background-color: var(--link-color-hover);
+}
+
+/* Create Button */
+.create-btn {
+    background-color: var(--link-color);
+    border: none;
+    border-radius: 8px;
+    color: var(--text-primary);
+    padding: 12px 20px;
+    transition: all 0.3s ease;
+    font-weight: 600;
+    box-shadow: 0 4px 15px rgba(32, 172, 130, 0.3);
+    position: relative;
+    overflow: hidden;
+    text-align: center;
+    width: 100%;
+    font-size: 1.1rem;
+}
+
+.create-btn::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    transform: translateX(-100%);
+    transition: 0.6s;
+}
+
+.create-btn:hover::after {
+    transform: translateX(100%);
+}
+
+.create-btn:hover {
+    background-color: var(--link-color-hover);
+    transform: translateY(-2px);
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .card-body {
+        padding: 20px;
+    }
+    
+    .nav-tabs .nav-link {
+        padding: 12px 15px;
+        font-size: 0.85rem;
+    }
+    
+    .form-label {
+        font-size: 0.95rem;
+    }
+    
+    .form-control {
+        padding: 0.7rem 1rem !important;
+        font-size: 0.95rem;
+    }
+    
+    .create-btn, .back-button {
+        padding: 10px 15px;
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .card-body {
+        padding: 15px;
+    }
+    
+    .nav-tabs .nav-link {
+        padding: 10px;
+        font-size: 0.8rem;
+    }
+    
+    .email-tag {
+        padding: 6px 12px;
+    }
+    
+    .email-text {
+        font-size: 0.85rem;
+    }
+}
+
+/* Toast Notifications */
+.toast-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 9999;
+}
+
+.toast {
+    background-color: var(--surface-color);
+    color: var(--text-primary);
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    display: flex;
+    align-items: center;
+    min-width: 300px;
+    border-left: 4px solid var(--link-color);
+    animation: slideIn 0.3s ease-out forwards;
+}
+
+.toast.success {
+    border-left-color: var(--complete-color);
+}
+
+.toast.warning {
+    border-left-color: var(--edit-color);
+}
+
+.toast.error {
+    border-left-color: var(--delete-color);
+}
+
+.toast-icon {
+    margin-right: 12px;
+    font-size: 1.2rem;
+}
+
+.toast-message {
+    flex-grow: 1;
+}
+
+.toast-close {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    font-size: 1.2rem;
+    cursor: pointer;
+    padding: 0;
+    margin-left: 10px;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideOut {
+    from {
+        transform: translateX(0);
+        opacity: 1;
+    }
+    to {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+}
+
+@media (max-width: 768px) {
+    .card {
+        padding: 0.5rem;
+    }
+
+    .nav-tabs {
+        margin-bottom: 1rem;
+    }
+
+    form {
+        display: block;
+    }
+
+    .btn-add-member {
+        margin-bottom: 0;
+    }
+}

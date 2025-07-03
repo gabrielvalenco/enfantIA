@@ -3,13 +3,13 @@
 @section('content')
 
 <link rel="icon" href="{{ asset('favicon.svg') }}" type="image/svg+xml">
-<link rel="stylesheet" href="{{ asset('css/auth-style.css') }}">
+<link rel="stylesheet" href="{{ asset('css/auth/login.css') }}">
 
 <div class="auth-wrapper">
     <div class="auth-container">
         <div class="auth-card">
             <div class="auth-header">
-                <h4>Login</h4>
+                <h4>{{ env('APP_NAME') }}</h4>
             </div>
 
             <div class="auth-body">
@@ -47,19 +47,20 @@
                             <span class="password-toggle" onclick="togglePasswordVisibility()">
                                 <i class="fas fa-eye" id="togglePassword"></i>
                             </span>
+                            <label class="password-reset" for="password-reset">Esqueceu sua senha?</label>
                         </div>
                         @error('password')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
-
+                    
                     <div class="form-check">
-                        <input type="checkbox" class="form-check-input" id="remember" name="remember">
+                        <input type="checkbox" class="form-check-input" id="remember" name="remember" {{ old('remember') ? 'checked' : '' }}>
                         <label class="form-check-label" for="remember">Lembrar-me</label>
                     </div>
 
                     <div class="form-actions">
-                        <button type="submit" class="btn btn-primary btn-block">Entrar</button>
+                        <button type="submit" class="btn-login">Entrar</button>
                         
                         @if (Route::has('password.request'))
                         <div class="forgot-password">
@@ -76,7 +77,9 @@
                 </form>
             </div>
         </div>
-        <a href="{{ route('portfolio') }}" class="portfolio-anchor mt-5 text-center">Conheça mais do projeto</a>
+        <div class="portfolio">
+            <a href="{{ route('portfolio') }}" class="portfolio-anchor mt-5 text-center">Conheça mais do projeto</a>
+        </div>
     </div>
 </div>
 

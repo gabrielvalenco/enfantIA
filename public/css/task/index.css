@@ -1,0 +1,1222 @@
+
+* {
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    font-family: 'Poppins', sans-serif !important;
+    background-color: var(--background-color);
+    color: var(--text-primary);
+    min-height: 100vh;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 20px 0;
+}
+
+.container {
+    max-width: 1400px;
+    width: 100%;
+}
+
+/* Alert Styles */
+.alert {
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 20px;
+    border: none;
+}
+
+.alert-success {
+    background-color: rgba(40, 167, 69, 0.15);
+    color: #8bffaa;
+    border-left: 4px solid var(--success-color);
+}
+
+.alert-warning {
+    background-color: rgba(255, 193, 7, 0.15);
+    color: #ffe066;
+    border-left: 4px solid var(--edit-color);
+}
+
+.alert-info {
+    background-color: var(--background-color);  
+    color: var(--text-secondary);
+    border: 2px solid var(--link-color);
+}
+
+.alert-dismissible .close {
+    color: var(--text-primary);
+    opacity: 0.8;
+}
+
+.alert-dismissible .close:hover {
+    opacity: 1;
+}
+
+/* Table Header */
+.table-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 3rem;
+    flex-wrap: wrap;
+    border-bottom: 2px solid var(--border-color);
+    padding-bottom:2.5rem;
+}
+
+.table-header h1 {
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 0;
+}
+
+.table-actions {
+    display: flex;
+    gap: 2rem;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.back-button {
+    color: var(--link-color);
+    text-decoration: none;
+    transition: all 0.3s ease;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.back-button:hover {
+    color: var(--link-color-hover);
+    transform: translateX(-5px);
+    text-decoration: none;
+}
+
+.back-button::before {
+    content: '←';
+    font-size: 1.2rem;
+}
+
+.add-task-button {
+    color: var(--link-color);
+    text-decoration: none;
+    transition: all 0.3s ease;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.add-task-button:hover {
+    color: var(--link-color-hover);
+    transform: translateX(-5px);
+    text-decoration: none;
+}
+
+/* Button Styles */
+.btn {
+    border-radius: 6px;
+    padding: 8px 16px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.btn-primary {
+    background-color: var(--link-color);
+    border-color: var(--link-color);
+    color: var(--text-primary);
+}
+
+.btn-primary:hover {
+    background-color: var(--link-color-hover);
+    border-color: var(--link-color-hover);
+    transform: translateY(-2px);
+}
+
+.btn-secondary {
+    background-color: var(--surface-color);
+    border: 1px solid var(--border-color);
+    color: var(--text-color);
+}
+
+.btn-secondary:hover {
+    background-color: var(--surface-color);
+    border-color: var(--border-hover);
+    color: var(--text-color-hover);
+}
+
+.btn-warning {
+    background-color: rgba(255, 193, 7, 0.2);
+    border-color: var(--edit-color);
+    color: #ffe066;
+}
+
+.btn-warning:hover {
+    background-color: rgba(255, 193, 7, 0.3);
+    border-color: var(--edit-color);
+    color: #fff;
+}
+
+.btn-danger {
+    background-color: rgba(220, 53, 69, 0.2);
+    border-color: var(--delete-color);
+    color: #ff8c96;
+}
+
+.btn-danger:hover {
+    background-color: rgba(220, 53, 69, 0.3);
+    border-color: var(--delete-color);
+    color: #fff;
+}
+
+.btn-success {
+    background-color: rgba(32, 172, 130, 0.2);
+    border-color: var(--link-color);
+    color: var(--link-color);
+}
+
+.btn-success:hover {
+    background-color: rgba(32, 172, 130, 0.3);
+    border-color: var(--link-color);
+    color: #fff;
+}
+
+.btn-sm {
+    padding: 5px 10px;
+    font-size: 0.875rem;
+}
+
+/* Table Styles */
+.table {
+    background-color: var(--surface-color);
+    color: var(--text-color);
+    border: 2px solid var(--border-color);
+    border-radius: 10px;
+    overflow: hidden;
+    border-collapse: separate;
+    border-spacing: 0;
+    width: 100%;
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+}
+
+.table thead th {
+    background-color: rgba(0, 0, 0, 0.2);
+    color: var(--text-primary);
+    border-top: none !important;
+    border-bottom: 2px solid var(--border-color);
+    padding: 15px;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    letter-spacing: 0.5px;
+    text-align: center;
+    vertical-align: middle;
+    display: table-cell;
+    height: 60px;
+}
+
+#title-header {
+    text-align: left;
+    padding-left: 1rem;
+}
+
+.table tbody td {
+    padding: 15px;
+    vertical-align: middle;
+    border-top: 1px solid var(--border-color);
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+.table tbody tr:hover {
+    background-color: rgba(32, 172, 130, 0.05);
+}
+
+/* Task Columns */
+.task-title {
+    font-size: 0.9rem;
+    color: var(--text-color);
+    font-weight: 500;
+}
+
+.task-description {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    max-width: 250px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.due-date-header, .due-date {
+    width: 180px;
+}
+
+.actions-column {
+    width: 150px;
+    text-align: center;
+}
+
+/* Specific column widths */
+.table th:nth-child(1) { /* Título */
+    width: 20%;
+}
+
+.table th:nth-child(2) { /* Descrição */
+    width: 25%;
+}
+
+.table th:nth-child(3) { /* Categorias */
+    width: 18%;
+}
+
+.table th:nth-child(4) { /* Urgência */
+    width: 12%;
+}
+
+.table th:nth-child(5) { /* Status */
+    width: 8%;
+}
+
+.table th:nth-child(6) { /* Data de Vencimento */
+    width: 12%;
+}
+
+.table th:nth-child(7) { /* Ações */
+    width: 10%;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+.action-btn {
+    width: 42px;
+    height: 42px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    border: none;   
+    border-radius: 50%;
+}
+
+.action-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
+}
+
+.action-btn i {
+    font-size: 16px;
+}
+
+/* Botão específico para visualizar detalhes */
+.btn-info.action-btn {
+    background-color: #0dcaf0;
+    color: #121212;
+}
+
+.btn-info.action-btn:hover {
+    background-color: #31d2f2;
+}
+
+/* Botão específico para editar */
+.btn-warning.action-btn {
+    background-color: #ffc107;
+    color: #121212;
+}
+
+.btn-warning.action-btn:hover {
+    background-color: #ffca2c;
+}
+
+/* Botão específico para excluir */
+.btn-danger.action-btn {
+    background-color: #dc3545;
+    color: #ffffff;
+}
+
+.btn-danger.action-btn:hover {
+    background-color: #e35d6a;
+}
+
+/* Estilização dos tooltips - Bootstrap nativamente suporta title como tooltip */
+/* Aplicamos estilos personalizados para os tooltips do Bootstrap */
+.tooltip-inner {
+    background-color: var(--surface-color);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+    font-family: 'Poppins', sans-serif;
+    font-size: 12px;
+    padding: 6px 10px;
+}
+
+.tooltip.bs-tooltip-top .arrow::before,
+.tooltip.bs-tooltip-auto[x-placement^="top"] .arrow::before {
+    border-top-color: var(--border-color);
+}
+
+/* Category Styles */
+.categories-column {
+    min-width: 150px;
+}
+
+.alert-body {
+    padding-left: 1rem;
+}
+
+.category-badge {
+    text-align: center;
+    color: var(--text-primary);
+    border: 2px solid; /* Border color will be set inline */
+    background-color: var(--surface-color);
+    padding: 1px 8px;
+    border-radius: 10px;
+    font-weight: 500;
+    font-size: 0.7rem;
+    letter-spacing: 0.3px;
+    margin: 0.3rem !important;
+    display: inline-block;
+}
+
+.bg-danger {
+    background-color: rgba(220, 53, 69, 0.2) !important;
+    color: #ff8c96;
+    border: 2px solid var(--delete-color);
+}
+
+.bg-warning {
+    background-color: rgba(255, 193, 7, 0.2) !important;
+    color: #ffe066;
+    border: 2px solid var(--edit-color);
+}
+
+.bg-info {
+    background-color: rgba(23, 162, 184, 0.2) !important;
+    color: #a8e4f0;
+    border: 2px solid var(--link-color);
+}
+
+.badge-urgent {
+    background-color: rgba(220, 53, 69, 0.3) !important;
+    color: #ff8c96;
+    border: 1px solid var(--delete-color);
+    border-radius: 10px;
+    animation: pulse 1.5s infinite;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-weight: 600;
+}
+
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(220, 53, 69, 0.4);
+    }
+    70% {
+        box-shadow: 0 0 0 10px rgba(220, 53, 69, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(220, 53, 69, 0);
+    }
+}
+
+/* Status Button */
+.index-status {
+    text-align: center;
+    border-radius: 50%;
+    padding: 1rem 1.1rem;
+    background-color: var(--surface-color);
+    border: 3px solid var(--border-color);
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+}
+
+.index-status::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at center, rgba(32, 172, 130, 0.05) 0%, transparent 70%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    border-radius: 50%;
+}
+
+.index-status .fa-check {
+    color: #6c757d; /* Gray color for the checkmark */
+    font-size: 1.25rem;
+    position: relative;
+    z-index: 2;
+    transition: all 0.3s ease, transform 0.2s ease;
+}
+
+.index-status.completed-animation {
+    background-color: rgba(32, 172, 130, 0.1);
+    border-color: var(--link-color);
+    box-shadow: 0 0 10px rgba(32, 172, 130, 0.3);
+    transform: scale(1.05);
+}
+
+.index-status.completed-animation .fa-check {
+    color: var(--link-color);
+    transform: scale(1.2);
+}
+
+.index-status:hover {
+    background-color: rgba(32, 172, 130, 0.1);
+    border-color: var(--link-color);
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+}
+
+.index-status:hover::before {
+    opacity: 1;
+}
+
+.index-status:hover .fa-check {
+    color: var(--link-color);
+    transform: scale(1.1);
+}
+
+.index-status:active {
+    transform: scale(0.95);
+}
+
+/* Responsive Adjustments */
+@media (max-width: 992px) {
+    .table-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+    
+    .table {
+        display: block;
+        overflow-x: auto;
+    }
+}
+
+@media (max-width: 576px) {
+    .container {
+        padding: 0 10px;
+    }
+    
+    .table thead th, 
+    .table tbody td {
+        padding: 10px;
+    }
+}
+
+/* Styles for modals and form inputs */
+.modal-content {
+    background-color: var(--surface-color);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+}
+
+/* Form inputs consistent styling across the site */
+.form-control:focus, 
+.form-select:focus,
+input:focus,
+textarea:focus,
+select:focus,
+.modal .form-control:focus,
+.modal input[type="color"]:focus,
+.modal input[type="text"]:focus,
+.modal textarea:focus,
+.modal select:focus {
+    border-color: var(--link-color) !important;
+    box-shadow: 0 0 0 0.25rem rgba(32, 172, 130, 0.25) !important;
+    background-color: var(--surface-color) !important;
+    color: var(--text-primary);
+    outline: none;
+}
+
+.modal-header {
+    border-bottom: 1px solid var(--border-color);
+    padding: 15px 20px;
+}
+
+.modal-title {
+    color: var(--text-primary);
+    font-weight: 600;
+}
+
+.modal-header .close {
+    background: transparent;
+    border: none;
+    font-size: 1.5rem;
+    color: #6c757d;
+    opacity: 0.7;
+    transition: all 0.2s ease;
+    padding: 0.5rem;
+    margin: -0.5rem -0.5rem -0.5rem auto;
+    border-radius: 50%;
+    width: 2rem;
+    height: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    outline: none !important;
+}
+
+.modal-header .close:hover {
+    color: var(--link-color, rgb(32, 172, 130));
+    opacity: 1;
+    background-color: rgba(32, 172, 130, 0.1);
+    transform: rotate(90deg);
+}
+
+.modal-body {
+    padding: 20px;
+}
+
+.modal-footer {
+    border-top: 1px solid var(--border-color);
+    padding: 15px 20px;
+}
+
+/* Estilos para elementos dentro do modal */
+#task-title {
+    color: var(--text-primary);
+    font-weight: 600;
+    margin-bottom: 15px;
+    font-size: 1.4rem;
+}
+
+#task-description {
+    color: var(--text-color);
+    margin-bottom: 20px;
+    font-size: 1rem;
+    line-height: 1.5;
+}
+
+.task-info {
+    background-color: rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 25px;
+}
+
+.task-info strong {
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.task-info span {
+    color: var(--text-color);
+}
+
+/* Estilo para Subtarefas */
+.subtask-item {
+    background-color: rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    padding: 10px 15px;
+    transition: all 0.3s ease;
+}
+
+.subtask-item:hover {
+    background-color: rgba(32, 172, 130, 0.05);
+}
+
+.form-check-input {
+    background-color: var(--surface-color);
+    border: 1px solid var(--border-color);
+}
+
+/* Custom Checkbox Styling */
+.form-check-input:checked, .category-checkbox:checked {
+    background-color: var(--link-color) !important;
+    border-color: var(--link-color) !important;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3e%3cpath fill='none' stroke='%23fff' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='M6 10l3 3l6-6'/%3e%3c/svg%3e") !important;
+}
+
+.form-check-input:focus, .category-checkbox:focus {
+    border-color: var(--link-color) !important;
+    box-shadow: 0 0 0 0.25rem rgba(32, 172, 130, 0.25) !important;
+    outline: 0;
+}
+
+.form-check-label {
+    color: var(--text-color);
+    margin-left: 5px;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    padding: 3px 0;
+}
+
+.form-check-label:hover {
+    color: var(--text-primary);
+}
+
+/* Completed subtask styling */
+.text-decoration-line-through {
+    text-decoration: line-through;
+    color: var(--text-secondary) !important;
+    opacity: 0.8;
+    transition: all 0.3s ease;
+}
+
+/* Animation for completing subtasks */
+@keyframes checkmarkAnimation {
+    0% { transform: scale(0); opacity: 0; }
+    50% { transform: scale(1.2); opacity: 1; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+.form-check-input:checked, .category-checkbox:checked {
+    animation: checkmarkAnimation 0.3s ease-in-out forwards;
+}
+
+/* Subtask Item Styling */
+.subtask-item {
+    background-color: rgba(32, 172, 130, 0.05);
+    border-radius: 6px;
+    padding: 8px 12px;
+    transition: all 0.2s ease;
+    border: 1px solid transparent;
+}
+
+.subtask-item:hover {
+    background-color: rgba(32, 172, 130, 0.1);
+    border-color: rgba(32, 172, 130, 0.2);
+}
+
+.delete-subtask {
+    margin-left: auto;
+    background-color: transparent;
+    border: none;
+    color: var(--delete-color);
+    opacity: 0.7;
+    transition: all 0.3s ease;
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+}
+
+.delete-subtask:hover {
+    opacity: 1;
+    background-color: rgba(220, 53, 69, 0.1);
+}
+
+#subtask-form input {
+    background-color: var(--surface-color);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    padding: 10px 15px;
+    border-radius: 6px;
+}
+
+#subtask-form input:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.2rem rgba(32, 172, 130, 0.25);
+}
+
+#subtask-form button {
+    background-color: var(--primary-color);
+    border: none;
+    color: var(--text-primary);
+    transition: all 0.3s ease;
+}
+
+#subtask-form button:hover {
+    background-color: var(--primary-hover);
+}
+
+#complete-task-btn {
+    background-color: var(--primary-color);
+    border: none;
+    color: var(--text-primary);
+}
+
+#complete-task-btn:hover {
+    background-color: var(--primary-hover);
+}
+
+.text-decoration-line-through {
+    text-decoration: line-through;
+    opacity: 0.6;
+}
+
+.task-row {
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.task-row:hover {
+    background-color: rgba(32, 172, 130, 0.1);
+}
+
+/* Estilo para a barra de pesquisa e filtros */
+.filters-container {
+    margin-top: 10px;
+    padding: 10px 0;
+}
+
+.filters-container .input-group-text {
+    background-color: var(--surface-color);
+    border-color: var(--border-color);
+    color: var(--primary-color);
+}
+
+.filters-container .form-control {
+    background-color: var(--surface-color);
+    border-color: var(--border-color);
+    color: var(--text-primary);
+    padding: 6px 15px;
+    height: auto;
+    font-family: 'Poppins', sans-serif;
+}
+
+.filters-container .form-control:focus {
+    background-color: var(--surface-color) !important;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.25rem rgba(32, 172, 130, 0.25);
+    color: var(--text-primary);
+}
+
+.filters-container .form-control::placeholder {
+    color: var(--text-secondary);
+    font-style: italic;
+}
+
+#edit-title {
+    background-color: var(--surface-color);
+    border: 2px solid var(--border-color);
+    color: var(--text-secondary);
+    padding: 10px 15px;
+    border-radius: 6px;
+}
+
+#edit-description {
+    background-color: var(--surface-color);
+    border: 2px solid var(--border-color);
+    color: var(--text-secondary);
+    padding: 10px 15px;
+    border-radius: 6px;
+}
+
+#edit-due-date {
+    background-color: var(--surface-color);
+    border: 2px solid var(--border-color);
+    color: var(--text-secondary);
+    padding: 10px 15px;
+    border-radius: 6px;
+    width: 100%;
+}
+
+/* Estiliza o ícone nativo do calendário */
+#edit-due-date::-webkit-calendar-picker-indicator {
+    filter: invert(0.7); /* Deixa o ícone mais claro em tom cinza */
+    cursor: pointer;
+    padding: 5px;
+}
+
+#edit-due-date::-webkit-calendar-picker-indicator:hover {
+    opacity: 0.7;
+}
+
+.date-input-group {
+    width: 100%;
+    position: relative;
+}
+
+#edit-urgency {
+    background-color: var(--surface-color);
+    border: 2px solid var(--border-color);
+    color: var(--text-secondary);
+    padding: 10px 15px;
+    border-radius: 6px;
+    height: auto; /* Garante que a altura seja suficiente para o texto */
+    text-overflow: ellipsis; /* Adiciona reticências se o texto for longo */
+    white-space: normal; /* Permite quebra de linha para evitar corte */
+}
+
+/* Ajustes para o modal de edição */
+#editTaskModal .modal-content {
+    background-color: var(--background-color);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+}
+
+#editTaskModal .modal-header,
+#editTaskModal .modal-footer {
+    border-color: var(--border-color);
+}
+
+#editTaskModal .modal-title {
+    color: var(--text-primary);
+}
+
+#editTaskModal .close {
+    color: var(--text-primary);
+}
+
+#editTaskModal label {
+    color: var(--text-primary);
+}
+
+#editTaskModal .custom-control-label {
+    color: var(--text-secondary);
+}
+
+#editTaskModal .custom-control-label::before {
+    background-color: var(--surface-color);
+    border-color: var(--border-color);
+}
+
+#editTaskModal .custom-checkbox .custom-control-input:checked ~ .custom-control-label::before {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.filters-container .btn-outline-secondary {
+    background-color: transparent;
+    border-color: var(--border-color);
+    color: var(--text-secondary);
+}
+
+.filters-container .btn-outline-secondary:hover {
+    background-color: rgba(32, 172, 130, 0.1);
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+}
+
+/* Estilo para os botões de filtro */
+.filter-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+}
+
+#clear-all-filters {
+    color: var(--delete-color);
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+#clear-all-filters:hover {
+    color: var(--delete-color-hover);
+}
+
+/* Estilos personalizados para o SweetAlert2 */
+.swal-title {
+    color: var(--text-primary) !important;
+    font-family: 'Poppins', sans-serif !important;
+}
+
+.swal-html-container {
+    color: var(--text-primary) !important;
+    font-family: 'Poppins', sans-serif !important;
+}
+
+.swal-html-container strong {
+    font-weight: 600;
+    color: var(--primary-color);
+}
+
+.swal-confirm-button {
+    font-family: 'Poppins', sans-serif !important;
+    font-weight: 500 !important;
+    box-shadow: none !important;
+    border: none !important;
+    border-radius: 5px !important;
+}
+
+.swal-cancel-button {
+    font-family: 'Poppins', sans-serif !important;
+    font-weight: 500 !important;
+    box-shadow: none !important;
+    border: none !important;
+    border-radius: 5px !important;
+}
+
+.swal2-popup {
+    border-radius: 10px !important;
+    border: 1px solid var(--border-color) !important;
+}
+
+.swal2-icon {
+    border-color: var(--edit-color) !important;
+    color: var(--edit-color) !important;
+}
+
+@media (min-width: 992px) {
+    .filter-buttons {
+        justify-content: flex-end;
+    }
+}
+
+.filter-dropdown {
+    margin-right: 8px;
+    margin-bottom: 8px;
+}
+
+.filter-button {
+    background-color: var(--surface-color);
+    border-color: var(--border-color);
+    color: var(--text-primary);
+    transition: all 0.3s ease;
+    padding: 8px 15px;
+    font-size: 14px;
+    white-space: nowrap;
+    min-width: 120px;
+    text-align: center;
+}
+
+.filter-button:hover, 
+.filter-button:focus {
+    background-color: rgba(32, 172, 130, 0.1);
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+}
+
+.filter-button i {
+    color: var(--primary-color);
+}
+
+/* Dropdown menus */
+.dropdown-menu {
+    background-color: var(--surface-color);
+    border-color: var(--border-color);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    width: auto;
+    min-width: 200px;
+    max-width: 100%;
+}
+
+.dropdown-item {
+    color: var(--text-primary);
+    transition: background-color 0.2s ease;
+    white-space: normal;
+    word-wrap: break-word;
+    padding: 8px 15px;
+    line-height: 1.3;
+}
+
+.dropdown-item.text-truncate {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.dropdown-item:hover,
+.dropdown-item:focus,
+.dropdown-item.active {
+    background-color: rgba(32, 172, 130, 0.1);
+    color: var(--primary-color);
+}
+
+.dropdown-divider {
+    border-top-color: var(--border-color);
+}
+
+/* Para telas menores */
+@media (max-width: 576px) {
+    .search-box {
+        margin-bottom: 15px;
+    }
+    
+    .filter-dropdown {
+        flex: 1 1 calc(50% - 8px);
+        max-width: calc(50% - 8px);
+    }
+    
+    .filter-button {
+        width: 100%;
+        min-width: unset;
+    }
+    
+    #active-filters {
+        flex-direction: column;
+    }
+    
+    .filter-tag {
+        margin-bottom: 5px;
+    }
+}
+
+/* Para telas muito pequenas */
+@media (max-width: 400px) {
+    .filter-dropdown {
+        flex: 1 1 100%;
+        max-width: 100%;
+    }
+}
+
+/* Filtros ativos */
+#active-filters {
+    background-color: rgba(32, 172, 130, 0.05);
+    border-radius: 5px;
+    padding: 8px 12px;
+}
+
+.filter-tag {
+    display: inline-block;
+    background-color: rgba(32, 172, 130, 0.1);
+    color: var(--primary-color);
+    border-radius: 20px;
+    padding: 2px 10px;
+    margin-right: 5px;
+    font-size: 12px;
+}
+
+.filter-tag i {
+    cursor: pointer;
+    margin-left: 5px;
+}
+
+.filter-tag i:hover {
+    color: var(--delete-color);
+}
+
+/* Remover estilos antigos da search-container que foram substituídos */
+.search-container {
+    margin-top: 10px;
+}
+
+        /* Estilos para os botões de ação em massa */
+        .multi-action-buttons {
+            display: flex;
+        }
+        
+        .action-button {
+            border-radius: 50%;
+            width: 38px;
+            height: 38px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+        }
+        
+        .action-button:hover {
+            transform: scale(1.1);
+        }
+        
+        .action-button.active {
+            background-color: rgba(32, 172, 130, 0.2);
+            border-color: var(--link-color, rgb(32, 172, 130));
+        }
+        
+        #multi-complete-btn {
+            color: var(--link-color, rgb(32, 172, 130));
+        }
+        
+        #multi-delete-btn {
+            color: #dc3545;
+        }
+        
+        /* Estilo para linhas selecionadas */
+        .task-row {
+            cursor: default;
+            transition: background-color 0.2s ease;
+        }
+        
+        .task-row.selectable {
+            cursor: pointer;
+            position: relative;
+        }
+        
+        .task-row.selectable:hover {
+            background-color: rgba(32, 172, 130, 0.05) !important;
+        }
+        
+        .task-row.selected {
+            background-color: rgba(32, 172, 130, 0.2) !important;
+        }
+        
+        .task-row.selected-delete {
+            background-color: rgba(196, 30, 58, 0.2) !important;
+        }
+        
+        /* Estilo para o modo de seleção */
+
+        .selectable {
+            background-color: var(--surface-color);
+            border: 2px solid var(--border-color);
+        }
+
+        .selectable:focus {
+            box-shadow: none;
+        }
+        
+        .selection-mode-active {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: var(--background-color);
+            color: var(--text-primary);
+            padding: 15px 25px;
+            border-radius: 50px;
+            z-index: 9999;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            font-size: 16px;
+        }
+        
+        .selection-mode-active .selection-count {
+            margin-right: 10px;
+            font-weight: bold;
+        }
+        
+        .selection-mode-active .btn {
+            margin-left: 10px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            padding: 5px 15px;
+        }
+        
+        .selection-mode-active .btn-confirm {
+            background-color: var(--link-color, rgb(32, 172, 130));
+            border-color: var(--link-color, rgb(32, 172, 130));
+            color: var(--text-primary);
+        }
+        
+        .selection-mode-active .btn-cancel {
+            background-color: #6c757d;
+            border-color: #6c757d;
+            color: var(--text-primary);
+        }
+        
+        /* Overlay para modo de seleção */
+        .selection-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.05);
+            z-index: 1000;
+            display: none;
+            pointer-events: none;
+        }
+        
+        /* Importante: cursor especial para os itens selecionáveis */
+        body.selection-mode-on * {
+            cursor: default;
+        }
+        
+        body.selection-mode-on .task-row {
+            cursor: pointer !important;
+        }

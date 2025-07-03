@@ -7,6 +7,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use App\Models\Category;
+use App\Models\Task;
+use App\Models\Note;
+use App\Models\Group;
+use App\Models\GroupInvitation;
+use App\Models\SocialLink;
 
 class User extends Authenticatable
 {
@@ -26,7 +32,9 @@ class User extends Authenticatable
         'position',
         'bio',
         'timezone',
-        'preferences'
+        'preferences',
+        'locale',
+        'languages'
     ];
 
     /**
@@ -59,6 +67,11 @@ class User extends Authenticatable
     {
         return $this->hasMany(Note::class);
     }
+    
+    public function categories()
+    {
+        return $this->hasMany(Category::class);
+    }
 
     public function groups()
     {
@@ -70,5 +83,28 @@ class User extends Authenticatable
     public function createdGroups()
     {
         return $this->hasMany(Group::class, 'created_by');
+    }
+
+    public function groupInvitations()
+    {
+        return $this->hasMany(GroupInvitation::class);
+    }
+
+    public function pendingGroupInvitations()
+    {
+        return $this->hasMany(GroupInvitation::class)->where('status', 'pending');
+    }
+
+    public function completedTasks()
+    {
+        return $this->hasMany(Task::class)->where('status', true);
+    }
+    
+    /**
+     * Get the social links for the user.
+     */
+    public function socialLinks()
+    {
+        return $this->hasMany(SocialLink::class)->orderBy('order');
     }
 }

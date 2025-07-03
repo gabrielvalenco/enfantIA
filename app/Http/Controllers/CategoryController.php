@@ -42,7 +42,7 @@ class CategoryController extends Controller
     public function edit(Category $category)
     {
         $this->authorize('update', $category);
-        return view('categories.edit', compact('category'));
+        return response()->json($category);
     }
 
     public function update(Request $request, Category $category)
@@ -65,7 +65,17 @@ class CategoryController extends Controller
             'description' => $request->description,
             'color' => $request->color
         ]);
-
+        
+        // Check if the request is AJAX
+        if ($request->ajax() || $request->wantsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Categoria atualizada com sucesso!',
+                'category' => $category
+            ]);
+        }
+        
+        // For non-AJAX requests, redirect
         return redirect()->route('categories.index')
             ->with('success', 'Categoria atualizada com sucesso!');
     }

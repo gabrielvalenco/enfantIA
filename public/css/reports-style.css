@@ -1,0 +1,86 @@
+/* Estilos específicos para a página de relatórios */
+.chart-container {
+    position: relative;
+    margin: auto;
+    height: 300px;
+    width: 100%;
+}
+
+.filter-card {
+    border: none;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.filter-card:hover {
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+}
+
+/* Estilos para as dicas de produtividade */
+#productivity-tips .list-group-item {
+    border-left: 4px solid transparent;
+    transition: all 0.2s ease;
+}
+
+#productivity-tips .list-group-item:hover {
+    background-color: var(--surface-hover);
+    transform: translateY(-2px);
+}
+
+#productivity-tips .text-success {
+    color: #20ac82 !important;
+}
+
+#productivity-tips .text-warning {
+    color: #ffc107 !important;
+}
+
+#productivity-tips .text-info {
+    color: #0dcaf0 !important;
+}
+
+#productivity-tips .text-primary {
+    color: #8e44ad !important;
+}
+
+/* Estilo adicional para os cartões de gráficos */
+.card {
+    border: none;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    margin-bottom: 20px;
+    background: var(--surface-card);
+    color: var(--text-color);
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+}
+
+.card-header {
+    border-bottom: none;
+    padding: 15px 20px;
+}
+
+.card-body {
+    padding: 20px;
+}
+
+/* Responsividade para dispositivos menores */
+@media (max-width: 768px) {
+    .status-cards {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .row {
+        flex-direction: column;
+    }
+    
+    .col-md-3, .col-lg-6 {
+        width: 100%;
+        margin-bottom: 15px;
+    }
+}

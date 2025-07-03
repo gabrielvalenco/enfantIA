@@ -1,0 +1,110 @@
+/* Estilos para a aba de configurações do grupo */
+
+.settings-card {
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    overflow: hidden;
+}
+
+.settings-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+}
+
+.settings-card .card-header {
+    background-color: var(--surface-card);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 15px 20px;
+}
+
+.form-check-input {
+    cursor: pointer;
+    width: 48px;
+    height: 24px;
+}
+
+.form-check-input:checked {
+    background-color: #20ac82;
+    border-color: #20ac82;
+}
+
+.form-check-label {
+    cursor: pointer;
+    padding-left: 10px;
+}
+
+/* Estilos para o ranking competitivo */
+.competitive-preview {
+    background-color: var(--surface-overlay) !important;
+    border-color: var(--surface-border) !important;
+}
+
+.rank-badge {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    color: white;
+}
+
+.rank-1 {
+    background-color: #FFD700; /* Ouro */
+    color: #333;
+}
+
+.rank-2 {
+    background-color: #C0C0C0; /* Prata */
+    color: #333;
+}
+
+.rank-3 {
+    background-color: #CD7F32; /* Bronze */
+    color: white;
+}
+
+.rank-avatar {
+    font-size: 1.5rem;
+    color: var(--text-color);
+}
+
+.rank-name {
+    font-weight: 600;
+    display: block;
+}
+
+.rank-stats .badge {
+    font-weight: normal;
+}
+
+/* Botão de salvar configurações */
+#saveSettings {
+    background-color: #20ac82;
+    border-color: #20ac82;
+    transition: all 0.3s ease;
+}
+
+#saveSettings:hover {
+    background-color: #1a8a68;
+    border-color: #1a8a68;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* Responsividade para dispositivos menores */
+@media (max-width: 768px) {
+    .ranking-item {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 10px;
+        border-bottom: 1px solid var(--surface-border);
+    }
+    
+    .rank-badge {
+        margin-bottom: 8px;
+    }
+}

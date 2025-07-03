@@ -3,30 +3,45 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Categorias</title>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <title>{{ env('APP_NAME') }} - Categorias</title>
 
-    <link rel="icon" href="{{ asset('favicon.svg') }}" type="image/svg+xml">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <link rel="stylesheet" href="{{ asset('css/custom-styles.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
     <link rel="stylesheet" href="{{ asset('css/category-style.css') }}">
+    <link rel="icon" href="{{ asset('favicon.svg') }}" type="image/svg+xml">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+    <!-- SweetAlert2 CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    
 </head>
 <body>
-    <div class="container mt-4">
+    <div class="container">
+        @if(session('success'))
+            <div class="alert alert-success">
+                {{ session('success') }}
+            </div>
+        @endif
+        
         <div class="table-header">
             <h1>Categorias</h1>
             <div class="table-actions">
-                <a href="{{ route('dashboard') }}" class="btn btn-secondary">Voltar</a>
-                <a href="{{ route('categories.create') }}" class="btn btn-primary">Nova Categoria</a>
+                <a class="back-button" href="{{ route('dashboard') }}">
+                    <span class="back-text">Voltar ao Dashboard</span>
+                    <i class="fas fa-sign-out-alt mobile-icon"></i>
+                </a>
+                <a class="add-button" href="#">
+                    <i class="fas fa-plus-circle"></i> Nova Categoria
+                </a>
             </div>
         </div>
         
-        <table class="table table-striped">
+        <table class="table">
             <thead>
                 <tr>
-                    <th>Nome</th>
-                    <th>Descrição</th>
-                    <th>Ações</th>
+                    <th id="name">Nome</th>
+                    <th id="description">Descrição</th>
+                    <th id="actions">Ações</th>
                 </tr>
             </thead>
             <tbody>
@@ -43,19 +58,21 @@
                     @foreach($categories as $category)
                     <tr>
                         <td>
-                            <div class="d-flex align-items-center">
+                            <div class="category-name-container">
                                 <span class="color-preview" style="background-color: {{ $category->color }};"></span>
-                                {{ $category->name }}
+                                <span class="category-name">{{ $category->name }}</span>
                             </div>
                         </td>
-                        <td>{{ $category->description }}</td>
+                        <td>{{ Str::limit($category->description, 50, ' [...]') }}</td>
                         <td>
-                            <a href="{{ route('categories.edit', $category->id) }}" class="btn btn-warning btn-sm">Editar</a>
-                            <form class="d-inline"="d-inline" action="{{ route('categories.destroy', $category->id) }}" method="POST" style="background-color: transparent;">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-danger btn-sm">Excluir</button>
-                            </form>
+                            <div class="action-buttons">
+                                <button type="button" class="badge edit-badge" data-category-id="{{ $category->id }}" data-category-description="{{ $category->description }}">Editar</button>
+                                <form class="d-inline delete-category-form" action="{{ route('categories.destroy', $category->id) }}" method="POST" style="background-color: transparent;">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="button" class="badge delete-badge" data-category-id="{{ $category->id }}" data-category-name="{{ $category->name }}">Excluir</button>
+                                </form>
+                            </div>
                         </td>
                     </tr>
                     @endforeach
@@ -63,5 +80,105 @@
             </tbody>
         </table>
     </div>
+    <!-- Modal para Editar Categoria -->
+    <div id="editCategoryModal" class="modal" style="display: none;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Editar Categoria</h5>
+                    <button type="button" class="close" onclick="closeModal('editCategoryModal')" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="edit-category-form">
+                        @csrf
+                        @method('PUT')
+                        <input type="hidden" id="edit-category-id">
+                        
+                        <div class="form-group">
+                            <label for="edit-name" class="font-weight-bold">Nome da Categoria</label>
+                            <input type="text" name="name" class="form-control" id="edit-name" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="edit-description" class="font-weight-bold">Descrição <small class="text-muted">(opcional)</small></label>
+                            <textarea name="description" class="form-control" id="edit-description" rows="3"></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="edit-color" class="font-weight-bold">Cor da Categoria</label>
+                            <div class="d-flex align-items-center">
+                                <input type="color" name="color" id="edit-color" class="form-control" style="width: 60px; height: 40px; padding: 2px;">
+                            </div>
+                        </div>
+                        <script>
+                            // Update color preview when color input changes
+                            document.getElementById('edit-color').addEventListener('input', function() {
+                                document.getElementById('edit-color-preview').style.backgroundColor = this.value;
+                            });
+                        </script>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="cancel-button" onclick="closeModal('editCategoryModal')">Cancelar</button>
+                    <button type="button" class="add-button" id="save-edit-category-btn">
+                        <i class="fas fa-save"></i> Salvar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="{{ asset('js/category/script.js') }}"></script>
+    <script src="{{ asset('js/script.js') }}"></script>
+
+    <!-- Modal para Criar Categoria -->
+    <div id="createCategoryModal" class="modal" style="display: none;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Nova Categoria</h5>
+                    <button type="button" class="close" onclick="closeModal('createCategoryModal')" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="create-category-form">
+                        @csrf
+                        <div class="form-group">
+                            <label for="create-name">Nome da Categoria</label>
+                            <input type="text" name="name" id="create-name" class="form-control" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="create-description">Descrição <small class="text-muted">(opcional)</small></label>
+                            <textarea name="description" class="form-control" id="create-description" rows="3"></textarea>
+                        </div>
+                        
+                        <div class="form-group mb-3">
+                            <label>Cor da Categoria</label>
+                            <input type="color" name="color" id="create-color" class="form-control" value="#DC3545">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="cancel-button" onclick="closeModal('createCategoryModal')">Cancelar</button>
+                    <button type="submit" form="create-category-form" class="add-button">
+                        <i class="fas fa-save"></i> Criar Categoria
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
+
+<button id="theme-toggle" class="theme-toggle" aria-label="Toggle dark/light mode">
+    <i class="fas fa-moon"></i>
+</button>
+
 </html>

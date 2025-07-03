@@ -9,6 +9,9 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\NoteController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\GroupController;
+use App\Http\Controllers\GroupInvitationController;
+use App\Http\Controllers\SubtaskController;
+use App\Http\Controllers\ReportController;
 
 /*
 |--------------------------------------------------------------------------
@@ -47,6 +50,22 @@ Route::middleware('auth')->group(function () {
     Route::patch('/tasks/{task}/uncomplete', [TaskController::class, 'uncomplete'])->name('tasks.uncomplete');
     Route::delete('/tasks/{task}/clear', [TaskController::class, 'clear'])->name('tasks.clear');
     Route::delete('/tasks/cleared', [TaskController::class, 'cleared'])->name('tasks.cleared');
+    
+    // Novas rotas para limpar tarefas concluídas
+    Route::delete('/tasks/clear-selected', [TaskController::class, 'clearSelected'])->name('tasks.clear-selected');
+    Route::get('/tasks/clear-all', [TaskController::class, 'clearAll'])->name('tasks.clear-all');
+    
+    // Rotas para ações em massa
+    Route::post('/tasks/complete-multiple', [TaskController::class, 'completeMultiple'])->name('tasks.complete-multiple');
+    Route::post('/tasks/delete-multiple', [TaskController::class, 'deleteMultiple'])->name('tasks.delete-multiple');
+    
+    // Rotas para subtarefas
+    Route::get('/tasks/{task}/details', [TaskController::class, 'details']);
+    Route::get('/tasks/{task}/can-complete', [TaskController::class, 'canComplete']);
+    Route::get('/tasks/{task}/subtasks', [SubtaskController::class, 'index']);
+    Route::post('/tasks/{task}/subtasks', [SubtaskController::class, 'store']);
+    Route::post('/subtasks/{subtask}/toggle', [SubtaskController::class, 'toggleComplete']);
+    Route::delete('/subtasks/{subtask}', [SubtaskController::class, 'destroy']);
 
     Route::get('/categories', [CategoryController::class, 'index'])->name('categories.index');
     Route::get('/categories/create', [CategoryController::class, 'create'])->name('categories.create');
@@ -60,21 +79,43 @@ Route::middleware('auth')->group(function () {
     Route::post('/notes', [NoteController::class, 'store'])->name('notes.store');
     Route::put('/notes/{note}', [NoteController::class, 'update'])->name('notes.update');
     Route::delete('/notes/{note}', [NoteController::class, 'destroy'])->name('notes.destroy');
+    Route::get('/notes/{note}/details', [NoteController::class, 'details'])->name('notes.details');
+
+    // Report routes
+    Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
 
     Route::middleware(['auth'])->group(function () {
-        Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-        Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+        Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
+        Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
+        Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
         Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
         
         // Rotas de Grupos
-        Route::resource('groups', GroupController::class);
+        Route::resource('groups', GroupController::class)->except(['edit', 'update']);
         Route::post('/groups/{group}/members', [GroupController::class, 'addMember'])->name('groups.add-member');
         Route::delete('/groups/{group}/members', [GroupController::class, 'removeMember'])->name('groups.remove-member');
         Route::delete('/groups/{group}/delete', [GroupController::class, 'delete'])->name('groups.delete');
-        Route::get('/groups/{group}/leave', [GroupController::class, 'leave'])->name('groups.leave');
+        Route::delete('/groups/{group}/leave', [GroupController::class, 'leave'])->name('groups.leave');
+        
+        // Rotas para configurações de grupo
+        Route::get('/groups/{group}/settings', [GroupController::class, 'getSettings'])->name('groups.get-settings');
+        Route::post('/groups/{group}/settings', [GroupController::class, 'saveSettings'])->name('groups.save-settings');
+        
+        // Group Invitations
+        Route::get('/invitations', [GroupInvitationController::class, 'index'])->name('invitations.index');
+        Route::post('/invitations/{invitation}/accept', [GroupInvitationController::class, 'accept'])->name('invitations.accept');
+        Route::post('/invitations/{invitation}/reject', [GroupInvitationController::class, 'reject'])->name('invitations.reject');
     });
 });
 
 Route::get('/portfolio', function () {
     return view('portfolio');
 })->name('portfolio');
+
+Route::get('/terms', function () {
+    return view('terms.terms');
+})->name('terms');
+
+Route::get('/politic', function () {
+    return view('terms.politic');
+})->name('politic');
