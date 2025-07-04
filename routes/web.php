@@ -80,6 +80,9 @@ Route::middleware('auth')->group(function () {
     Route::put('/notes/{note}', [NoteController::class, 'update'])->name('notes.update');
     Route::delete('/notes/{note}', [NoteController::class, 'destroy'])->name('notes.destroy');
     Route::get('/notes/{note}/details', [NoteController::class, 'details'])->name('notes.details');
+    Route::get('/notes/{note}/edit', [NoteController::class, 'edit'])->name('notes.edit');
+    Route::get('/tasks/list', [NoteController::class, 'tasksList'])->name('notes.tasks-list');
+    Route::get('/categories/list', [NoteController::class, 'categoriesList'])->name('notes.categories-list');
 
     // Report routes
     Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');

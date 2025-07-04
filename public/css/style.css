@@ -283,6 +283,19 @@ tr:hover {
     background-color: var(--background-color);
 }
 
+.alert {
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 20px;
+    border: none;
+}
+
+.alert-info {
+    background-color: var(--background-color);  
+    color: var(--text-secondary);
+    border: 2px solid var(--link-color);
+}
+
 /* Custom SweetAlert2 Styling */
 .swal2-popup {
     background-color: var(--surface-color) !important;

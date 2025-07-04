@@ -210,25 +210,10 @@ select:focus,
 }
 
 /* Alert Styles */
-.alert {
-    padding: 1rem;
-    margin-bottom: 1.5rem;
-    border-radius: 4px;
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-}
-
 .alert-success {
     background-color: #d4edda;
     color: #155724;
     border: 1px solid #c3e6cb;
-}
-
-.alert-info {
-    background-color: #d1ecf1;
-    color: #0c5460;
-    border: 1px solid #bee5eb;
 }
 
 .alert i {

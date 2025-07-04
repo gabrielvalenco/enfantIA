@@ -20,11 +20,17 @@ class CategoryController extends Controller
 
     public function store(Request $request)
     {
+        $messages = [
+            'name.required' => 'O nome da categoria é obrigatório.',
+            'name.unique' => 'Já existe uma categoria com este nome.',
+            'color.required' => 'A cor da categoria é obrigatória.'
+        ];
+        
         $request->validate([
             'name' => 'required|string|max:255|unique:categories,name,NULL,id,user_id,' . auth()->id(),
             'description' => 'nullable|string',
             'color' => 'required|string|max:7'
-        ]);
+        ], $messages);
 
         $category = new Category([
             'name' => $request->name,
@@ -34,6 +40,15 @@ class CategoryController extends Controller
         ]);
 
         $category->save();
+        
+        // Check if the request is AJAX
+        if ($request->ajax() || $request->wantsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Categoria criada com sucesso!',
+                'category' => $category
+            ]);
+        }
 
         return redirect()->route('categories.index')
             ->with('success', 'Categoria criada com sucesso!');

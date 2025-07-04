@@ -108,8 +108,13 @@ $(document).ready(function() {
     });
     
     // Criar nova categoria
-    $('#create-category-form').on('submit', function(e) {
+    $('#save-create-category-btn').on('click', function(e) {
         e.preventDefault();
+        
+        // Mostrar indicador de carregamento
+        const $button = $(this);
+        const originalButtonText = $button.html();
+        $button.prop('disabled', true).html('<i class="fas fa-spinner fa-spin"></i> Criando...');
         
         const formData = {
             name: $('#create-name').val(),
@@ -163,6 +168,15 @@ $(document).ready(function() {
                         htmlContainer: 'swal-html-container'
                     }
                 });
+            },
+            complete: function() {
+                // Restaurar o estado original do botão
+                $button.prop('disabled', false).html(originalButtonText);
+                
+                // Garantir que o modal de criação seja fechado em caso de erro
+                if ($('#createCategoryModal').is(':visible')) {
+                    closeModal('createCategoryModal');
+                }
             }
         });
     });

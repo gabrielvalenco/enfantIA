@@ -6,12 +6,13 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\User;
 use App\Models\Task;
+use App\Models\Category;
 
 class Note extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['title', 'content', 'user_id', 'task_id'];
+    protected $fillable = ['title', 'content', 'user_id', 'task_id', 'category_id'];
 
     public function user()
     {
@@ -21,6 +22,11 @@ class Note extends Model
     public function task()
     {
         return $this->belongsTo(Task::class);
+    }
+    
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
     }
     
     /**

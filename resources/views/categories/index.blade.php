@@ -168,7 +168,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="cancel-button" onclick="closeModal('createCategoryModal')">Cancelar</button>
-                    <button type="submit" form="create-category-form" class="add-button">
+                    <button type="button" class="add-button" id="save-create-category-btn">
                         <i class="fas fa-save"></i> Criar Categoria
                     </button>
                 </div>
