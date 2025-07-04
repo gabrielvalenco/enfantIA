@@ -84,7 +84,7 @@
     position: relative;
     height: 300px;
     margin-bottom: 1rem;
-    background-color: var(--surface-color);
+    background-color: var(--background-color);
     border-radius: 8px;
     padding: 1rem;
     border: 1px solid var(--border-color);

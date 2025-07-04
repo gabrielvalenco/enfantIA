@@ -36,6 +36,9 @@
                     <div class="note-header">
                         <h3>{{ $note->title }}</h3>
                         <div class="note-actions">
+                            <button class="drag-handle" title="Arraste para reordenar">
+                                <i class="fas fa-grip-vertical"></i>
+                            </button>
                             <button class="note-edit" data-id="{{ $note->id }}">
                                 <i class="fas fa-edit"></i>
                             </button>
@@ -111,18 +114,6 @@
                         </div>
                         
                         <div class="form-group">
-                            <label for="category-id">Categoria relacionada (opcional)</label>
-                            <select id="category-id" name="category_id">
-                                <option value="">Selecione uma categoria</option>
-                                @if(isset($categories) && count($categories) > 0)
-                                    @foreach($categories as $category)
-                                        <option value="{{ $category->id }}">{{ $category->name }}</option>
-                                    @endforeach
-                                @endif
-                            </select>
-                        </div>
-                        
-                        <div class="form-group">
                             <label for="category-id">Categoria (opcional)</label>
                             <select id="category-id" name="category_id">
                                 <option value="">Selecione uma categoria</option>
@@ -136,12 +127,44 @@
                             </select>
                         </div>
                         
-                        <div class="form-actions">
-                            <button type="submit" class="save-button">Salvar</button>
-                            <button type="button" class="cancel-button" id="cancel-note">Cancelar</button>
-                        </div>
                     </form>
                 </div>
+                <div class="form-actions">
+                    <button type="button" class="cancel-button" id="cancel-note">Cancelar</button>
+                    <button type="button" class="add-button" id="save-note">Salvar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal para visualização completa da nota -->
+    <div class="modal" id="view-note-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="view-note-title">Detalhes da nota</h2>
+                <span class="close-modal" id="close-view-modal">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="view-note-content">
+
+                    <div id="view-note-content" class="note-description mb-4"></div>
+                    
+                    <div class="note-details">
+                        <div id="view-note-task">
+                            <strong>Tarefa:</strong> <span id="view-task-value">Nenhuma</span>
+                        </div>
+                        <div id="view-note-category">
+                            <strong>Categoria:</strong> <span id="view-category-value">Nenhuma</span>
+                        </div>
+                        <div id="view-note-date">
+                            <strong>Criada em:</strong> <span id="view-date-value"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="view-note-actions mt-4">
+                <button class="cancel-button" id="close-view-btn">Fechar</button>
+                <button class="add-button" id="view-edit-btn">Editar</button>
             </div>
         </div>
     </div>
@@ -150,8 +173,9 @@
         <i class="fas fa-moon"></i>
     </button>
     
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
     <script src="{{ asset('js/script.js') }}"></script>
-    <script src="{{ asset('js/notes/index.js') }}"></script>
+    <script src="{{ asset('js/notes/script.js') }}"></script>
     <script>
         // Variáveis globais para o SweetAlert
         const Toast = Swal.mixin({

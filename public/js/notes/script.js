@@ -1,9 +1,16 @@
 document.addEventListener('DOMContentLoaded', function() {
+    // Inicializar Sortable.js para drag and drop das notas
+    initSortable();
+    
+    // Adicionar evento de clique nas notas para visualização
+    initNoteViewEvents();
+    
     // Elementos do modal
     const modal = document.getElementById('note-modal');
     const openModalBtn = document.getElementById('open-note-modal');
     const closeModalBtn = document.querySelector('.close-modal');
     const cancelBtn = document.getElementById('cancel-note');
+    const saveBtn = document.getElementById('save-note');
     const noteForm = document.getElementById('note-form');
     const modalTitle = document.getElementById('modal-title');
     
@@ -32,6 +39,18 @@ document.addEventListener('DOMContentLoaded', function() {
     
     closeModalBtn.addEventListener('click', closeModal);
     cancelBtn.addEventListener('click', closeModal);
+    
+    // Evento para o botão salvar que está fora do formulário
+    if (saveBtn) {
+        saveBtn.addEventListener('click', function() {
+            // Dispara o evento de submit manualmente no formulário
+            const submitEvent = new Event('submit', {
+                bubbles: true,
+                cancelable: true
+            });
+            noteForm.dispatchEvent(submitEvent);
+        });
+    }
     
     // Fechar modal ao clicar fora dele
     window.addEventListener('click', function(event) {
@@ -370,4 +389,335 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Carregar categorias e tarefas quando o modal é aberto
     openModalBtn.addEventListener('click', loadTasksAndCategories);
+    
+    /**
+     * Inicializa o Sortable.js para permitir arrastar e soltar as notas
+     */
+    function initSortable() {
+        const notesContainer = document.querySelector('.notes-container');
+        
+        // Verificar se o container de notas existe e se há notas
+        if (notesContainer && notesContainer.children.length > 0 && !notesContainer.querySelector('.no-notes')) {
+            // Adicionar data-id a cada nota para rastreamento
+            Array.from(notesContainer.querySelectorAll('.note-card')).forEach((noteCard, index) => {
+                // Se o card já tem um ID de nota, usá-lo; caso contrário, usar o índice
+                const noteId = noteCard.getAttribute('data-id') || index.toString();
+                noteCard.setAttribute('data-id', noteId);
+                noteCard.setAttribute('data-position', index);
+            });
+            
+            // Remover classes antigas do cabeçalho caso existam
+            document.querySelectorAll('.sortable-handle').forEach(el => {
+                el.classList.remove('sortable-handle');
+                if (el.classList.contains('note-header')) {
+                    el.style.cursor = 'default';
+                }
+            });
+            
+            // Inicializar Sortable
+            const sortable = new Sortable(notesContainer, {
+                animation: 150,
+                ghostClass: 'note-card-ghost',  // Classe aplicada ao clone durante arrasto
+                chosenClass: 'note-card-chosen', // Classe aplicada ao elemento sendo arrastado
+                dragClass: 'note-card-drag',     // Classe aplicada durante o arrasto
+                handle: '.drag-handle',          // Usar o ícone de arrasto
+                onEnd: function(evt) {
+                    const noteId = evt.item.getAttribute('data-id');
+                    const newPosition = evt.newIndex;
+                    const oldPosition = evt.oldIndex;
+                    
+                    if (newPosition !== oldPosition) {
+                        updateNotePositions(noteId, newPosition, oldPosition);
+                    }
+                }
+            });
+            
+            // Adicionar estilos dinâmicos para drag and drop
+            addDragStyles();
+        }
+    }
+    
+    /**
+     * Atualiza as posições das notas após drag and drop
+     */
+    function updateNotePositions(movedNoteId, newPosition, oldPosition) {
+        // Atualizar data-position em todas as notas
+        const notes = Array.from(document.querySelectorAll('.note-card'));
+        notes.forEach((note, index) => {
+            note.setAttribute('data-position', index);
+        });
+        
+        // Aqui você pode implementar uma chamada AJAX para salvar a ordem no servidor
+        // Por exemplo:
+        /*
+        const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+        
+        fetch('/notes/reorder', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': csrfToken,
+                'Accept': 'application/json',
+            },
+            body: JSON.stringify({
+                noteId: movedNoteId,
+                newPosition: newPosition
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Feedback de sucesso
+            }
+        })
+        .catch(error => console.error('Erro ao atualizar posições:', error));
+        */
+        
+        // Feedback visual de sucesso
+        Toast.fire({
+            icon: 'success',
+            title: 'Notas reorganizadas'
+        });
+    }
+    
+    /**
+     * Adiciona estilos CSS necessários para o drag and drop
+     */
+    function addDragStyles() {
+        // Verificar se os estilos já foram adicionados
+        if (document.getElementById('drag-drop-styles')) return;
+        
+        // Criar elemento de estilo
+        const style = document.createElement('style');
+        style.id = 'drag-drop-styles';
+        style.textContent = `
+            .note-card-ghost {
+                opacity: 0.5;
+                background: var(--background-tertiary, #f0f0f0) !important;
+            }
+            
+            .note-card-chosen {
+                box-shadow: 0 0 10px 3px var(--link-color, rgb(32, 172, 130)) !important;
+            }
+            
+            .note-card-drag {
+                transform: scale(1.05);
+                opacity: 0.8;
+            }
+            
+            .sortable-handle {
+                cursor: grab;
+            }
+            
+            .sortable-handle:active {
+                cursor: grabbing;
+            }
+            
+            @media (max-width: 992px) {
+                .notes-container {
+                    grid-template-columns: repeat(2, 1fr) !important;
+                }
+            }
+            
+            @media (max-width: 576px) {
+                .notes-container {
+                    grid-template-columns: 1fr !important;
+                }
+            }
+            
+            .note-card .note-content, .note-card .note-header h3 {
+                cursor: pointer;
+            }
+            
+            .view-note-content {
+                padding: 10px;
+            }
+            
+            #view-note-content {
+                white-space: pre-wrap;
+                line-height: 1.6;
+                min-height: 100px;
+                margin-bottom: 20px;
+            }
+            
+            .note-details {
+                padding-top: 15px;
+                margin-top: 15px;
+            }
+            
+            .view-note-actions {
+                display: flex;
+                justify-content: flex-end;
+                gap: 10px;
+                margin-top: 20px;
+            }
+            
+            .edit-button {
+                background-color: var(--link-color);
+                color: white;
+                border: none;
+                border-radius: 4px;
+                padding: 8px 16px;
+                cursor: pointer;
+                transition: background-color 0.2s;
+            }
+            
+            .edit-button:hover {
+                background-color: var(--link-hover-color, #178f6a);
+            }
+            
+            .mb-2 {
+                margin-bottom: 8px;
+            }
+            
+            .mb-4 {
+                margin-bottom: 16px;
+            }
+            
+            .mt-4 {
+                margin-top: 16px;
+            }
+        `;
+        
+        document.head.appendChild(style);
+    }
+    
+    /**
+     * Inicializa eventos de visualização de notas ao clicar
+     */
+    function initNoteViewEvents() {
+        // Modal de visualização e seus elementos
+        const viewModal = document.getElementById('view-note-modal');
+        const closeViewModalBtn = document.getElementById('close-view-modal');
+        const closeViewBtn = document.getElementById('close-view-btn');
+        const editBtn = document.getElementById('view-edit-btn');
+        
+        if (!viewModal) return; // Sair se o modal não existir
+        
+        // Evento para fechar modal de visualização
+        function closeViewModal() {
+            viewModal.style.display = 'none';
+        }
+        
+        if (closeViewModalBtn) closeViewModalBtn.addEventListener('click', closeViewModal);
+        if (closeViewBtn) closeViewBtn.addEventListener('click', closeViewModal);
+        
+        // Fechar ao clicar fora do modal
+        window.addEventListener('click', function(event) {
+            if (event.target === viewModal) {
+                closeViewModal();
+            }
+        });
+        
+        // Evento de clique nas notas (exceto nos botões de ações)
+        document.addEventListener('click', function(e) {
+            // Verificar se o clique foi no conteúdo da nota ou no título
+            const noteContent = e.target.closest('.note-content');
+            const noteTitle = e.target.closest('.note-header h3');
+            
+            // Se não for conteúdo ou título, ou se for em botões de ações, sair
+            if ((!noteContent && !noteTitle) || e.target.closest('.note-actions')) {
+                return;
+            }
+            
+            // Encontrar o card da nota para obter o ID
+            const noteCard = e.target.closest('.note-card');
+            if (noteCard) {
+                const noteId = noteCard.getAttribute('data-id');
+                if (noteId) {
+                    viewNote(noteId);
+                }
+            }
+        });
+        
+        // Botão Editar dentro do modal de visualização
+        if (editBtn) {
+            editBtn.addEventListener('click', function() {
+                const noteId = this.getAttribute('data-id');
+                if (noteId) {
+                    closeViewModal();
+                    editNote(noteId); // Usar a função existente de edição
+                }
+            });
+        }
+    }
+    
+    /**
+     * Carrega e exibe os detalhes de uma nota no modal de visualização
+     */
+    function viewNote(id) {
+        // Elementos do modal de visualização
+        const viewModal = document.getElementById('view-note-modal');
+        const viewNoteTitle = document.getElementById('view-note-title');
+        const viewNoteContent = document.getElementById('view-note-content');
+        const viewTaskValue = document.getElementById('view-task-value');
+        const viewCategoryValue = document.getElementById('view-category-value');
+        const viewDateValue = document.getElementById('view-date-value');
+        const editBtn = document.getElementById('view-edit-btn');
+        
+        // Guardar o título padrão do modal
+        const defaultTitle = viewNoteTitle.textContent;
+        
+        // Obter token CSRF
+        const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+        
+        // Fazer requisição para obter os detalhes da nota
+        fetch(`/notes/${id}/edit`, {
+            headers: {
+                'X-CSRF-TOKEN': csrfToken,
+                'X-Requested-With': 'XMLHttpRequest',
+                'Accept': 'application/json',
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.note) {
+                const note = data.note;
+                
+                // Preencher dados no modal de visualização
+                viewNoteTitle.textContent = note.title;
+                viewNoteContent.textContent = note.content;
+                viewDateValue.textContent = new Date(note.created_at).toLocaleString('pt-BR');
+                
+                // Informações da tarefa associada
+                if (note.task && note.task_id) {
+                    viewTaskValue.textContent = note.task.title;
+                    document.getElementById('view-note-task').style.display = 'block';
+                } else {
+                    viewTaskValue.textContent = 'Nenhuma';
+                    document.getElementById('view-note-task').style.display = 'block';
+                }
+                
+                // Informações da categoria
+                if (note.category) {
+                    viewCategoryValue.innerHTML = `<span style="color: ${note.category.color}">${note.category.name}</span>`;
+                    document.getElementById('view-note-category').style.display = 'block';
+                } else {
+                    viewCategoryValue.textContent = 'Nenhuma';
+                    document.getElementById('view-note-category').style.display = 'block';
+                }
+                
+                // Definir ID da nota no botão de edição
+                if (editBtn) {
+                    editBtn.setAttribute('data-id', note.id);
+                }
+                
+                // Exibir o modal
+                viewModal.style.display = 'block';
+            } else {
+                // Mostrar mensagem de erro
+                Toast.fire({
+                    icon: 'error',
+                    title: 'Não foi possível carregar os dados da nota.'
+                });
+            }
+        })
+        .catch(error => {
+            console.error('Erro ao buscar nota:', error);
+            Toast.fire({
+                icon: 'error',
+                title: 'Erro ao carregar os dados da nota.'
+            });
+        });
+    }
 });

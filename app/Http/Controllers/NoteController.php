@@ -166,7 +166,7 @@ class NoteController extends Controller
             ], 403);
         }
         
-        $note->load(['task', 'task.categories']);
+        $note->load(['task', 'task.categories', 'category']);
         return response()->json([
             'success' => true,
             'note' => $note
