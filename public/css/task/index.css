@@ -3,22 +3,6 @@
     font-family: 'Poppins', sans-serif;
 }
 
-body {
-    font-family: 'Poppins', sans-serif !important;
-    background-color: var(--background-color);
-    color: var(--text-primary);
-    min-height: 100vh;
-    display: flex;
-    align-items: flex-start;
-    justify-content: center;
-    padding: 20px 0;
-}
-
-.container {
-    max-width: 1400px;
-    width: 100%;
-}
-
 /* Alert Styles */
 .alert {
     border-radius: 8px;
@@ -54,69 +38,11 @@ body {
     opacity: 1;
 }
 
-/* Table Header */
-.table-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 3rem;
-    flex-wrap: wrap;
-    border-bottom: 2px solid var(--border-color);
-    padding-bottom:2.5rem;
-}
-
-.table-header h1 {
-    font-size: 1.8rem;
-    font-weight: 600;
-    color: var(--text-primary);
-    margin-bottom: 0;
-}
-
-.table-actions {
-    display: flex;
-    gap: 2rem;
-}
 
 .text-center {
     text-align: center;
 }
 
-.back-button {
-    color: var(--link-color);
-    text-decoration: none;
-    transition: all 0.3s ease;
-    font-weight: 500;
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-}
-
-.back-button:hover {
-    color: var(--link-color-hover);
-    transform: translateX(-5px);
-    text-decoration: none;
-}
-
-.back-button::before {
-    content: '←';
-    font-size: 1.2rem;
-}
-
-.add-task-button {
-    color: var(--link-color);
-    text-decoration: none;
-    transition: all 0.3s ease;
-    font-weight: 500;
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-}
-
-.add-task-button:hover {
-    color: var(--link-color-hover);
-    transform: translateX(-5px);
-    text-decoration: none;
-}
 
 /* Button Styles */
 .btn {
@@ -258,6 +184,9 @@ body {
 
 .due-date-header, .due-date {
     width: 180px;
+    text-align: center;
+    color: var(--text-secondary);
+    font-size: 0.85rem;
 }
 
 .actions-column {
@@ -369,6 +298,12 @@ body {
 
 /* Category Styles */
 .categories-column {
+    text-align: center;
+    min-width: 150px;
+}
+
+.urgency-column {
+    text-align: center;
     min-width: 150px;
 }
 

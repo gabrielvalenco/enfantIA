@@ -200,7 +200,7 @@ p {
     width: 100%;
     margin-top: 5px;
     font-size: 14px;
-    color: var(--danger);
+    color: var(--delete-color);
 }
 
 .password-container {

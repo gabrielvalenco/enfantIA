@@ -73,9 +73,9 @@
 
 /* Formulário do modal */
 .form-control {
-    background-color: var(--input-bg);
+    background-color: var(--background-color);
     border: 1px solid var(--border-color);
-    color: var(--text-primary);
+    color: var(--text-secondary);
     border-radius: 4px;
     padding: 8px 12px;
     width: 100%;
@@ -190,7 +190,7 @@
     color: var(--link-color);
     font-size: 14px;
     cursor: pointer;
-    padding: 5px 10px;
+    padding: 6px 10px;
     border-radius: 2rem;
     transition: all 0.2s ease;
 }
@@ -213,16 +213,15 @@
 .subtask-item {
     display: flex;
     align-items: center;
-    margin-bottom: 10px;
+    justify-content: center;
     padding-bottom: 10px;
-    border-bottom: 1px solid var(--border-color);
+    margin-bottom: 10px;
     position: relative;
     padding-right: 30px;
 }
 
 .subtask-item:last-child {
     margin-bottom: 0;
-    padding-bottom: 0;
     border-bottom: none;
 }
 
@@ -243,7 +242,6 @@
 
 .subtask-title {
     font-weight: 500;
-    margin-bottom: 3px;
 }
 
 .subtask-description {

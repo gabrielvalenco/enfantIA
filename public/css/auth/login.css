@@ -152,11 +152,11 @@ p {
 }
 
 .invalid-feedback {
+    color: var(--delete-color);
     display: block;
     width: 100%;
     margin-top: 5px;
     font-size: 14px;
-    color: var(--danger);
 }
 
 .password-container {

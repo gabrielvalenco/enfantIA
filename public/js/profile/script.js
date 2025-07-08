@@ -37,10 +37,19 @@ function detectSocialMedia(input, iconId) {
 
 // Inicialização de componentes do perfil
 document.addEventListener("DOMContentLoaded", function () {
-    // Avatar preview
+    // Avatar preview e otimização
     const avatarInput = document.getElementById('avatar');
-    if (avatarInput) {
-        avatarInput.addEventListener('change', function() {
+    const avatarContainer = document.querySelector('.avatar-container');
+    const avatarPreview = document.getElementById('avatar-preview');
+    
+    if (avatarInput && avatarContainer && avatarPreview) {
+        // Clicar na imagem do avatar para abrir o seletor de arquivo
+        avatarContainer.addEventListener('click', function() {
+            avatarInput.click();
+        });
+        
+        // Processar a imagem selecionada
+        avatarInput.addEventListener('change', async function() {
             const file = this.files[0];
             if (file) {
                 // Verificar tamanho do arquivo (máximo 2MB)
@@ -50,14 +59,25 @@ document.addEventListener("DOMContentLoaded", function () {
                     return;
                 }
                 
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const avatarImg = document.querySelector('.avatar-img');
-                    if (avatarImg) {
-                        avatarImg.src = e.target.result;
-                    }
-                };
-                reader.readAsDataURL(file);
+                // Otimizar a imagem antes de exibir
+                const optimizedImage = await resizeAndOptimizeImage(file, 300, 300);
+                
+                // Verificar se estamos usando o placeholder (ícone) ou já temos uma imagem
+                const avatarPreviewContainer = document.getElementById('avatar-preview-container');
+                if (avatarPreviewContainer) {
+                    // Esconder o container com o ícone
+                    avatarPreviewContainer.style.display = 'none';
+                    // Mostrar a imagem
+                    avatarPreview.style.display = 'block';
+                }
+                
+                // Atualizar a imagem
+                avatarPreview.src = URL.createObjectURL(optimizedImage);
+                
+                // Substituir o arquivo original pelo otimizado no input
+                const dataTransfer = new DataTransfer();
+                dataTransfer.items.add(optimizedImage);
+                avatarInput.files = dataTransfer.files;
             }
         });
     }
@@ -338,4 +358,74 @@ function formatDate(date) {
     const month = date.getMonth() + 1;
     const year = date.getFullYear();
     return `${day}/${month}/${year}`;
+}
+
+/**
+ * Redimensiona e otimiza uma imagem para upload
+ * @param {File} file - O arquivo de imagem original
+ * @param {number} maxWidth - Largura máxima da imagem otimizada
+ * @param {number} maxHeight - Altura máxima da imagem otimizada
+ * @param {number} quality - Qualidade da imagem (0-1), padrão 0.8
+ * @returns {Promise<File>} - Promise com o arquivo de imagem otimizado
+ */
+async function resizeAndOptimizeImage(file, maxWidth = 300, maxHeight = 300, quality = 0.8) {
+    return new Promise((resolve, reject) => {
+        // Criar um elemento de imagem para carregar o arquivo
+        const img = new Image();
+        img.onload = () => {
+            // Calcular as dimensões mantendo a proporção
+            let width = img.width;
+            let height = img.height;
+            
+            if (width > height) {
+                if (width > maxWidth) {
+                    height = Math.round((height * maxWidth) / width);
+                    width = maxWidth;
+                }
+            } else {
+                if (height > maxHeight) {
+                    width = Math.round((width * maxHeight) / height);
+                    height = maxHeight;
+                }
+            }
+            
+            // Criar um canvas para redimensionar a imagem
+            const canvas = document.createElement('canvas');
+            canvas.width = width;
+            canvas.height = height;
+            
+            // Desenhar a imagem redimensionada no canvas
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, width, height);
+            
+            // Determinar o formato de saída baseado no arquivo original
+            let format = 'image/jpeg';
+            if (file.type === 'image/png') {
+                format = 'image/png';
+            } else if (file.type === 'image/webp') {
+                format = 'image/webp';
+            }
+            
+            // Converter o canvas para um blob (arquivo)
+            canvas.toBlob((blob) => {
+                if (blob) {
+                    // Criar um novo arquivo com o mesmo nome, mas otimizado
+                    const optimizedFile = new File([blob], file.name, {
+                        type: format,
+                        lastModified: new Date().getTime()
+                    });
+                    resolve(optimizedFile);
+                } else {
+                    reject(new Error('Falha ao converter imagem'));
+                }
+            }, format, quality);
+        };
+        
+        img.onerror = () => {
+            reject(new Error('Falha ao carregar imagem'));
+        };
+        
+        // Carregar a imagem do arquivo
+        img.src = URL.createObjectURL(file);
+    });
 }

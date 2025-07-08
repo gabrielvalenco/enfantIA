@@ -35,6 +35,26 @@
     
     /* Transition for theme changes */
     --transition-speed: 0.3s;
+
+    /* Colors for badges */
+    --badge-low: #17a2b8;
+    --badge-medium: #ffc107;
+    --badge-danger: #dc3545;
+
+    /* Colors for badges hover */
+    --badge-low-hover: #22b8cf;
+    --badge-medium-hover: #ffd93d;
+    --badge-danger-hover: #f44336;
+
+    /* Colors for badges background (transparent) */
+    --badge-low-bg: rgba(23, 162, 184, 0.1);
+    --badge-medium-bg: rgba(255, 193, 7, 0.1);
+    --badge-danger-bg: rgba(220, 53, 69, 0.1);
+
+    /* Colors for badges background hover (transparent) */
+    --badge-low-bg-hover: rgba(34, 184, 207, 0.15);
+    --badge-medium-bg-hover: rgba(255, 217, 61, 0.15);
+    --badge-danger-bg-hover: rgba(244, 67, 54, 0.15);
 }
 
 /* Light theme colors */
@@ -70,6 +90,26 @@
     /* Action Colors Hover */
     --edit-color-hover: #B8860B;
     --delete-color-hover: #A91B0D;
+
+    /* Colors for badges - Light theme (darker colors) */
+    --badge-low: #0c7489;
+    --badge-medium: #b8860b;
+    --badge-danger: #a71e2a;
+
+    /* Colors for badges hover - Light theme */
+    --badge-low-hover: #0a5f70;
+    --badge-medium-hover: #9d7209;
+    --badge-danger-hover: #8b1a24;
+
+    /* Colors for badges background (transparent) - Light theme */
+    --badge-low-bg: rgba(12, 116, 137, 0.1);
+    --badge-medium-bg: rgba(184, 134, 11, 0.1);
+    --badge-danger-bg: rgba(167, 30, 42, 0.1);
+
+    /* Colors for badges background hover (transparent) - Light theme */
+    --badge-low-bg-hover: rgba(10, 95, 112, 0.15);
+    --badge-medium-bg-hover: rgba(157, 114, 9, 0.15);
+    --badge-danger-bg-hover: rgba(139, 26, 36, 0.15);
 }
 
 /* Theme Toggle Button */
@@ -245,6 +285,8 @@ h1, h2, h3, h4, h5, h6 {
     color: var(--delete-color-hover);
     text-decoration: none;
 }
+
+
 
 table {
     width: 100%;

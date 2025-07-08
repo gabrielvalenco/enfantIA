@@ -1,20 +1,29 @@
 .dashboard-header {
     background-color: var(--surface-color);
-    padding: 2rem 2rem;
+    padding: 1.5rem 2rem;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     margin-bottom: 2rem;
 }
 
-.dashboard-header .d-flex {
+.dashboard-header-content {
     max-width: 1200px;
     margin: 0 auto;
     width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .dashboard-title {
     font-size: 1.5rem;
     margin: 0;
     color: var(--text-primary);
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
 }
 
 
@@ -99,6 +108,52 @@
     border-color: var(--border-color);
 }
 
+.user-image {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    color: white;
+    transition: all 0.3s ease;
+    border: 2px solid var(--border-color);
+    overflow: hidden;
+    background-color: var(--surface-color);
+}
+
+.user-image:hover {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border: 2px solid var(--border-hover);
+}
+
+.theme-icon {
+    color: var(--text-primary);
+    font-size: 1.5rem;
+}
+
+.history-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background-color: var(--surface-color);
+    border: 2px solid var(--border-color);
+    color: var(--link-color);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 0.9rem;
+}
+
+.history-icon:hover {
+    background-color: var(--background-color-hover);
+    border-color: var(--link-color);
+    transform: scale(1.1);
+}
+
 .dashboard-header-content {
     max-width: 1200px;
     margin: 0 auto;
@@ -122,9 +177,11 @@
     border: 2px solid rgba(255, 255, 255, 0.3);
 }
 
+/* Remova ou comente o CSS antigo para .status-cards, .status-card, .status-card-icon, .status-card-info */
+
 .status-cards {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); /* Ajustado minmax para mais flexibilidade */
     gap: 1.5rem;
     margin-bottom: 4rem;
     cursor: pointer;
@@ -133,153 +190,283 @@
 .status-card {
     background: var(--surface-color);
     border: 2px solid var(--border-color);
-    border-radius: 12px;
+    border-radius: 15px; /* Bordas mais arredondadas */
     padding: 1.5rem;
     display: flex;
-    align-items: center;
+    flex-direction: column; /* Ícone no topo, conteúdo abaixo */
+    align-items: center; /* Centraliza o conteúdo */
     gap: 1rem;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-    transition: transform 0.2s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); /* Sombra mais suave */
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease; /* Transições suaves */
 }
 
 .status-card:hover {
-    transform: translateY(-2px);
-    border: 2px solid var(--border-hover);
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transform: translateY(-8px); /* Levanta o card no hover */
+    border-color: var(--link-color); /* Borda muda para link-color no hover */
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15); /* Sombra mais pronunciada no hover */
 }
 
 .status-card-icon {
-    width: 48px;
-    height: 48px;
-    border-radius: 12px;
+    width: 60px; /* Ícone maior */
+    height: 60px; /* Ícone maior */
+    border-radius: 50%; /* Circular */
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.5rem;
-    color: white; /* Default icon color */
+    font-size: 2rem; /* Tamanho do ícone */
+    color: white; /* Cor padrão do ícone (será sobrescrita) */
     transition: all 0.3s ease;
+    border: 2px solid transparent; /* Borda transparente inicial */
+    position: relative; /* Para o efeito de brilho */
+    overflow: hidden; /* Para garantir que o brilho não vaze */
 }
 
-/* Background and icon colors for different status cards */
+/* Efeito de brilho sutil no ícone ao passar o mouse */
+.status-card:hover .status-card-icon::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.15); /* Brilho branco semi-transparente */
+    transform: skewX(-20deg);
+    transition: all 0.5s ease;
+}
+
+.status-card:hover .status-card-icon::before {
+    left: 100%;
+}
+
+
+/* Background e cores dos ícones para cada status */
 .status-card-icon.pending { 
-    background-color: #4e73df; /* Blue for pending tasks */
+    background-color: #4e73df; /* Azul */
     color: white;
 }
 
 .status-card-icon.completed { 
-    background-color: #1cc88a; /* Green for completed tasks */
+    background-color: #1cc88a; /* Verde */
     color: white;
 }
 
 .status-card-icon.urgent { 
-    background-color: #e74a3b; /* Red for urgent tasks */
+    background-color: #e74a3b; /* Vermelho */
     color: white;
 }
 
 .status-card-icon.categories { 
-    background-color: #f6c23e; /* Yellow for categories */
+    background-color: #f6c23e; /* Amarelo */
     color: white;
 }
 
+/* Hover effects para os ícones - mantendo a cor do ícone e adicionando borda */
+.status-card:hover .status-card-icon.pending {
+    border-color: #4e73df; /* Borda com a cor do status */
+}
+.status-card:hover .status-card-icon.completed {
+    border-color: #1cc88a;
+}
+.status-card:hover .status-card-icon.urgent {
+    border-color: #e74a3b;
+}
+.status-card:hover .status-card-icon.categories {
+    border-color: #f6c23e;
+}
 
+
+.status-card-info {
+    text-align: center; /* Centraliza o texto */
+}
 
 .status-card-info h3 {
-    font-size: 1.5rem;
+    font-size: 2.2rem; /* Número maior e mais impactante */
     margin: 0;
-    font-weight: 600;
+    font-weight: 700; /* Mais negrito */
+    color: var(--text-primary);
 }
 
 .status-card-info p {
-    margin: 0;
-    color: #666;
-    font-size: 0.875rem;
+    margin: 0.25rem 0 0;
+    color: var(--text-secondary); /* Cor mais suave para a descrição */
+    font-size: 0.95rem; /* Texto um pouco maior */
+}
+
+/* Responsividade para status-cards */
+@media (max-width: 768px) {
+    .status-cards {
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); /* Ajuste para telas menores */
+        gap: 1rem;
+    }
+
+    .status-card {
+        padding: 1rem;
+        gap: 0.8rem;
+    }
+
+    .status-card-icon {
+        width: 50px;
+        height: 50px;
+        font-size: 1.8rem;
+    }
+
+    .status-card-info h3 {
+        font-size: 1.8rem;
+    }
+
+    .status-card-info p {
+        font-size: 0.85rem;
+    }
 }
 
 .dashboard-menu {
     background-color: var(--surface-color);
     border: 2px solid var(--border-color);
     margin: 5rem auto;
-    max-width: 800px;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    padding: 20px;
+    max-width: 1200px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    padding: 30px;
 }
 
 .dashboard-section-title {
-    font-size: 1.25rem;
-    font-weight: 600;
-    margin-bottom: 1.5rem;
+    font-size: 1.6rem;
+    font-weight: 700;
+    margin-bottom: 2.5rem;
     color: var(--text-primary);
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 0.75rem;
 }
 
-.dashboard-section-group-title {
-    font-size: 1.25rem;
-    font-weight: 600;
-    margin-bottom: 0.5rem;
-    color: var(--text-primary);
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
+.dashboard-section-title i {
+    color: var(--link-color);
 }
 
-.menu-grid {
+.menu-grid-modern {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 1.5rem;
+    gap: 1.8rem;
 }
 
-.menu-item {
+.menu-card {
     background: var(--background-color);
     border: 2px solid var(--border-color);
-    border-radius: 12px;
-    padding: 1.5rem;
+    border-radius: 15px;
+    padding: 1rem;
     display: flex;
-    align-items: center;
-    gap: 1.25rem;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
     color: var(--text-primary);
     text-decoration: none;
-    transition: all 0.2s ease;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    position: relative;
+    overflow: hidden;
 }
 
-.menu-item:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+.menu-card:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.2);
     text-decoration: none;
     color: var(--text-primary);
-    border: 2px solid var(--border-hover);
+    border-color: var(--link-color);
 }
 
-.menu-item-icon i {
+.menu-card-icon {
     width: 48px;
     height: 48px;
-    border-radius: 12px;
+    border-radius: 50%;
+    background-color: var(--surface-color);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.5rem;
-    color: var(--text-primary);
-    transition: all 0.2s ease;
+    font-size: 1.8rem;
+    color: var(--link-color);
+    transition: all 0.3s ease;
+    border: 2px solid var(--border-color);
 }
 
-.menu-item:hover .menu-item-icon {
-    color: var(--text-primary);
-    background: var(--primary-color);
+.menu-card:hover .menu-card-icon {
+    background-color: var(--link-color);
+    color: var(--surface-color);
+    border-color: var(--link-color);
 }
 
-.menu-item-content h3 {
+.menu-card-content h3 {
     margin: 0;
-    font-size: 1.1rem;
+    font-size: 1.3rem;
     font-weight: 600;
+    color: var(--text-primary);
 }
 
-.menu-item-content p {
-    margin: 0.25rem 0 0;
-    font-size: 0.875rem;
-    color: #666;
+.menu-card-content p {
+    margin: 0.4rem 0 0;
+    font-size: 0.95rem;
+    color: var(--text-color);
+    line-height: 1.4;
+}
+
+.menu-card-highlight {
+    border-color: var(--edit-color);
+    background: linear-gradient(135deg, var(--background-color) 0%, rgba(205, 161, 65, 0.05) 100%);
+}
+
+.menu-card-highlight .menu-card-icon {
+    color: var(--edit-color);
+    border-color: var(--edit-color);
+}
+
+.menu-card-highlight:hover {
+    border-color: var(--edit-color-hover);
+    transform: translateY(-10px) scale(1.03);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+}
+
+.menu-card-highlight:hover .menu-card-icon {
+    background-color: var(--edit-color-hover);
+    color: var(--surface-color);
+    border-color: var(--edit-color-hover);
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .dashboard-menu {
+        padding: 20px;
+        margin: 3rem auto;
+    }
+
+    .dashboard-section-title {
+        font-size: 1.4rem;
+        margin-bottom: 2rem;
+    }
+
+    .menu-grid-modern {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+
+    .menu-card {
+        padding: 1.5rem;
+        flex-direction: row;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .menu-card-icon {
+        width: 40px;
+        height: 40px;
+        font-size: 1.5rem;
+    }
+
+    .menu-card-content h3 {
+        font-size: 1.2rem;
+    }
+
+    .menu-card-content p {
+        font-size: 0.9rem;
+    }
 }
 
 .upcoming-tasks {
@@ -374,19 +561,7 @@ table tr {
     border-bottom: 1px solid var(--border-color);
 }
 
-/* Estilos para as badges de urgência */
-.badge {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 5px 10px;
-    border-radius: 4px;
-    font-weight: 500;
-    font-size: 0.8rem;
-    margin: 0 auto;
-    text-align: center;
-}
-
+/* Estilos para as badges de urgência */    
 .bg-danger {
     background-color: rgba(220, 53, 69, 0.2) !important;
     color: #ff8c96;
@@ -930,36 +1105,4 @@ table tr:hover td {
         margin-top: 10px !important;
     }
 
-}
-
-/* Theme Toggle Button */
-.theme-toggle {
-    position: fixed;
-    bottom: 30px;
-    right: 30px;
-    background-color: var(--surface-color);
-    border: 2px solid var(--border-color);
-    color: var(--text-primary);
-    cursor: pointer;
-    font-size: 1.2rem;
-    padding: 0;
-    border-radius: 50%;
-    width: 50px;
-    height: 50px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: background-color var(--transition-speed) ease, 
-                color var(--transition-speed) ease,
-                transform 0.3s ease,
-                box-shadow 0.3s ease;
-    z-index: 1000;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-}
-
-.theme-toggle:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
-    background-color: var(--background-color-hover);
-    border-color: var(--border-hover);
 }

@@ -79,13 +79,64 @@
             font-weight: 500;
         }
         
+        .avatar-container {
+            position: relative;
+            width: 120px;
+            height: 120px;
+            margin: 0 auto;
+            margin-bottom: 10px;
+            cursor: pointer;
+            border-radius: 50%;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
         .avatar-img {
-            width: 100px;
-            height: 100px;
+            width: 100%;
+            height: 100%;
             border-radius: 50%;
             object-fit: cover;
-            margin-bottom: 20px;
             background-color: var(--surface-color);
+            transition: all 0.3s ease;
+        }
+        
+        .avatar-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: all 0.3s ease;
+            color: white;
+            border-radius: 50%;
+        }
+        
+        .avatar-overlay i {
+            font-size: 24px;
+        }
+        
+        .avatar-container:hover .avatar-overlay {
+            opacity: 1;
+        }
+        
+        .avatar-container:hover .avatar-img {
+            filter: brightness(0.8);
+        }
+        
+        .avatar-hint {
+            display: block;
+            text-align: center;
+            margin: 0 auto 20px auto;
+            width: 100%;
+            color: var(--text-secondary);
+            font-size: 12px;
         }
         
         .form-group {
@@ -229,7 +280,21 @@
         <div class="profile-content">
             <div class="profile-left">
                 <div class="profile-section">
-                    <img src="{{ $user->avatar ? asset('storage/' . $user->avatar) : asset('images/avatar-placeholder.png') }}" alt="Avatar" class="avatar-img">
+                    <div class="avatar-container">
+                        @if($user->avatar)
+                            <img src="{{ asset('storage/' . $user->avatar) }}" alt="Avatar" class="avatar-img" id="avatar-preview">
+                        @else
+                            <div class="avatar-img d-flex justify-content-center align-items-center" id="avatar-preview-container">
+                                <i class="fas fa-user theme-icon"></i>
+                            </div>
+                            <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="" id="avatar-preview" style="display: none;">
+                        @endif
+                        <div class="avatar-overlay">
+                            <i class="fas fa-camera"></i>
+                        </div>
+                        <input type="file" name="avatar" id="avatar" accept="image/jpeg,image/png,image/webp" style="display: none">
+                    </div>
+                    <small class="avatar-hint">Clique na imagem para alterar o avatar</small>
                     
                     <h2>Informações Pessoais</h2>
                     
@@ -259,11 +324,7 @@
                         <textarea name="bio" id="bio" rows="4">{{ old('bio', $user->bio) }}</textarea>
                     </div>
                     
-                    <div class="form-group">
-                        <label for="avatar">Avatar</label>
-                        <input type="file" name="avatar" id="avatar">
-                        <small>Nenhum arquivo escolhido</small>
-                    </div>
+
                 </div>
                 
             </div>

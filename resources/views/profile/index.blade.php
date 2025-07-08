@@ -22,7 +22,7 @@
                     <i class="fas fa-sign-out-alt mobile-icon"></i>
                 </a>
                 <a href="{{ route('profile.edit') }}" class="edit-button">
-                    <span class="edit-text">Editar Perfil</span>
+                    <span class="add-button">Editar Perfil</span>
                     <!-- <i class="fas fa-edit mobile-icon"></i> -->
                 </a>
             </div>
