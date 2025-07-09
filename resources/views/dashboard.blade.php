@@ -19,7 +19,7 @@
             <h1 class="dashboard-title">{{ env('APP_NAME') }}</h1>
             
             <div class="header-right">
-                <div class="history-icon" title="Histórico de ações" data-bs-toggle="tooltip" data-bs-placement="left">
+                <div class="history-icon" title="Histórico de ações" data-bs-toggle="modal" data-bs-target="#activityLogModal">
                     <i class="fas fa-history"></i>
                 </div>
                 
@@ -243,6 +243,7 @@
 
         <script src="{{ asset('js/script.js') }}"></script>
         <script src="{{ asset('js/dashboard/script.js') }}"></script>
+        <script src="{{ asset('js/activity-log/script.js') }}"></script>
         <script>
             // Define category colors for the external script
             var categoryColors = {
@@ -252,6 +253,36 @@
                 'default': '#20ac82'
             };
         </script>
+    </div>
+
+    <!-- Activity Log Modal -->
+    <div class="modal fade" id="activityLogModal" tabindex="-1" aria-labelledby="activityLogModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="activityLogModalLabel"><i class="fas fa-history me-2"></i>Histórico de Ações</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="activity-log-container" class="position-relative">
+                        <div id="activity-log-loading" class="d-flex justify-content-center py-4">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">Carregando...</span>
+                            </div>
+                        </div>
+                        <ul id="activity-log-list" class="list-group list-group-flush d-none">
+                            <!-- Activity logs will be populated here via JavaScript -->
+                        </ul>
+                        <div id="activity-log-empty" class="text-center py-4 d-none">
+                            <p class="text-muted">Nenhuma atividade registrada.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                </div>
+            </div>
+        </div>
     </div>
 
     @include('layouts.footer')

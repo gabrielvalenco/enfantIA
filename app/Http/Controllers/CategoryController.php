@@ -4,9 +4,19 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Category;
+use App\Services\UserActivityLogService;
 
 class CategoryController extends Controller
 {
+    protected $activityLogService;
+    
+    /**
+     * Create a new controller instance.
+     */
+    public function __construct(UserActivityLogService $activityLogService)
+    {
+        $this->activityLogService = $activityLogService;
+    }
     public function index()
     {
         $categories = Category::where('user_id', auth()->id())->get();
@@ -40,6 +50,14 @@ class CategoryController extends Controller
         ]);
 
         $category->save();
+        
+        // Log category creation activity
+        $this->activityLogService->log(
+            'create',
+            "Criou categoria '{$category->name}'",
+            'category',
+            $category->id
+        );
         
         // Check if the request is AJAX
         if ($request->ajax() || $request->wantsJson()) {
@@ -81,6 +99,14 @@ class CategoryController extends Controller
             'color' => $request->color
         ]);
         
+        // Log category update activity
+        $this->activityLogService->log(
+            'update',
+            "Atualizou categoria '{$category->name}'",
+            'category',
+            $category->id
+        );
+        
         // Check if the request is AJAX
         if ($request->ajax() || $request->wantsJson()) {
             return response()->json([
@@ -98,7 +124,21 @@ class CategoryController extends Controller
     public function destroy(Category $category)
     {
         $this->authorize('delete', $category);
+        
+        // Store category name before deletion
+        $categoryName = $category->name;
+        $categoryId = $category->id;
+        
         $category->delete();
+        
+        // Log category deletion activity
+        $this->activityLogService->log(
+            'delete',
+            "Excluiu categoria '{$categoryName}'",
+            'category',
+            $categoryId
+        );
+        
         return redirect()->route('categories.index')
             ->with('success', 'Categoria excluída com sucesso!');
     }

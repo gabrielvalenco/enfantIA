@@ -12,6 +12,7 @@ use App\Http\Controllers\GroupController;
 use App\Http\Controllers\GroupInvitationController;
 use App\Http\Controllers\SubtaskController;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\UserActivityLogController;
 
 /*
 |--------------------------------------------------------------------------
@@ -86,6 +87,9 @@ Route::middleware('auth')->group(function () {
 
     // Report routes
     Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
+    
+    // User Activity Logs routes
+    Route::get('/activity-logs', [UserActivityLogController::class, 'getRecentActivities'])->name('activity-logs.recent');
 
     Route::middleware(['auth'])->group(function () {
         Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');

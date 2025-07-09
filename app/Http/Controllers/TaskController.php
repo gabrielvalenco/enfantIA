@@ -5,11 +5,21 @@ namespace App\Http\Controllers;
 use App\Models\Task;
 use App\Models\Category;
 use App\Models\Group;
+use App\Services\UserActivityLogService;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 
 class TaskController extends Controller
 {
+    protected $activityLogService;
+    
+    /**
+     * Create a new controller instance.
+     */
+    public function __construct(UserActivityLogService $activityLogService)
+    {
+        $this->activityLogService = $activityLogService;
+    }
     public function index(Request $request)
     {
         // Verificar se é para mostrar tarefas de um grupo específico
@@ -132,6 +142,15 @@ class TaskController extends Controller
                 }
             }
 
+            // Log task creation activity
+            $taskTitle = mb_strlen($task->title) > 30 ? mb_substr($task->title, 0, 30) . '...' : $task->title;
+            $this->activityLogService->log(
+                'create',
+                "Criou tarefa '{$taskTitle}'",
+                'task',
+                $task->id
+            );
+
             if ($request->has('group_id')) {
                 return redirect()->route('groups.show', $request->group_id)
                     ->with('success', 'Tarefa criada com sucesso no grupo!');
@@ -200,6 +219,15 @@ class TaskController extends Controller
 
             // Sincronizar categorias mesmo se não houver nenhuma selecionada
             $task->categories()->sync($request->input('categories', []));
+            
+            // Log task update activity
+            $taskTitle = mb_strlen($task->title) > 30 ? mb_substr($task->title, 0, 30) . '...' : $task->title;
+            $this->activityLogService->log(
+                'update',
+                "Atualizou tarefa '{$taskTitle}'",
+                'task',
+                $task->id
+            );
 
             return redirect()->route('tasks.index')->with('success', 'Tarefa atualizada com sucesso!');
         } catch (\Exception $e) {
@@ -211,7 +239,19 @@ class TaskController extends Controller
     {
         $this->authorize('delete', $task);
         try {
+            $taskTitle = mb_strlen($task->title) > 30 ? mb_substr($task->title, 0, 30) . '...' : $task->title;
+            $taskId = $task->id; // Store ID before deletion
+            
             $task->delete();
+            
+            // Log task deletion activity
+            $this->activityLogService->log(
+                'delete',
+                "Excluiu tarefa '{$taskTitle}'",
+                'task',
+                $taskId
+            );
+            
             return redirect()->route('tasks.index')->with('success', 'Tarefa excluída com sucesso!');
         } catch (\Exception $e) {
             return back()->with('error', 'Erro ao excluir a tarefa. Por favor, tente novamente.');
@@ -229,6 +269,15 @@ class TaskController extends Controller
             'status' => true,
             'completed_at' => now()
         ]);
+        
+        // Log task completion activity
+        $taskTitle = mb_strlen($task->title) > 30 ? mb_substr($task->title, 0, 30) . '...' : $task->title;
+        $this->activityLogService->log(
+            'complete',
+            "Concluiu tarefa '{$taskTitle}'",
+            'task',
+            $task->id
+        );
 
         if (url()->previous() === route('dashboard')) {
             return redirect()->route('tasks.completed')->with('success', 'Tarefa marcada como concluída!');
