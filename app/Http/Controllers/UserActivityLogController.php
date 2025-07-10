@@ -24,7 +24,7 @@ class UserActivityLogController extends Controller
      */
     public function getRecentActivities(Request $request)
     {
-        $limit = $request->get('limit', 10);
+        $limit = $request->get('limit', 5);
         $activities = $this->activityLogService->getRecentActivities(Auth::id(), $limit);
         
         return response()->json([
