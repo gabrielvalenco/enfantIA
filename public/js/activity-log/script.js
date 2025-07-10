@@ -59,7 +59,7 @@ document.addEventListener('DOMContentLoaded', function() {
                             const formattedDate = formatDate(activity.created_at);
                             
                             li.innerHTML = `
-                                <div class="d-flex align-items-start">
+                                <div class="d-flex align-items-center">
                                     <div class="activity-icon me-3">
                                         <i class="fas ${iconClass}"></i>
                                     </div>

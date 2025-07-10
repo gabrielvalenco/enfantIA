@@ -338,6 +338,71 @@ tr:hover {
     border: 2px solid var(--link-color);
 }
 
+.modal-content {
+    background-color: var(--surface-color);
+    color: var(--text-primary);
+    border: 2px solid var(--border-color);
+    border-radius: 10px;
+    box-shadow: var(--card-shadow);
+}
+
+.modal-header {
+    border-bottom: 2px solid var(--border-color);
+    padding: 1.25rem;
+}
+
+.modal-footer {
+    border-top: 2px solid var(--border-color);
+    padding: 1rem;
+}
+
+.modal-title {
+    color: var(--text-primary);
+    font-weight: 600;
+}
+
+.close-button {
+    background-color: transparent;
+    border: 2px solid var(--text-secondary);
+    color: var(--text-secondary);
+    border-radius: 100%;
+    width: 20px;
+    height: 20px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    padding: 1rem;
+}
+
+.close-button:hover {
+    color: var(--text-secondary-hover);
+    border-color: var(--text-secondary-hover);
+}
+
+.modal-body {
+    background-color: var(--background-color);
+}
+
+#activity-log-list {
+    padding: 0;
+}
+
+.list-group-item {
+    background: transparent;
+}
+
+.list-group-item.activity-log-item {
+    color: var(--text-primary);
+    border-bottom: 1px solid var(--border-color);
+    padding: 0.5rem;
+}
+
+.text-muted {
+    color: var(--text-secondary) !important;
+}
+
 /* Custom SweetAlert2 Styling */
 .swal2-popup {
     background-color: var(--surface-color) !important;

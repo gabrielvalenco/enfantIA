@@ -82,7 +82,7 @@
         @if(session('success'))
             <div class="alert alert-success alert-dismissible fade show" role="alert">
                 {{ session('success') }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                <button type="button" class="cancel-button" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
         @endif
 
@@ -261,7 +261,6 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="activityLogModalLabel"><i class="fas fa-history me-2"></i>Histórico de Ações</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <div id="activity-log-container" class="position-relative">
@@ -270,7 +269,7 @@
                                 <span class="visually-hidden">Carregando...</span>
                             </div>
                         </div>
-                        <ul id="activity-log-list" class="list-group list-group-flush d-none">
+                        <ul id="activity-log-list">
                             <!-- Activity logs will be populated here via JavaScript -->
                         </ul>
                         <div id="activity-log-empty" class="text-center py-4 d-none">
@@ -279,7 +278,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                    <button type="button" class="cancel-button" data-bs-dismiss="modal">Fechar</button>
                 </div>
             </div>
         </div>
