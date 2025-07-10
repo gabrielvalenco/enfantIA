@@ -10,7 +10,7 @@
 <meta name="user-email" content="{{ Auth::user()->email }}">
 <meta name="csrf-token" content="{{ csrf_token() }}">
 
-<div class="container mt-4">
+<div class="container">
     <!-- Toast container -->
     <div class="toast-container"></div>
     

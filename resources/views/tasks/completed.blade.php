@@ -8,11 +8,11 @@
 
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
     <link rel="icon" href="{{ asset('favicon.svg') }}" type="image/svg+xml">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="stylesheet" href="{{ asset('css/task/completed.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 </head>
 <body>
-    <div class="container mt-4">
+    <div class="container">
         @if(session('success'))
             <div class="alert alert-success">
                 {{ session('success') }}
@@ -90,10 +90,10 @@
             <table class="table table-striped">
                 <thead>
                     <tr>
-                        <th width="15%">Título</th>
-                        <th width="30%" class="text-center">Categorias</th>
-                        <th width="15%">Data de Conclusão</th>
-                        <th width="15%" class="text-center">Ações</th>
+                        <th class="title-header">Título</th>
+                        <th class="categories-header">Categorias</th>
+                        <th class="due-date-header">Data de Conclusão</th>
+                        <th class="actions-header">Ações</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -127,7 +127,7 @@
                                         <span class="text-muted">Sem categoria</span>
                                     @endif
                                 </td>
-                                <td>{{ $task->updated_at->format('d/m/Y H:i') }}</td>
+                                <td class="due-date">{{ $task->updated_at->format('d/m/Y H:i') }}</td>
                                 <td class="actions-column">
                                     <div class="action-buttons">
                                         <form action="{{ route('tasks.uncomplete', $task) }}" method="POST" class="d-inline">

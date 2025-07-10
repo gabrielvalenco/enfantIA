@@ -5,7 +5,7 @@
 <link rel="icon" href="{{ asset('favicon.svg') }}" type="image/svg+xml">
 <link rel="stylesheet" href="{{ asset('css/group/index.css') }}">
 
-<div class="container mt-4">
+<div class="container">
     @if(session('success'))
         <div class="alert alert-success">
             {{ session('success') }}

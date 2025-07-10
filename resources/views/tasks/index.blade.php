@@ -32,7 +32,7 @@
     </script>
 </head>
 <body>
-    <div class="container mt-4">
+    <div class="containerw">
         @if(session('success'))
             <div class="alert alert-success">
                 {{ session('success') }}
@@ -65,17 +65,17 @@
             <div class="table-actions">
                 @if(isset($group))
                     <a class="back-button" href="{{ route('groups.show', $group->id) }}">
-                        <i class="fas fa-arrow-left"></i> Voltar ao Grupo
+                        Voltar ao Grupo
                     </a>
-                    <a class="add-task-button" href="{{ route('tasks.create', ['group_id' => $group->id]) }}">
-                        <i class="fas fa-plus-circle"></i> Nova Tarefa no Grupo
+                    <a class="add-button" href="{{ route('tasks.create', ['group_id' => $group->id]) }}">
+                        Nova Tarefa no Grupo
                     </a>
                 @else
                     <a class="back-button" href="{{ route('dashboard') }}">
                         Voltar ao Dashboard
                     </a>
-                    <a class="add-task-button" href="{{ route('tasks.create') }}">
-                        <i class="fas fa-plus-circle"></i> Nova Tarefa
+                    <a class="add-button" href="{{ route('tasks.create') }}">
+                        Nova Tarefa
                     </a>
                 @endif
             </div>
@@ -198,7 +198,7 @@
                                             <span class="text-muted">Sem categoria</span>
                                         @endif
                                     </td>
-                                    <td>
+                                    <td class="task-urgency">
                                         @switch($task->urgency)
                                             @case('high')
                                                 @php

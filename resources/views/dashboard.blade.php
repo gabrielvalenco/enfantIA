@@ -78,7 +78,7 @@
         </div>
     </header>
 
-    <div class="container mt-4">
+    <div class="container">
         @if(session('success'))
             <div class="alert alert-success alert-dismissible fade show" role="alert">
                 {{ session('success') }}
@@ -87,6 +87,17 @@
         @endif
 
         <div class="status-cards">
+
+            <div class="status-card">
+                <div class="status-card-icon urgent">
+                    <i class="fas fa-exclamation-circle"></i>
+                </div>
+                <div class="status-card-info">
+                    <h3>{{ $urgentTasks ?? 0 }}</h3>
+                    <p>Tarefas Urgentes</p>
+                </div>
+            </div>
+
             <div class="status-card">
                 <div class="status-card-icon pending">
                     <i class="fas fa-tasks"></i>
@@ -99,21 +110,11 @@
             
             <div class="status-card">
                 <div class="status-card-icon completed">
-                    <i class="fas fa-check-circle"></i>
+                    <i class="fas fa-users"></i>
                 </div>
                 <div class="status-card-info">
-                    <h3>{{ $completedTasks ?? 0 }}</h3>
-                    <p>Tarefas Concluídas</p>
-                </div>
-            </div>
-            
-            <div class="status-card">
-                <div class="status-card-icon urgent">
-                    <i class="fas fa-exclamation-circle"></i>
-                </div>
-                <div class="status-card-info">
-                    <h3>{{ $urgentTasks ?? 0 }}</h3>
-                    <p>Tarefas Urgentes</p>
+                    <h3>0</h3>
+                    <p>Tarefas de Grupos</p>
                 </div>
             </div>
             

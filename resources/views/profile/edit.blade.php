@@ -5,266 +5,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/profile-style.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/user/profile-style.css') }}">
     <link rel="icon" href="{{ asset('favicon.svg') }}" type="image/svg+xml">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 
     <title>Editar Perfil</title>
-    <style>
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-        
-        .profile-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid var(--border-color);
-        }
-        
-        .profile-header h1 {
-            color: var(--text-primary);
-            margin: 0;
-            font-size: 24px;
-        }
-        
-        .back-link {
-            color: var(--link-color);
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            font-size: 14px;
-            transition: all 0.3s ease;
-        }
-        
-        .back-link:hover {
-            color: var(--link-color-hover);
-            transform: translateX(-5px);
-        }
-        
-        .profile-content {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 5rem;
-        }
-
-        .profile-left,
-        .profile-right {
-            flex: 1;
-            min-width: 300px;
-            box-sizing: border-box;
-        }
-        .form-group input, 
-        .form-group textarea, 
-        .form-group select {
-            width: 100%;
-            box-sizing: border-box;
-        }
-
-        
-        .profile-section {
-            margin-bottom: 30px;
-        }
-        
-        .profile-section h2 {
-            color: var(--text-primary);
-            font-size: 18px;
-            margin-bottom: 20px;
-            font-weight: 500;
-        }
-        
-        .avatar-container {
-            position: relative;
-            width: 120px;
-            height: 120px;
-            margin: 0 auto;
-            margin-bottom: 10px;
-            cursor: pointer;
-            border-radius: 50%;
-            overflow: hidden;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-        
-        .avatar-img {
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            object-fit: cover;
-            background-color: var(--surface-color);
-            transition: all 0.3s ease;
-        }
-        
-        .avatar-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            opacity: 0;
-            transition: all 0.3s ease;
-            color: white;
-            border-radius: 50%;
-        }
-        
-        .avatar-overlay i {
-            font-size: 24px;
-        }
-        
-        .avatar-container:hover .avatar-overlay {
-            opacity: 1;
-        }
-        
-        .avatar-container:hover .avatar-img {
-            filter: brightness(0.8);
-        }
-        
-        .avatar-hint {
-            display: block;
-            text-align: center;
-            margin: 0 auto 20px auto;
-            width: 100%;
-            color: var(--text-secondary);
-            font-size: 12px;
-        }
-        
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-        
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-            color: var(--text-primary);
-            font-size: 14px;
-        }
-        
-        .form-group input, .form-group textarea, .form-group select {
-            width: 100%;
-            background-color: var(--surface-color);
-            border: 1px solid var(--border-color);
-            color: var(--text-primary);
-            padding: 8px 12px;
-            border-radius: 4px;
-            font-family: 'Poppins', sans-serif;
-        }
-        
-        .form-group input:focus, .form-group textarea:focus, .form-group select:focus {
-            outline: none;
-            border-color: var(--link-color);
-        }
-        
-        .social-media-links {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-        
-        .social-media-item {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .social-icon {
-            width: 24px;
-            height: 24px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--text-primary);
-        }
-        
-        .tag-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin-bottom: 1rem;
-        }
-        
-        .tag {
-            background-color: var(--link-color);
-            color: white;
-            padding: 4px 10px;
-            border-radius: 20px;
-            font-size: 12px;
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-        }
-        
-        .tag .remove-tag {
-            cursor: pointer;
-        }
-        
-        .tag-hint {
-            font-size: 12px;
-            color: var(--text-secondary);
-            margin-top: 5px;
-        }
-        
-        .action-buttons {
-            display: flex;
-            gap: 10px;
-            margin-top: 20px;
-        }
-        
-        .btn {
-            padding: 8px 16px;
-            border-radius: 4px;
-            border: none;
-            cursor: pointer;
-            font-weight: 500;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-        }
-        
-        .btn-primary {
-            background-color: var(--link-color);
-            color: white;
-        }
-        
-        .btn-primary:hover {
-            background-color: var(--link-color-hover);
-        }
-        
-        .btn-secondary {
-            background-color: transparent;
-            color: var(--text-primary);
-            border: 1px solid var(--border-color);
-        }
-        
-        .btn-secondary:hover {
-            background-color: var(--surface-color);
-            border-color: var(--text-secondary);
-        }
-        
-        small {
-            color: var(--text-secondary);
-            font-size: 12px;
-        }
-    </style>
 </head>
 <body>
 
     <div class="container">
-        <div class="profile-header">
+        <div class="table-header">
             <h1>Editar Perfil</h1>
-            <a href="{{ route('profile.index') }}" class="back-link">
-                <i class="fas fa-arrow-left"></i> Voltar ao Perfil
-            </a>
+            <div class="table-actions">
+                <a href="{{ route('profile.index') }}" class="back-button">
+                    Voltar ao Perfil
+                </a>
+                <button type="submit" class="add-button">Salvar</button>
+            </div>
         </div>
 
         @if(session('success'))
@@ -395,11 +152,6 @@
                     </div>
                 </div>
             </div>
-        </div>
-        
-        <div class="action-buttons">
-            <button type="submit" class="save-button">Salvar</button>
-            <a href="{{ route('profile.index') }}" class="cancel-button">Cancelar</a>
         </div>
     </form>
 

@@ -84,10 +84,6 @@
     white-space: nowrap;
 }
 
-.due-date-header, .due-date {
-    width: 180px;
-}
-
 .actions-column {
     width: 180px;
     text-align: center;
@@ -240,59 +236,7 @@
     }
 }
 
-/* Estilo da caixa de busca */
-.search-box {
-    display: flex;
-    background-color: transparent;
-    border-radius: 6px;
-    overflow: hidden;
-    width: 100%;
-}
-
-.input-group-prepend,
-.input-group-append {
-    display: flex;
-}
-
-.input-group-text {
-    display: flex;
-    align-items: center;
-    padding: 8px 12px;
-    background-color: rgba(0, 0, 0, 0.2);
-    border: 1px solid var(--border-color);
-    color: var(--text-secondary);
-}
-
-.search-box .form-control {
-    flex: 1;
-    background-color: var(--background-color);
-    border: 1px solid var(--border-color);
-    border-left: none;
-    border-right: none;
-    color: var(--text-primary);
-    padding: 8px 12px;
-    width: 100%;
-}
-
-.search-box .form-control:focus {
-    box-shadow: 0 0 0 0.25rem rgba(32, 172, 130, 0.25);
-    border-color: var(--link-color);
-    outline: none;
-}
-
-.search-box .btn-outline-secondary {
-    border-color: var(--border-color);
-    color: var(--text-secondary);
-    background-color: rgba(0, 0, 0, 0.2);
-    padding: 8px 12px;
-    cursor: pointer;
-    border: 1px solid var(--border-color);
-}
-
-.search-box .btn-outline-secondary:hover {
-    background-color: var(--border-color);
-    color: var(--text-primary);
-}
+/* Estilo da caixa de busca movido para style.css */
 
 /* Estilos para os botões de filtro */
 .filter-buttons {
@@ -646,22 +590,20 @@ font-size: 1.2rem;
 
 /* Delete task button */
 .delete-task-button {
-    background: none;
-    border: none;
     color: var(--delete-color);
-    text-decoration: none;
-    transition: all 0.3s ease;
+    background: transparent;
+    border: 2px solid var(--delete-color);
+    border-radius: 2rem;
+    padding: 7px 15px;
     font-size: 1rem;
-    font-weight: 500;
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
     cursor: pointer;
-    padding: 0;
+    transition: all 0.3s ease;
+    text-decoration: none;
 }
 
 .delete-task-button:hover {
-    color: #ff8c96;
+    color: var(--delete-color-hover);
+    border: 2px solid var(--delete-color-hover);
     transform: translateX(-3px);
     text-decoration: none;
 }

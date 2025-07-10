@@ -20,7 +20,6 @@
     color: var(--text-primary);
 }
 
-/* Estilos para o activity log */
 .activity-icon {
     min-width: 32px;
     width: 32px;
@@ -42,8 +41,6 @@
     align-items: center;
     gap: 1rem;
 }
-
-
 .dropdown-menu {
     background-color: var(--surface-color);
     border: 2px solid var(--border-color);
@@ -194,51 +191,49 @@
     border: 2px solid rgba(255, 255, 255, 0.3);
 }
 
-/* Remova ou comente o CSS antigo para .status-cards, .status-card, .status-card-icon, .status-card-info */
-
 .status-cards {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); /* Ajustado minmax para mais flexibilidade */
-    gap: 1.5rem;
-    margin-bottom: 4rem;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 0.85rem;
+    margin-bottom: 2.5rem;
     cursor: pointer;
+    margin-top: 1rem;
 }
 
 .status-card {
     background: var(--surface-color);
     border: 2px solid var(--border-color);
-    border-radius: 15px; /* Bordas mais arredondadas */
-    padding: 1.5rem;
+    border-radius: 12px;
+    padding: 1rem;
     display: flex;
-    flex-direction: column; /* Ícone no topo, conteúdo abaixo */
-    align-items: center; /* Centraliza o conteúdo */
-    gap: 1rem;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); /* Sombra mais suave */
-    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease; /* Transições suaves */
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
 }
 
 .status-card:hover {
-    transform: translateY(-8px); /* Levanta o card no hover */
-    border-color: var(--link-color); /* Borda muda para link-color no hover */
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15); /* Sombra mais pronunciada no hover */
+    transform: translateY(-5px);
+    border-color: var(--link-color);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
 }
 
 .status-card-icon {
-    width: 60px; /* Ícone maior */
-    height: 60px; /* Ícone maior */
-    border-radius: 50%; /* Circular */
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 2rem; /* Tamanho do ícone */
-    color: white; /* Cor padrão do ícone (será sobrescrita) */
+    font-size: 1.5rem;
+    color: white;
     transition: all 0.3s ease;
-    border: 2px solid transparent; /* Borda transparente inicial */
-    position: relative; /* Para o efeito de brilho */
-    overflow: hidden; /* Para garantir que o brilho não vaze */
+    border: 1px solid transparent;
+    position: relative;
+    overflow: hidden;
 }
 
-/* Efeito de brilho sutil no ícone ao passar o mouse */
 .status-card:hover .status-card-icon::before {
     content: '';
     position: absolute;
@@ -246,73 +241,74 @@
     left: -100%;
     width: 100%;
     height: 100%;
-    background: rgba(255, 255, 255, 0.15); /* Brilho branco semi-transparente */
-    transform: skewX(-20deg);
-    transition: all 0.5s ease;
+    background: rgba(255, 255, 255, 0.1);
+    transform: skewX(-15deg);
+    transition: all 0.4s ease;
 }
 
 .status-card:hover .status-card-icon::before {
     left: 100%;
 }
 
-
-/* Background e cores dos ícones para cada status */
 .status-card-icon.pending { 
-    background-color: #4e73df; /* Azul */
+    background-color: #4e73df;
     color: white;
 }
 
 .status-card-icon.completed { 
-    background-color: #1cc88a; /* Verde */
+    background-color: #1cc88a;
     color: white;
 }
 
 .status-card-icon.urgent { 
-    background-color: #e74a3b; /* Vermelho */
+    background-color: #e74a3b;
     color: white;
 }
 
 .status-card-icon.categories { 
-    background-color: #f6c23e; /* Amarelo */
+    background-color: #f6c23e;
     color: white;
 }
 
-/* Hover effects para os ícones - mantendo a cor do ícone e adicionando borda */
 .status-card:hover .status-card-icon.pending {
-    border-color: #4e73df; /* Borda com a cor do status */
+    border-color: #4e73df;
+    border-width: 1px;
 }
+
 .status-card:hover .status-card-icon.completed {
     border-color: #1cc88a;
+    border-width: 1px;
 }
+
 .status-card:hover .status-card-icon.urgent {
     border-color: #e74a3b;
+    border-width: 1px;
 }
+
 .status-card:hover .status-card-icon.categories {
     border-color: #f6c23e;
+    border-width: 1px;
 }
-
-
 .status-card-info {
-    text-align: center; /* Centraliza o texto */
+    text-align: center;
 }
 
 .status-card-info h3 {
-    font-size: 2.2rem; /* Número maior e mais impactante */
+    font-size: 1.8rem;
     margin: 0;
-    font-weight: 700; /* Mais negrito */
+    font-weight: 600;
     color: var(--text-primary);
 }
 
 .status-card-info p {
-    margin: 0.25rem 0 0;
-    color: var(--text-secondary); /* Cor mais suave para a descrição */
-    font-size: 0.95rem; /* Texto um pouco maior */
+    margin: 0.15rem 0 0;
+    color: var(--text-secondary);
+    font-size: 0.85rem;
 }
 
-/* Responsividade para status-cards */
 @media (max-width: 768px) {
     .status-cards {
-        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); /* Ajuste para telas menores */
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));    
         gap: 1rem;
     }
 
@@ -392,8 +388,9 @@
 }
 
 .menu-card-icon {
-    width: 48px;
-    height: 48px;
+    width: 40px;
+    height: 40px;
+    padding: 1.5rem;
     border-radius: 50%;
     background-color: var(--surface-color);
     display: flex;
@@ -426,28 +423,27 @@
 }
 
 .menu-card-highlight {
-    border-color: var(--edit-color);
-    background: linear-gradient(135deg, var(--background-color) 0%, rgba(205, 161, 65, 0.05) 100%);
+    border-color: var(--link-color);
+    background: linear-gradient(135deg, var(--background-color) 0%, rgba(65, 205, 165, 0.05) 100%);
 }
 
 .menu-card-highlight .menu-card-icon {
-    color: var(--edit-color);
-    border-color: var(--edit-color);
+    color: var(--link-color);
+    border-color: var(--link-color);
 }
 
 .menu-card-highlight:hover {
-    border-color: var(--edit-color-hover);
+    border-color: var(--link-color-hover);
     transform: translateY(-10px) scale(1.03);
     box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
 }
 
 .menu-card-highlight:hover .menu-card-icon {
-    background-color: var(--edit-color-hover);
+    background-color: var(--link-color-hover);
     color: var(--surface-color);
-    border-color: var(--edit-color-hover);
+    border-color: var(--link-color-hover);
 }
 
-/* Responsividade */
 @media (max-width: 768px) {
     .dashboard-menu {
         padding: 20px;
@@ -505,7 +501,6 @@
     border: none !important;
 }
 
-
 .pendingSubtasksMessage {
     color: var(--text-primary);
     font-size: 0.875rem;
@@ -550,7 +545,6 @@ table tr {
     border-bottom: 1px solid var(--border-color);
 }
 
-/* Estilos para as badges de urgência */    
 .bg-danger {
     background-color: rgba(220, 53, 69, 0.2) !important;
     color: #ff8c96;
@@ -569,89 +563,8 @@ table tr {
     border: 2px solid var(--link-color);
 }
 
-/* Estilos para os eventos do calendário */
-.fc-event {
-    border-radius: 6px !important;
-    padding: 4px 8px !important;
-    margin: 2px 0 !important;
-    cursor: pointer !important;
-    transition: transform 0.2s ease !important;
-}
 
-.fc-event:hover {
-    transform: translateY(-2px) !important;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15) !important;
-    z-index: 10 !important;
-}
 
-.fc-daygrid-event-dot {
-    border-color: var(--link-color) !important;
-}
-
-.fc-daygrid-day.fc-day-today {
-    background-color: rgba(32, 172, 130, 0.1) !important;
-}
-
-.fc-daygrid-day-number {
-    font-weight: bold;
-    padding: 8px !important;
-}
-
-.fc-daygrid-more-link {
-    color: var(--link-color) !important;
-    font-weight: bold;
-    background-color: rgba(32, 172, 130, 0.1);
-    border-radius: 4px;
-    padding: 2px 4px;
-}
-
-/* Centralizar o botão na célula do calendário */
-.fc-daygrid-day-bottom {
-    display: flex !important;
-    justify-content: center !important;
-    padding-top: 4px !important;
-    padding-bottom: 4px !important;
-}
-
-/* Ocultar a palavra "mais" nos links e mostrar apenas o número */
-.fc-daygrid-more-link {
-    font-size: 0 !important;
-    position: relative !important;
-}
-
-/* Estilizar o botão de "mais" como uma esfera */
-.fc-daygrid-more-link {
-    background-color: var(--link-color) !important;
-    border-radius: 50% !important;
-    width: 28px !important;
-    height: 28px !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    padding: 0 !important;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2) !important;
-    transition: transform 0.2s, box-shadow 0.2s !important;
-    margin: 0 auto !important;
-    cursor: pointer !important;
-    z-index: 5 !important;
-}
-
-/* Efeito hover na esfera */
-.fc-daygrid-more-link:hover {
-    transform: translateY(-2px) !important;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3) !important;
-}
-
-/* Conteúdo do botão */
-.fc-daygrid-more-link::before {
-    content: "+" !important;
-    font-size: 1.2rem !important;
-    color: white !important;
-    font-weight: bold !important;
-    line-height: 1 !important;
-}
-
-/* Estilo para o contador de tarefas */
 .task-count {
     position: absolute !important;
     top: -6px !important;
@@ -669,289 +582,6 @@ table tr {
     box-shadow: 0 1px 3px rgba(0,0,0,0.3) !important;
     border: 1px solid white !important;
 }
-
-/* Corrigir o z-index do popover para ficar abaixo do modal */
-.fc-popover.fc-more-popover {
-    z-index: 1040 !important; /* Menor que o modal (1050) */
-    border: 2px solid var(--border-color) !important;
-    border-radius: 8px !important;
-    background-color: var(--surface-color) !important;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
-}
-
-.fc-popover-title {
-    background-color: var(--background-color) !important;
-    color: var(--text-primary) !important;
-    font-weight: bold !important;
-    padding: 8px 10px !important;
-    border-bottom: 1px solid var(--border-color) !important;
-}
-
-/* Ocultar a palavra "mais" no título do popover */
-.fc-popover-title:not(:empty)::before {
-    content: "";
-    display: inline;
-}
-
-.fc-popover-title:not(:empty) {
-    visibility: hidden;
-    position: relative;
-}
-
-.fc-popover-title:not(:empty)::after {
-    visibility: visible;
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    padding: 8px 10px;
-    content: attr(data-date);
-    box-sizing: border-box;
-}
-
-.fc-popover-close {
-    color: var(--delete-color) !important;
-    opacity: 0.8 !important;
-}
-
-.fc-popover-close:hover {
-    color: var(--delete-color-hover) !important;
-    opacity: 1 !important;
-}
-
-/* Calendar table lines styling */
-#calendar .fc-scrollgrid,
-#calendar .fc-scrollgrid-section,
-#calendar .fc-col-header,
-#calendar .fc-daygrid-body,
-#calendar .fc-scrollgrid-sync-table,
-#calendar .fc-timegrid-body,
-#calendar .fc-timegrid-slots,
-#calendar .fc-timegrid-cols,
-#calendar .fc-daygrid-day-frame,
-#calendar .fc-daygrid-day,
-#calendar .fc-col-header-cell,
-#calendar .fc-timegrid-slot,
-#calendar .fc-timegrid-col,
-#calendar .fc-scrollgrid-section-body,
-#calendar .fc-scrollgrid-section-header,
-#calendar table,
-#calendar th,
-#calendar td {
-    border-color: var(--border-color) !important;
-}
-
-.calendar-task-desc {
-    background-color: var(--background-color);
-    border: 2px solid var(--border-color);
-    padding: 1rem;
-    border-radius: 12px;
-}
-
-#taskDescription {
-    background-color: var(--background-color);
-    color: var(--text-secondary) !important;
-    margin-top: 1rem;
-    border: 2px solid var(--border-color);
-    padding: 1rem;
-    border-radius: 12px;
-}
-
-.view-task-btn {
-    color: var(--link-color);
-    border: 2px solid var(--link-color);
-    border-radius: 2rem;
-    padding: 0.5rem 3rem;
-    transition: all 0.2s ease;
-    margin: 1rem;
-    text-decoration: none;
-}
-
-.view-task-btn:hover {
-    color: var(--link-color-hover);
-    border-color: var(--link-color-hover);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-.noSubtasks {
-    color: var(--text-secondary);
-    font-size: 0.875rem;
-    margin-top: 1.35rem;
-    background-color: var(--background-color);
-    border: 2px solid var(--border-color);
-    border-radius: 12px;
-    padding: 1rem;
-}
-
-/* Estilos para subtarefas no modal */
-.subtasks-section {
-    border-top: 1px solid var(--border-color);
-    padding-top: 1rem;
-}
-
-.subtasks-title {
-    font-weight: 600;
-    margin-bottom: 1rem;
-    color: var(--text-primary);
-}
-
-.subtasks-list {
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-}
-
-.subtask-item {
-    background-color: var(--surface-color);
-    border: 1px solid var(--border-color);
-    border-radius: 6px;
-    padding: 0.75rem 1rem;
-    transition: all 0.2s ease;
-}
-
-.subtask-item:hover {
-    border-color: var(--border-hover);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.subtask-title {
-    font-weight: 500;
-    margin-bottom: 0.25rem;
-    color: var(--text-primary);
-}
-
-.subtask-description {
-    font-size: 0.9rem;
-    color: var(--text-color);
-    margin-bottom: 0;
-}
-
-.fc-today-button {
-    background-color: var(--button-color) !important;
-    border-color: var(--border-color) !important;
-    color: var(--text-primary) !important;
-    transition: all 0.2s ease;
-}
-
-.fc-today-button:hover {
-    background-color: var(--button-color-hover) !important;
-    border-color: var(--border-color-hover) !important;
-    color: var(--text-primary-hover) !important;
-}
-
-.fc-prev-button {
-    background-color: var(--button-color) !important;
-    border-color: var(--border-color) !important;
-    color: var(--text-primary) !important;
-    transition: all 0.2s ease;
-}
-
-.fc-next-button {
-    background-color: var(--button-color) !important;
-    border-color: var(--border-color) !important;
-    color: var(--text-primary) !important;
-    transition: all 0.2s ease;
-}
-
-.fc-next-button:hover {
-    background-color: var(--button-color-hover) !important;
-    border-color: var(--border-color-hover) !important;
-    color: var(--text-primary-hover) !important;
-}
-
-.fc-prev-button:hover {
-    background-color: var(--button-color-hover) !important;
-    border-color: var(--border-color-hover) !important;
-    color: var(--text-primary-hover) !important;
-}
-
-/* Notification Box Styles */
-.notification-box {
-    max-width: 800px;
-    margin: 0 auto;
-    border: 2px solid var(--border-color);
-    border-radius: 8px;
-    padding: 20px;
-}
-
-.notification-box .card {
-    border: none;
-    border-radius: 12px;
-    overflow: hidden;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-.notification-box .list-group-item {
-    transition: all 0.2s ease;
-    border-radius: 8px !important;
-}
-
-.notification-box .list-group-item:hover {
-    background-color: var(--surface-color);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-}
-
-.notification-box .badge {
-    padding: 0.35em 0.65em;
-    font-size: 0.75em;
-    vertical-align: middle;
-}
-
-.notification-box .btn {
-    transition: all 0.2s ease;
-}
-
-.notification-box .btn:hover {
-    transform: translateY(-2px);
-}
-
-.notification-box .btn-success {
-    background-color: var(--success);
-    border-color: var(--success);
-}
-
-.notification-box .btn-danger {
-    background-color: var(--danger);
-    border-color: var(--danger);
-}
-
-.logout-btn {
-    color: var(--delete-color) !important;
-    background: transparent;
-    border: none;
-    width: 100%;
-    text-align: left;
-    padding: 0.5rem 1rem;
-    transition: all 0.2s ease;
-    display: flex;
-    align-items: center;
-    font-size: 1rem;
-    cursor: pointer;
-}
-
-.logout-btn:hover {
-    color: var(--delete-color-hover) !important;
-    padding-left: 1.5rem;
-    transition: all 0.2s ease;
-}
-
-.list-group-item.activity-log-item {
-    color: var(--text-primary);
-}
-
-.activity-timestamp text-muted small {
-    color: var(--text-secondary);
-}
-
-.activity-icon {
-    color: var(--link-color);
-    align-items: center;
-    justify-content: center;
-}
-
 @media (max-width: 768px) {
     .status-cards {
         grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -985,13 +615,4 @@ table tr {
         padding: 0.3rem 0.5rem;
         font-size: 0.8rem;
     }
-
-    .fc-header-toolbar {
-        display: block !important;
-    }
-
-    .fc-header-toolbar button {
-        margin-top: 10px !important;
-    }
-
 }

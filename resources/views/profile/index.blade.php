@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/profile-style.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/user/profile-style.css') }}">
     <link rel="icon" href="{{ asset('favicon.svg') }}" type="image/svg+xml">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 
@@ -17,13 +17,11 @@
         <div class="table-header">
             <h1>Perfil</h1>
             <div class="table-actions">
-                <a class="back-button" href="{{ route('dashboard') }}">
-                    <span class="back-text">Voltar ao Dashboard</span>
-                    <i class="fas fa-sign-out-alt mobile-icon"></i>
+                <a href="{{ route('dashboard') }}">
+                    <span class="back-button">Voltar ao Dashboard</span>
                 </a>
                 <a href="{{ route('profile.edit') }}" class="edit-button">
                     <span class="add-button">Editar Perfil</span>
-                    <!-- <i class="fas fa-edit mobile-icon"></i> -->
                 </a>
             </div>
         </div>
@@ -33,7 +31,13 @@
             <div class="left-content">
                 <div class="profile-info">
                         <div class="profile-image">
-                            <!-- <img src="#" alt="Avatar"> -->
+                            @if(Auth::user()->avatar)
+                                <img src="{{ asset('storage/' . Auth::user()->avatar) }}" alt="{{ Auth::user()->name }}" class="avatar-img-index">
+                            @else
+                                <div class="user-image rounded-circle d-flex justify-content-center align-items-center">
+                                    <i class="fas fa-user theme-icon"></i>
+                                </div>
+                            @endif
                         </div>
                         <div class="profile-details">
                             <div class="profile-item">
