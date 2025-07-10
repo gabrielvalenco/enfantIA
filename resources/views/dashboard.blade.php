@@ -89,42 +89,50 @@
         <div class="status-cards">
 
             <div class="status-card">
-                <div class="status-card-icon urgent">
-                    <i class="fas fa-exclamation-circle"></i>
+                <div class="status-card-header">
+                    <div class="status-card-icon urgent">
+                        <i class="fas fa-exclamation-circle"></i>
+                    </div>
+                    <h3>{{ $urgentTasks ?? 0 }}</h3>
                 </div>
                 <div class="status-card-info">
-                    <h3>{{ $urgentTasks ?? 0 }}</h3>
-                    <p>Tarefas Urgentes</p>
+                    <p class="status-card-text">Tarefas Urgentes</p>
                 </div>
             </div>
 
             <div class="status-card">
-                <div class="status-card-icon pending">
-                    <i class="fas fa-tasks"></i>
-                </div>
-                <div class="status-card-info">
+                <div class="status-card-header">
+                    <div class="status-card-icon pending">
+                        <i class="fas fa-tasks"></i>
+                    </div>
                     <h3>{{ $pendingTasks ?? 0 }}</h3>
-                    <p>Tarefas Pendentes</p>
+                </div>
+                <div class="status-card-info">
+                    <p class="status-card-text">Tarefas Pendentes</p>
                 </div>
             </div>
             
             <div class="status-card">
-                <div class="status-card-icon completed">
-                    <i class="fas fa-users"></i>
-                </div>
-                <div class="status-card-info">
+                <div class="status-card-header">
+                    <div class="status-card-icon completed">
+                        <i class="fas fa-users"></i>
+                    </div>
                     <h3>0</h3>
-                    <p>Tarefas de Grupos</p>
+                </div>
+                <div class="status-card-info">
+                    <p class="status-card-text">Tarefas de Grupos</p>
                 </div>
             </div>
             
             <div class="status-card">
-                <div class="status-card-icon categories">
-                    <i class="fas fa-tags"></i>
+                <div class="status-card-header">
+                    <div class="status-card-icon categories">
+                        <i class="fas fa-tags"></i>
+                    </div>
+                    <h3>{{ $categories ?? 0 }}</h3>
                 </div>
                 <div class="status-card-info">
-                    <h3>{{ $categories ?? 0 }}</h3>
-                    <p>Categorias</p>
+                    <p class="status-card-text">Categorias</p>
                 </div>
             </div>
         </div>
