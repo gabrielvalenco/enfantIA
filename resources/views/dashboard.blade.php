@@ -23,6 +23,16 @@
                     <i class="fas fa-history"></i>
                 </div>
                 
+                <a href="{{ route('notifications.index') }}" 
+                   class="notification-icon {{ isset($pendingInvitations) && $pendingInvitations->count() > 0 && (!session('notifications_seen') || session('last_notification_count') < $pendingInvitations->count()) ? 'pulse-animation' : '' }}" 
+                   title="Notificações" 
+                   id="notificationIcon" 
+                   data-count="{{ isset($pendingInvitations) ? $pendingInvitations->count() : 0 }}"
+                   data-seen="{{ session('notifications_seen') ? 'true' : 'false' }}"
+                   data-last-count="{{ session('last_notification_count') ?? 0 }}">
+                    <i class="fas fa-bell"></i>
+                </a>
+                
                 <div class="dropdown">
                     <button class="btn btn-link text-light p-0 border-0" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                         @if(Auth::user()->avatar)
@@ -77,6 +87,9 @@
             </div>
         </div>
     </header>
+    <div class="scroll-progress-container">
+        <div class="scroll-progress-bar" id="scrollProgressBar"></div>
+    </div>
 
     <div class="container">
         @if(session('success'))
@@ -136,60 +149,6 @@
                 </div>
             </div>
         </div>
-
-        @if(isset($pendingInvitations) && $pendingInvitations->count() > 0)
-        <div class="notification-box mt-4 mb-4">
-            <div class="dashboard-section-group-title">
-                <i class="fas fa-bell"></i>
-                Notificações <span class="badge bg-danger">{{ $pendingInvitations->count() }}</span>
-            </div>
-            <div class="card">
-                <div class="card-body">
-                    <div class="list-group">
-                        @foreach($pendingInvitations as $invitation)
-                            <div class="list-group-item list-group-item-action mb-2 border rounded">
-                                <div class="d-flex w-100 justify-content-between align-items-center">
-                                    <div>
-                                        <h5 class="mb-1">Convite para o grupo: {{ $invitation->group->name }}</h5>
-                                        <p class="mb-1">
-                                            <small class="text-muted">
-                                                <i class="fas fa-user"></i> Enviado por: {{ $invitation->group->creator->name }}
-                                            </small>
-                                        </p>
-                                        <p class="mb-1">{{ $invitation->group->description }}</p>
-                                        <p class="mb-0">
-                                            <small class="text-muted">
-                                                <i class="fas fa-clock"></i> Recebido em: {{ $invitation->created_at->format('d/m/Y H:i') }}
-                                            </small>
-                                        </p>
-                                    </div>
-                                    <div class="d-flex">
-                                        <form action="{{ route('invitations.accept', $invitation) }}" method="POST" class="me-2">
-                                            @csrf
-                                            <button type="submit" class="btn btn-success">
-                                                <i class="fas fa-check"></i> Aceitar
-                                            </button>
-                                        </form>
-                                        <form action="{{ route('invitations.reject', $invitation) }}" method="POST">
-                                            @csrf
-                                            <button type="submit" class="btn btn-danger">
-                                                <i class="fas fa-times"></i> Rejeitar
-                                            </button>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
-                        @endforeach
-                    </div>
-                    <div class="text-end mt-2">
-                        <a href="{{ route('invitations.index') }}" class="btn btn-outline-primary btn-sm">
-                            <i class="fas fa-envelope"></i> Ver todos os convites
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        @endif
 
         <div class="dashboard-menu">
             <div class="dashboard-section-title">
@@ -252,6 +211,8 @@
 
         <script src="{{ asset('js/script.js') }}"></script>
         <script src="{{ asset('js/dashboard/script.js') }}"></script>
+        <script src="{{ asset('js/notifications.js') }}"></script>
+        <script src="{{ asset('js/scroll-progress.js') }}"></script>
         <script src="{{ asset('js/activity-log/script.js') }}"></script>
         <script>
             // Define category colors for the external script

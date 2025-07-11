@@ -109,9 +109,9 @@ Route::middleware('auth')->group(function () {
         Route::post('/groups/{group}/settings', [GroupController::class, 'saveSettings'])->name('groups.save-settings');
         
         // Group Invitations
-        Route::get('/invitations', [GroupInvitationController::class, 'index'])->name('invitations.index');
-        Route::post('/invitations/{invitation}/accept', [GroupInvitationController::class, 'accept'])->name('invitations.accept');
-        Route::post('/invitations/{invitation}/reject', [GroupInvitationController::class, 'reject'])->name('invitations.reject');
+        Route::get('/notifications', [GroupInvitationController::class, 'index'])->name('notifications.index');
+        Route::post('/notifications/{invitation}/accept', [GroupInvitationController::class, 'accept'])->name('notifications.accept');
+        Route::post('/notifications/{invitation}/reject', [GroupInvitationController::class, 'reject'])->name('notifications.reject');
     });
 });
 

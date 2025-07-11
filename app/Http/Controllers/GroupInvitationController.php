@@ -13,7 +13,13 @@ class GroupInvitationController extends Controller
     public function index()
     {
         $pendingInvitations = Auth::user()->pendingGroupInvitations()->with('group.creator')->get();
-        return view('invitations.index', compact('pendingInvitations'));
+        
+        // Mark notifications as seen in the session
+        session(['notifications_seen' => true]);
+        session(['last_notification_count' => $pendingInvitations->count()]);
+        session(['last_notification_check' => now()->timestamp]);
+        
+        return view('notifications.index', compact('pendingInvitations'));
     }
 
     public function accept(GroupInvitation $invitation)
@@ -25,7 +31,7 @@ class GroupInvitationController extends Controller
 
         // Check if the invitation is still pending
         if ($invitation->status !== 'pending') {
-            return redirect()->route('invitations.index')
+            return redirect()->route('notifications.index')
                 ->with('error', 'Este convite já foi respondido anteriormente.');
         }
 
@@ -36,7 +42,7 @@ class GroupInvitationController extends Controller
                 'responded_at' => now()
             ]);
             
-            return redirect()->route('invitations.index')
+            return redirect()->route('notifications.index')
                 ->with('error', 'O grupo já atingiu o limite máximo de 4 membros.');
         }
 
@@ -62,7 +68,7 @@ class GroupInvitationController extends Controller
 
         // Check if the invitation is still pending
         if ($invitation->status !== 'pending') {
-            return redirect()->route('invitations.index')
+            return redirect()->route('notifications.index')
                 ->with('error', 'Este convite já foi respondido anteriormente.');
         }
 
@@ -72,7 +78,7 @@ class GroupInvitationController extends Controller
             'responded_at' => now()
         ]);
 
-        return redirect()->route('invitations.index')
+        return redirect()->route('notifications.index')
             ->with('success', 'Convite rejeitado com sucesso.');
     }
 }

@@ -23,7 +23,7 @@
     --text-color-hover: #d3d3d3;
     --text-primary-hover: #ffffff;
     --text-secondary-hover: #838b93;
-    --link-color-hover: #17c893;
+    --link-color-hover: #1ab587;
 
     /* Action Colors */
     --edit-color: #cda141;
@@ -81,7 +81,7 @@
     --text-color-hover: #333333;
     --text-primary-hover: #000000;
     --text-secondary-hover: #495057;
-    --link-color-hover: #17c893;
+    --link-color-hover: #1ab587;
     
     /* Action Colors */
     --edit-color: #D4A017;
@@ -167,7 +167,6 @@ h1, h2, h3, h4, h5, h6 {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 1rem;
     border-bottom: 2px solid var(--border-color);
     margin-bottom: 2rem;
     padding-top: 1rem;
@@ -279,7 +278,7 @@ h1, h2, h3, h4, h5, h6 {
     background: transparent;
     border: 2px solid var(--link-color);
     border-radius: 2rem;
-    padding: 7px 15px;
+    padding: 8px 16px;
     font-size: 1rem;
     cursor: pointer;
     transition: all 0.3s ease;
@@ -288,7 +287,23 @@ h1, h2, h3, h4, h5, h6 {
 
 .add-button:hover {
     color: var(--link-color-hover);
-    transform: translateX(-2px);
+    text-decoration: none;
+}
+
+.delete-button {
+    color: var(--delete-color);
+    background: transparent;
+    border: 2px solid var(--delete-color);
+    border-radius: 2rem;
+    padding: 8px 16px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+}
+
+.delete-button:hover {
+    color: var(--delete-color-hover);
     text-decoration: none;
 }
 
@@ -309,7 +324,6 @@ h1, h2, h3, h4, h5, h6 {
 
 .cancel-button:hover {
     color: var(--text-secondary-hover);
-    transform: translateX(-2px);
 }
 
 .badge {
@@ -417,7 +431,6 @@ tr:hover {
 .alert-info {
     background-color: var(--background-color);  
     color: var(--text-secondary);
-    border: 2px solid var(--link-color);
 }
 
 .modal-content {
