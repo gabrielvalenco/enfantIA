@@ -81,4 +81,28 @@ class GroupInvitationController extends Controller
         return redirect()->route('notifications.index')
             ->with('success', 'Convite rejeitado com sucesso.');
     }
+    
+    public function clearAll()
+    {
+        // Get all pending invitations for the current user
+        $pendingInvitations = Auth::user()->pendingGroupInvitations();
+        
+        // Mark all as rejected
+        $pendingInvitations->update([
+            'status' => 'rejected',
+            'responded_at' => now()
+        ]);
+        
+        // Update the session variables
+        session(['notifications_seen' => true]);
+        session(['last_notification_count' => 0]);
+        session(['last_notification_check' => now()->timestamp]);
+        
+        if (request()->ajax()) {
+            return response()->json(['success' => true, 'message' => 'Todas as notificações foram limpas.']);
+        }
+        
+        return redirect()->route('notifications.index')
+            ->with('success', 'Todas as notificações foram limpas.');
+    }
 }

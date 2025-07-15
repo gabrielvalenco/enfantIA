@@ -112,6 +112,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/notifications', [GroupInvitationController::class, 'index'])->name('notifications.index');
         Route::post('/notifications/{invitation}/accept', [GroupInvitationController::class, 'accept'])->name('notifications.accept');
         Route::post('/notifications/{invitation}/reject', [GroupInvitationController::class, 'reject'])->name('notifications.reject');
+        Route::post('/notifications/clear-all', [GroupInvitationController::class, 'clearAll'])->name('notifications.clear-all');
     });
 });
 

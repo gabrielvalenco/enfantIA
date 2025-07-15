@@ -20,7 +20,7 @@
                 <a href="{{ route('profile.index') }}" class="back-button">
                     Voltar ao Perfil
                 </a>
-                <button type="submit" class="add-button">Salvar</button>
+                <button type="submit" form="profile-form" class="add-button">Salvar</button>
             </div>
         </div>
 
@@ -30,7 +30,7 @@
             </div>
         @endif
 
-        <form action="{{ route('profile.update') }}" method="POST" enctype="multipart/form-data">
+        <form id="profile-form" action="{{ route('profile.update') }}" method="POST" enctype="multipart/form-data">
         @csrf
         @method('PUT')
         
