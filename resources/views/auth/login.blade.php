@@ -4,6 +4,7 @@
 
 <link rel="icon" href="{{ asset('favicon.svg') }}" type="image/svg+xml">
 <link rel="stylesheet" href="{{ asset('css/auth/login.css') }}">
+<link rel="stylesheet" href="{{ asset('css/style.css') }}">
 
 <div class="auth-wrapper">
     <div class="auth-container">

@@ -14,7 +14,9 @@
     <style>
         body {
             font-family: 'Poppins', sans-serif;
-            background-color: var(--background-color);
+            background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('{{ asset('images/background.png') }}');
+            background-size: cover;
+            background-position: center;
             color: var(--text-color);
             display: flex;
             flex-direction: column;
@@ -27,6 +29,7 @@
         }
         .error-container {
             background-color: var(--surface-color);
+            border: 2px solid var(--border-color);
             border-radius: 0.75rem;
             box-shadow: var(--card-shadow);
             padding: 2.5rem;
