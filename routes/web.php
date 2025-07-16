@@ -25,6 +25,11 @@ use App\Http\Controllers\UserActivityLogController;
 |
 */
 
+// Welcome Page for Guests
+Route::get('/', function () {
+    return view('welcome');
+})->middleware('guest');
+
 // Authentication Routes
 Route::middleware('guest')->group(function () {
     Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
@@ -127,3 +132,8 @@ Route::get('/terms', function () {
 Route::get('/politic', function () {
     return view('terms.politic');
 })->name('politic');
+
+// Fallback route for 404 errors
+Route::fallback(function () {
+    return response()->view('errors.404', [], 404);
+});

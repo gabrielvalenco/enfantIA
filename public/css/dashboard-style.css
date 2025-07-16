@@ -50,6 +50,24 @@
     box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
 }
 
+/* Estilo para o badge de sessão lembrada */
+.remembered-badge {
+    display: flex;
+    align-items: center;
+    margin-top: 8px;
+    padding: 4px 8px;
+    background-color: rgba(32, 172, 130, 0.15);
+    border-radius: 4px;
+    color: var(--link-color);
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.remembered-badge i {
+    font-size: 11px;
+    margin-right: 5px;
+}
+
 .dropdown-menu form {
     width: 100%;
 }

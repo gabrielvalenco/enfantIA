@@ -21,10 +21,15 @@
             <div class="footer-section links">
                 <h3 class="footer-title">Links Rápidos</h3>
                 <ul>
-                    <li><a href="{{ route('dashboard') }}">Dashboard</a></li>
-                    <li><a href="{{ route('tasks.index') }}">Tarefas</a></li>
-                    <li><a href="{{ route('categories.index') }}">Categorias</a></li>
-                    <li><a href="{{ route('groups.index') }}">Grupos</a></li>
+                    @auth
+                        <li><a href="{{ route('dashboard') }}">Dashboard</a></li>
+                        <li><a href="{{ route('tasks.index') }}">Tarefas</a></li>
+                        <li><a href="{{ route('categories.index') }}">Categorias</a></li>
+                        <li><a href="{{ route('groups.index') }}">Grupos</a></li>
+                    @else
+                        <li><a href="{{ route('login') }}">Login</a></li>
+                        <li><a href="{{ route('register') }}">Cadastre-se</a></li>
+                    @endauth
                 </ul>
             </div>
             <div class="footer-section contact-form">

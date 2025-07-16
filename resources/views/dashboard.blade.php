@@ -49,6 +49,11 @@
                                 <span class="fw-bold">{{ Auth::user()->name }}</span>
                                 <br>
                                 <small class="text-muted">{{ Auth::user()->email }}</small>
+                                @if(session('remembered'))
+                                    <div class="remembered-badge" title="Conectado com a opção 'Lembrar-me' ativa">
+                                        <i class="fas fa-check-circle"></i> Sessão lembrada
+                                    </div>
+                                @endif
                             </div>
                         </li>
                         <li><hr class="dropdown-divider"></li>

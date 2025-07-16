@@ -24,14 +24,21 @@ class LoginController extends Controller
             'email' => ['required', 'email'],
             'password' => ['required'],
         ]);
+        
+        $remember = $request->boolean('remember');
 
-        if (Auth::attempt($credentials, $request->boolean('remember'))) {
+        if (Auth::attempt($credentials, $remember)) {
             $request->session()->regenerate();
+            
+            // Armazenamos na sessão se o usuário optou por ser lembrado
+            // Isso nos permite mostrar visualmente que a opção está funcionando
+            $request->session()->put('remembered', $remember);
+            
             return redirect()->intended('dashboard');
         }
 
         return back()->withErrors([
-            'email' => 'The provided credentials do not match our records.',
+            'email' => 'As credenciais fornecidas não correspondem aos nossos registros.',
         ])->onlyInput('email');
     }
 
