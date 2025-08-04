@@ -21,7 +21,7 @@
                     <span class="back-button">Voltar ao Dashboard</span>
                 </a>
                 <a href="{{ route('profile.edit') }}" class="edit-button">
-                    <span class="add-button">Editar Perfil</span>
+                    <span>Editar Perfil</span>
                 </a>
             </div>
         </div>

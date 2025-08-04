@@ -39,22 +39,6 @@
     transform: translateX(-5px);
 }
 
-.edit-button {
-    text-decoration: none;
-    color: var(--link-color);
-    transition: all 0.3s ease;
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-weight: 500;
-}
-    
-.edit-button:hover {
-    color: var(--link-color-hover);
-    transform: translateX(-5px);
-    text-decoration: none;
-}
-
 /* Form Container Layout */
 .form-container {
     display: flex;

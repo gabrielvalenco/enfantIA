@@ -198,3 +198,25 @@
         margin-top: 0;
     }
 }
+
+@media (max-width: 767px) {
+    /* Hide text in delete button on mobile */
+    .delete-button .back-text {
+        display: none;
+    }
+    
+    /* Style the trash icon for mobile */
+    .delete-button .delete-mobile-icon {
+        display: inline-block;
+        font-size: 1.2rem;
+        padding: 0.25rem 0;
+        border-radius: 50%;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+    
+    .delete-button:hover .delete-mobile-icon {
+        border-color: var(--delete-color-hover);
+        transform: scale(1.05);
+    }
+}

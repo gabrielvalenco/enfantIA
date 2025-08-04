@@ -40,15 +40,6 @@
     align-items: center;
     gap: 1rem;
 }
-.dropdown-menu {
-    background-color: var(--surface-color);
-    border: 2px solid var(--border-color);
-    border-radius: 12px;
-    min-width: 200px;
-    padding: 0.5rem 0;
-    margin: 0;
-    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
-}
 
 /* Estilo para o badge de sessão lembrada */
 .remembered-badge {
@@ -265,6 +256,21 @@
     height: 48px;
     background: rgba(255, 255, 255, 0.2);
     border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.dropdown-menu {
+    background-color: var(--surface-color);
+    min-width: 240px;
+    border: 2px solid var(--border-color);
+    border-radius: 12px;
+    padding: 0.5rem 0;
+    margin: 0;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+}
+
+.dropdown-item:hover {
+    color: var(--link-color-hover);
+    background: transparent;
 }
 
 .status-cards {

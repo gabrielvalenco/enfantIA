@@ -110,8 +110,13 @@ Route::middleware('auth')->group(function () {
         Route::delete('/groups/{group}/leave', [GroupController::class, 'leave'])->name('groups.leave');
         
         // Rotas para configurações de grupo
-        Route::get('/groups/{group}/settings', [GroupController::class, 'getSettings'])->name('groups.get-settings');
+        Route::get('/groups/{group}/settings', [GroupController::class, 'settings'])->name('groups.settings');
+        Route::get('/groups/{group}/get-settings', [GroupController::class, 'getSettings'])->name('groups.get-settings');
         Route::post('/groups/{group}/settings', [GroupController::class, 'saveSettings'])->name('groups.save-settings');
+        Route::post('/groups/{group}/remove-member', [GroupController::class, 'removeMember'])->name('groups.remove-member');
+        
+        // API para verificação de usuário
+        Route::post('/api/check-user', [\App\Http\Controllers\Api\UserController::class, 'checkUser'])->name('api.check-user');
         
         // Group Invitations
         Route::get('/notifications', [GroupInvitationController::class, 'index'])->name('notifications.index');

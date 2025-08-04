@@ -19,5 +19,15 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-// User check endpoint
+// User check endpoints
 Route::get('/check-user', [UserController::class, 'checkUser']);
+Route::post('/check-user', [UserController::class, 'checkUser']);
+
+// Group API routes
+Route::middleware('auth:sanctum')->group(function () {
+    // Group member management
+    Route::post('/groups/add-member', [\App\Http\Controllers\Api\GroupController::class, 'addMember']);
+    Route::post('/groups/remove-member', [\App\Http\Controllers\Api\GroupController::class, 'removeMember']);
+    Route::post('/groups/{id}/settings', [\App\Http\Controllers\Api\GroupController::class, 'saveSettings']);
+    Route::post('/groups/check-invite-status', [\App\Http\Controllers\Api\GroupController::class, 'checkInviteStatus']);
+});
