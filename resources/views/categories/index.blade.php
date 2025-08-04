@@ -83,49 +83,33 @@
     <!-- Modal para Editar Categoria -->
     <div id="editCategoryModal" class="modal" style="display: none;">
         <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Editar Categoria</h5>
-                    <button type="button" class="close" onclick="closeModal('editCategoryModal')" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form id="edit-category-form">
-                        @csrf
-                        @method('PUT')
-                        <input type="hidden" id="edit-category-id">
-                        
-                        <div class="form-group">
-                            <label for="edit-name" class="font-weight-bold">Nome da Categoria</label>
-                            <input type="text" name="name" class="form-control" id="edit-name" required>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="edit-description" class="font-weight-bold">Descrição <small class="text-muted">(opcional)</small></label>
-                            <textarea name="description" class="form-control" id="edit-description" rows="3"></textarea>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="edit-color" class="font-weight-bold">Cor da Categoria</label>
-                            <div class="d-flex align-items-center">
-                                <input type="color" name="color" id="edit-color" class="form-control" style="width: 60px; height: 40px; padding: 2px;">
-                            </div>
-                        </div>
-                        <script>
-                            // Update color preview when color input changes
-                            document.getElementById('edit-color').addEventListener('input', function() {
-                                document.getElementById('edit-color-preview').style.backgroundColor = this.value;
-                            });
-                        </script>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="cancel-button" onclick="closeModal('editCategoryModal')">Cancelar</button>
-                    <button type="button" class="add-button" id="save-edit-category-btn">
-                        <i class="fas fa-save"></i> Salvar
-                    </button>
-                </div>
+            <div class="modal-header">
+                <h3 class="modal-title">Editar Categoria</h3>
+            </div>
+            <div class="modal-body">
+                <form id="edit-category-form">
+                    @csrf
+                    @method('PUT')
+                    <input type="hidden" id="edit-category-id">
+                    <div class="form-group">
+                        <label for="edit-name">Nome da Categoria</label>
+                        <input type="text" name="name" id="edit-name" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-description">Descrição <small class="text-muted">(opcional)</small></label>
+                        <textarea name="description" class="form-control" id="edit-description" rows="3"></textarea>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label>Cor da Categoria</label>
+                        <input type="color" name="color" id="edit-color" class="form-control" style="width: 100%; height: 40px; padding: 2px;">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="cancel-button" onclick="closeModal('editCategoryModal')">Cancelar</button>
+                <button type="button" class="add-button" id="save-edit-category-btn">
+                    <i class="fas fa-save"></i> Salvar
+                </button>
             </div>
         </div>
     </div>
@@ -140,12 +124,8 @@
     <!-- Modal para Criar Categoria -->
     <div id="createCategoryModal" class="modal" style="display: none;">
         <div class="modal-dialog">
-            <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Nova Categoria</h5>
-                    <button type="button" class="close" onclick="closeModal('createCategoryModal')" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+                    <h3 class="modal-title">Nova Categoria</h3>
                 </div>
                 <div class="modal-body">
                     <form id="create-category-form">
@@ -162,7 +142,7 @@
                         
                         <div class="form-group mb-3">
                             <label>Cor da Categoria</label>
-                            <input type="color" name="color" id="create-color" class="form-control" value="#DC3545">
+                            <input type="color" name="color" id="edit-color" class="form-control" style="width: 100%; height: 40px; padding: 2px;">
                         </div>
                     </form>
                 </div>
@@ -172,7 +152,6 @@
                         <i class="fas fa-save"></i> Criar Categoria
                     </button>
                 </div>
-            </div>
         </div>
     </div>
 </body>

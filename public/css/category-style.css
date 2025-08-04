@@ -173,30 +173,6 @@ select:focus,
     padding: 1.5rem;
 }
 
-.modal-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1.5rem;
-    padding-bottom: 1rem;
-    border-bottom: 1px solid var(--border-color);
-}
-
-.modal-title {
-    margin: 0;
-    font-size: 1.25rem;
-    font-weight: 600;
-}
-
-.modal-footer {
-    display: flex;
-    justify-content: flex-end;
-    gap: 0.5rem;
-    margin-top: 1.5rem;
-    padding-top: 1rem;
-    border-top: 1px solid var(--border-color);
-}
-
 .close {
     background: none;
     border: none;
